@@ -3249,11 +3249,12 @@ async function enviarDatos() {
     const inputs = document.querySelectorAll("input");
     const payload = {};
 
+    // Recolecta dinámicamente solo los campos con valores
     inputs.forEach(input => {
-        const id = input.id.toLowerCase(); // Convierte a minúsculas
-        const value = input.value?.trim(); // Elimina espacios en blanco
+        const id = input.id.trim(); // Usa el ID del campo como clave
+        const value = input.value?.trim(); // Elimina espacios vacíos
         if (value) {
-            payload[id] = value; // Agrega solo los campos con valores
+            payload[id] = value;
         }
     });
 

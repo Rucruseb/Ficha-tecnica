@@ -3245,6 +3245,48 @@ function toggleCheckbox(element) {
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
+async function enviarDatos() {
+    const inputs = document.querySelectorAll("input");
+    const payload = {};
+
+    inputs.forEach(input => {
+        const id = input.id.toLowerCase(); // Convierte a minúsculas
+        const value = input.value?.trim(); // Elimina espacios en blanco
+        if (value) {
+            payload[id] = value; // Agrega solo los campos con valores
+        }
+    });
+
+    console.log("Payload enviado:", payload);
+
+    if (!payload.numero_ficha || !payload.version) {
+        alert("Los campos 'Ficha' y 'Versión' son obligatorios.");
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            "https://us-central1-ficha-producto.cloudfunctions.net/fichasTecnicasHandler",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(`Error en el servidor: ${response.statusText}`);
+        }
+
+        const result = await response.text();
+        alert(result);
+    } catch (error) {
+        console.error("Error al enviar los datos:", error);
+        alert("Hubo un error al enviar los datos.");
+    }
+}
 
 
 

@@ -3250,14 +3250,14 @@ async function enviarDatos() {
     const payload = {};
 
     inputs.forEach(input => {
-        const id = input.id.toLowerCase(); // Convierte el ID a minúsculas
+        const id = input.id.toLowerCase(); // Convierte a minúsculas
         const value = input.value?.trim(); // Elimina espacios en blanco
         if (value) {
-            // Transforma el campo "Ficha" en "numero_ficha"
             if (id === "ficha") {
-                payload["ficha"] = value;
+                payload.ficha = value; // Asigna el valor de "ficha"
+                payload.numero_ficha = value; // Duplica el valor en "numero_ficha"
             } else {
-                payload[id] = value; // Agrega el resto de los campos tal cual
+                payload[id] = value; // Otros campos normales
             }
         }
     });
@@ -3274,16 +3274,12 @@ async function enviarDatos() {
             "https://us-central1-ficha-producto.cloudfunctions.net/fichasTecnicasHandler",
             {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json"
+                },
                 body: JSON.stringify(payload)
             }
         );
-
-        if (response.status === 422) {
-            const errorMessage = await response.text();
-            alert(`Error: ${errorMessage}`);
-            return;
-        }
 
         if (!response.ok) {
             throw new Error(`Error en el servidor: ${response.statusText}`);
@@ -3296,7 +3292,6 @@ async function enviarDatos() {
         alert("Hubo un error al enviar los datos.");
     }
 }
-
 
 
 

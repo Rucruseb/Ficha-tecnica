@@ -3255,7 +3255,7 @@ async function enviarDatos() {
         if (value) {
             // Transforma el campo "Ficha" en "numero_ficha"
             if (id === "ficha") {
-                payload["numero_ficha"] = value;
+                payload["ficha"] = value;
             } else {
                 payload[id] = value; // Agrega el resto de los campos tal cual
             }

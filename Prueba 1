@@ -1,0 +1,3346 @@
+
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventory Dashboard</title>
+  <style>
+    /* Color de letra de elementos sidebar y color background en general */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: #fff;
+      background-color: #e5edf5;
+      overflow-y: hidden; 
+            height: 100%; /* Importante: asegura que el body ocupe todo el viewport */
+
+      
+    }
+
+    .Header {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      margin-top: 20px;
+      text-align: center;
+    color: #000000;
+    }
+    .Header2 {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      margin-top: 20px;
+      text-align: center;
+    color: #000000;
+    }
+
+    .Header3 {
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      margin-top: 20px;
+      text-align: center;
+      color: #000000;
+    }
+
+
+    .dashboard {
+      display: flex;
+       height: calc(100vh - 35px); /* Ajusta la altura de la barra superior */
+      margin-top: 60px; /* Espaciado igual a la altura de la barra */
+    }
+
+    /* Color Sidebar */
+    .sidebar {
+      width: 15%;
+      background-color: #2626ca;
+      padding: 20px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+            height: 100%; /* Asegura que la sidebar ocupe todo el contenedor */
+    }
+
+    .sidebar .logo {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #ffffff;
+    }
+
+    .sidebar .menu {
+      list-style: none;
+      padding: 0;
+    }
+
+
+/* Color de botones del sidebar */
+    .sidebar .menu-item {
+      margin: 15px 0;
+      padding: 10px;
+      cursor: pointer;
+      background-color: #2626ca;
+      border-radius: 5px;
+      text-align: center;
+      transition: background 0.3s ease;
+    }
+
+
+/* Color de seleccion de botones del sidebar */
+    .sidebar .menu-item:hover {
+      background-color:  #ffffff;
+      color: #000000;
+
+    }
+
+    /* Main Content */
+    .main-content {
+      width: 80%;
+      padding: 20px;
+      overflow-y: auto; /* Activa el scroll vertical cuando excede la altura */
+
+          box-sizing: border-box; /* Incluye padding en las dimensiones */
+    }
+
+    .inventory-section {
+      margin: 20px;
+      display: none;
+    }
+    .dashboard-section {
+      margin: 20px;
+      display: none;
+    }
+    .entradas-section {
+      margin: 20px;
+      display: none;
+    }
+    .salidas-section {
+      margin: 20px;
+      display: none;
+    }
+
+
+
+.form-row {
+  display: flex; /* Alinea los elementos de la fila horizontalmente */
+  gap: 0px; /* Espaciado entre los campos */
+  margin-bottom: 20px; /* Espaciado entre filas */
+  color: #000000;
+  
+
+}
+
+.form-group {
+  position: relative; /* Contexto para posicionar las sugerencias */
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+    margin-right: 30px; /* Espaciado entre filas */
+
+}
+
+    .form-group label {
+      font-size: 14px;
+              color:  #000000; /* Color de texto */
+
+    }
+
+
+/* Color fondo de los inputs*/
+    .form-group input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+          background-color: #ffffff;
+    }
+
+
+.form-groupB {
+  position: relative; /* Contexto para posicionar las sugerencias */
+   flex-direction: column; /* Etiquetas encima del input */
+  display: flex;
+  flex-direction: column;
+          color:  #000000; /* Color de texto */
+}
+
+    .form-groupB label {
+      font-size: 14px;
+              color:  #000000; /* Color de texto */
+    }
+
+    .form-groupB input {
+      width: 250px;
+      padding: 10px;
+      margin-top: 5px;
+      margin-right: 10px;
+      border-radius: 5px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+    }
+
+
+
+    .form-GroupC{
+      position: relative; /* Contexto para posicionar las sugerencias */
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+              color:  #000000; /* Color de texto */
+    }
+
+.form-rowB {
+  display: flex; /* Alinea los elementos de la fila horizontalmente */
+  gap: 0px; /* Espaciado entre los campos */
+  margin-bottom: 5px; /* Espaciado entre filas */
+
+}
+
+    .form-GroupD{
+      flex-direction: column;
+      padding: 5px;
+      width: 100%;
+      border-radius: 5px;
+      border: none;
+      outline: none;
+      font-size: 8px;
+    }
+
+
+    .form-groupD input {
+      display: flex;
+      flex: initial;
+      padding: 5px;
+      border-radius: 5px;
+      border: none;
+      outline: none;
+      font-size: 8px;
+    }
+    .suggestions-container {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      max-height: 150px; /* Altura máxima visible */
+      overflow-y: auto; /* Activa el scroll vertical cuando excede la altura */
+      background-color: #fff;
+      color: #000;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+    }
+
+    .suggestion-item {
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    .suggestion-item:hover {
+      background-color:  #2626ca;
+      color: #24243e;
+    }
+
+
+/* Color fondo topbar*/
+.topbar {
+  position: fixed; /* Fija la barra en la parte superior */
+  top: 0;
+  left: 0;
+  width: 100%; /* Ocupa todo el ancho */
+  height: 60px; /* Altura de la barra */
+  background-color: #2626ca; /* Color de fondo */
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Sombra para separar visualmente */
+  z-index: 1000; /* Asegura que esté sobre otros elementos */
+}
+
+.topbar-menu {
+  list-style: none; /* Elimina los estilos de lista */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 20px; /* Espaciado entre los elementos */
+  padding-left: 20px; /* Espaciado interno izquierdo */
+}
+
+.topbar-menu li {
+  display: inline; /* Los enlaces se muestran en línea */
+}
+
+.topbar-menu a {
+  text-decoration: none; /* Elimina subrayado */
+  color: #ffffff; /* Color de texto */
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 15px; /* Espaciado interno */
+  border-radius: 5px; /* Bordes redondeados */
+  transition: background 0.3s ease; /* Suaviza los cambios de fondo */
+}
+
+/* Color de de letra y seleccion topbar */
+
+.topbar-menu a:hover {
+  background-color: #ffffff; /* Fondo azul en hover */
+  color: #000000; /* Color de texto oscuro */
+}
+
+#Preliminares {
+    display: block;
+}
+#Conversión {
+    display: none;
+}
+
+
+
+.input-group, select {
+    width: 270px; /* Ajusta el ancho de los inputs */
+    height:35px;
+    margin-top:5px;
+    margin-right: 10px;
+    height:37px;
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+            color:  #000000; /* Color de texto */
+}
+
+.input-group, .selectB {
+      position: relative; /* Contexto para posicionar las sugerencias */
+      box-sizing: border-box; 
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+              color:  #000000; /* Color de texto */
+}
+
+
+.table2 {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+    text-align: center;
+            color:  #000000; /* Color de texto */
+}
+
+.table2 th, .table2 td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.table2 th {
+    background-color: #86868a;
+    color:#f2f2f2;
+}
+
+.table2 input[type="text"] {
+    width: 90%;
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Contenedor principal */
+.container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Botón de toggle */
+.toggle-button {
+    background-color: #86868a;
+    border: none;
+      width: 1090px; /* Ancho del botón */
+    height: 60px; /* Altura del botón */
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #FFFFFF;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+
+
+
+.toggle-button:hover {
+    background-color: #2626ca; /* Oscuro */
+    color:#000000;  /* Gris */
+    transform: scale(1.05); /* Pequeño aumento */
+}
+
+
+/*boton enviar datos*/
+
+    .submit-button {
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .submit-button:hover {
+      background-color: #0056b3;
+    }
+
+/* Contenedor de campos */
+.fields-container {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #86868a; /* Fondo oscuro */
+    border-radius: 8px;
+    display: none; /* Oculto por defecto */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+     transition: max-height 0.5s ease, padding 0.5s ease; /* Transición suave */
+}
+
+.checkbox {
+  width: 30px; /* Ancho de la casilla */
+  height: 30px; /* Altura de la casilla */
+  border: 2px solid #ccc; /* Borde de la casilla */
+  display: flex;
+  margin-left: 20px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 5px; /* Opcional: bordes redondeados */
+  background-color: #fff; /* Fondo blanco */
+  transition: background-color 0.3s, color 0.3s; /* Transiciones suaves */
+}
+
+.checkbox.marked {
+  background-color: #2626ca; /* Fondo al estar marcado */
+  color: #24243e; /* Color del texto "X" */
+  font-size: 20px; /* Tamaño de la "X" */
+  font-weight: bold; /* Resalta la "X" */
+}
+
+
+.checkbox-container {
+  margin-bottom: 10px; /* Espacio entre cuadros */
+
+  flex-direction: column; /* Para que el nombre esté encima del cuadro */
+
+}
+
+.checkbox-label {
+  font-size: 14px; /* Tamaño del texto */
+  font-weight: bold; /* Resalta el texto */
+  color: #fff; /* Color del texto */
+  margin-bottom: 5px; /* Espacio entre el nombre y el cuadro */
+  margin-left: 20px;
+
+}
+
+
+  </style>
+</head>
+<body>
+
+  <!-- Barra Superior -->
+  <div class="topbar">
+    <ul class="topbar-menu">
+      <li><a href="#ventas">Ventas</a></li>
+      <li><a href="#produccion">Producción</a></li>
+      <li><a href="#finanzas">Finanzas</a></li>
+      <li><a href="#configuracion">Configuración</a></li>
+    </ul>
+  </div>
+
+
+  <div class="dashboard">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="logo">Ficha Técnica</div>
+
+     
+      <ul class="menu">
+        <li class="menu-item"onclick="mostrarSeccion('Preliminares')" >Preliminares</li>
+      </ul>
+
+      <ul class="menu">
+        <li class="menu-item" onclick="mostrarSeccion('Conversión')">Conversión</li>
+      </ul>
+      <ul class="menu">
+        <li class="menu-item" onclick="mostrarSeccion('Corrugación')" >Corrugación</li>
+      </ul>
+      <ul class="menu">
+        <li class="menu-item" onclick="mostrarSeccion('Corte')" >Corte</li>
+      </ul>
+      <ul class="menu">
+        <li class="menu-item" onclick="mostrarSeccion('Impresión')" >Impresión</li>
+      </ul>
+            <ul class="menu">
+        <li class="menu-item" onclick="mostrarSeccion('Colaminación')" >Colaminación</li>
+      </ul>
+            <ul class="menu">
+        <li class="menu-item" onclick="mostrarSeccion('Troquelado')" >Troquelado</li>
+      </ul>
+      <ul class="menu">
+        <li class="menu-item" onclick="mostrarSeccion('Terminados')" >Terminados</li>
+      </ul>
+      <ul class="menu">
+        <li class="menu-item" onclick="mostrarSeccion('Pegue')" >Pegue</li>
+      </ul>
+      <ul class="menu">
+        <li class="menu-item" onclick="mostrarSeccion('Empaque')" >Empaque</li>
+      </ul>
+      <ul class="menu">
+        <li class="menu-item" onclick="mostrarSeccion('Logística')" >Logística</li>
+      </ul>
+
+
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+
+      <div id="Preliminares"style="display: none;">
+
+
+        <div id="filters">
+
+
+<div class="container">
+
+
+ <button class="toggle-button"data-target="fieldsGroup1" onclick="toggleFields(this)">Descripción del producto</button>
+
+       <div class="fields-container" id="fieldsGroup1">
+
+      <div class="form-row">
+          <div class="form-groupB">
+          <label for="Fecha">Fecha:</label>
+          <input type="date" id="Fecha" required>
+        </div>
+
+</div>
+
+      <div class="form-row">
+          <div class="form-group">
+          <label for="Ficha">Ficha:</label>
+          <input type="text" id="Ficha" required>
+        </div>
+          <div class="form-group">
+          <label for="versión">Versión:</label>
+          <input type="number" id="version" required>
+        </div>
+          <div class="form-group">
+          <label for="Código cliente">Código Cliente:</label>
+          <input type="text" id="codigo_cliente" required>
+        </div>
+          <div class="form-group">
+          <label for="Cliente">Cliente:</label>
+          <input type="text" id="cliente" required>
+        </div>
+
+  <!-- Botón para enviar datos -->
+  <button type="button" class="submit-button" onclick="enviarDatos()">Enviar</button>
+
+  <!-- Botón para consultar datos -->
+<button id="consultar-datos" onclick="consultarDatos()">Consultar Datos</button>
+
+
+</div>
+          
+
+
+        
+      <div class="form-row">
+
+          <div class="form-group">
+          <label for="Orden">Orden de compra:</label>
+          <input type="text" id="Orden" required>
+        </div>
+          <div class="form-group">
+          <label for="Nombre producto">Nombre producto:</label>
+          <input type="text" id="Nombre_producto" required>
+        </div>
+          <div class="form-group">
+           <label for="Código producto">Código producto:</label>
+          <input type="text" id="Código_producto" required>
+        </div>         
+          <div class="form-group">
+          <label for="Plano Producto">Plano Producto:</label>
+          <input type="text" id="Plano_Producto" required>
+        </div>
+
+
+                </div>
+
+
+      <div class="form-row">
+
+          <div class="form-group">
+          <label for="División de cuerpos">División de cuerpos:</label>
+          <input type="number" id="División_de_cuerpos" required>
+        </div>
+
+          <div class="form-group">
+          <label for="Cantidad cuerpos">Cantidad cuerpos:</label>
+          <input type="number" id="Cantidad_cuerpos" required>
+        </div>
+
+
+          <div class="form-group">
+          <label for="Partes">¿Contiene partes?:</label>
+          <input type="text" id="Partes" required>
+        </div>
+
+
+          <div class="form-group">
+          <label for="Cantidad partes">Cantidad partes:</label>
+          <input type="number" id="Cantidad_partes" required>
+        </div>
+          <div class="form-group">
+          <label for="Parte">Parte:</label>
+          <input type="number" id="Parte" required>
+        </div>
+
+          <div class="form-group">
+          <label for="Nombre parte">Nombre de la parte:</label>
+          <input type="text" id="Nombre_parte" required>
+        </div>
+
+ </div>
+
+   <div class="form-row">
+
+          <div class="form-group">
+          <label for="Descripción">Descripción:</label>
+          <input type="text" id="Descripción" required>
+        </div>
+
+  </div>
+</div>
+</div>
+
+ <div class="container">
+
+
+   <button class="toggle-button" data-target="fieldsGroup2" onclick="toggleFields(this)">Piezas del producto y medidas abiertas</button>
+    <div class="fields-container" id="fieldsGroup2">
+
+<table class="table2" id="tablaPiezas">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>1</th>
+            <th>2</th>
+            <th>3</th>
+            <th>4</th>
+            <th>5</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <label id="NombrePieza">Nombre:</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="NombrePieza" id="NombrePieza1" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="NombrePieza" id="NombrePieza2" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="NombrePieza" id="NombrePieza3" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="NombrePieza" id="NombrePieza4" required>
+       
+            </td>
+            <td>
+                <input type="text" aria-labelledby="NombrePieza" id="NombrePieza5" required>
+       
+            </td>
+        </tr>
+            <td>
+                <label for="anchoPieza">Ancho:</label>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="anchoPieza" id="anchoPieza1" required>
+                 </td>
+                 <td>
+                <input type="text" aria-labelledby="anchoPieza" id="anchoPieza2" required>         
+                 </td>   
+                 <td>
+                <input type="text" aria-labelledby="anchoPieza" id="anchoPieza3" required>
+                 </td>
+                 <td>
+                <input type="text" aria-labelledby="anchoPieza" id="anchoPieza4" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="anchoPieza" id="anchoPieza5" required>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="largoPieza">Largo:</label>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="largoPieza" id="largoPieza1" required>
+             </td>
+              <td>
+                <input type="text" aria-labelledby="largoPieza" id="largoPieza2" required>    
+            </td>
+             <td>
+                <input type="text" aria-labelledby="largoPieza" id="largoPieza3" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="largoPieza" id="largoPieza4" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="largoPieza" id="largoPieza5" required>
+            </td>
+        </tr>
+
+       
+       
+       
+    </tbody>
+</table>
+
+</div>
+</div>
+
+                </div>
+
+    <div class="container">             
+
+ <button class="toggle-button"data-target="fieldsGroup3" onclick="toggleFields(this)">Listado de accesorios</button>
+
+       <div class="fields-container" id="fieldsGroup3">
+
+      <div class="form-row">
+
+          <div class="form-group">
+          <label for="accesorio1">1:</label>
+          <input type="text" id="accesorio1" required>
+        </div>
+          <div class="form-group">
+          <label for="accesorio2">2:</label>
+          <input type="text" id="accesorio2" required>
+        </div>
+          <div class="form-group">
+          <label for="accesorio3">3:</label>
+          <input type="text" id="accesorio3" required>
+        </div>
+          <div class="form-group">
+          <label for="accesorio4">4:</label>
+          <input type="text" id="accesorio4" required>
+        </div>
+</div>
+      <div class="form-row">
+          <div class="form-group">
+          <label for="accesorio5">5:</label>
+          <input type="text" id="accesorio5" required>
+        </div>
+        <div class="form-group">
+          <label for="accesorio6">6:</label>
+          <input type="text" id="accesorio6" required>
+        </div>
+        <div class="form-group">
+          <label for="accesorio7">7:</label>
+          <input type="text" id="accesorio7" required>
+        </div>
+        <div class="form-group">
+          <label for="accesorio8">8:</label>
+          <input type="text" id="accesorio8" required>
+        </div>
+        
+                </div>
+</div>
+</div>
+
+
+    <div class="container">             
+
+ <button class="toggle-button"data-target="fieldsGroup4" onclick="toggleFields(this)">Descripción general del proceso por componente</button>
+
+       <div class="fields-container" id="fieldsGroup4">      
+
+       <div class="form-row">
+          <div class="form-group">
+          <label for="descripcion1">1:</label>
+          <input type="text" id="descripcion1" required>
+        </div>
+        <div class="form-group">
+          <label for="descripcion2">2:</label>
+          <input type="text" id="descripcion2" required>
+        </div>
+ </div>
+
+     <div class="form-row">
+        <div class="form-group">
+          <label for="descripcion3">3:</label>
+          <input type="text" id="descripcion3" required>
+        </div>
+        <div class="form-group">
+          <label for="descripcion4">4:</label>
+          <input type="text" id="descripcion4" required>
+        </div>
+                </div>
+
+    <div class="form-row">
+        <div class="form-group">
+          <label for="descripcion5">5:</label>
+          <input type="text" id="descripcion5" required>
+        </div>
+        <div class="form-group">
+          <label for="descripcion6">6:</label>
+          <input type="text" id="descripcion6" required>
+        </div>
+                </div>
+
+
+        <div class="form-row">
+        <div class="form-group">
+          <label for="descripcion7">7:</label>
+          <input type="text" id="descripcion7" required>
+        </div>
+        <div class="form-group">
+          <label for="descripcion8">8:</label>
+          <input type="text" id="descripcion8" required>
+        </div>
+                </div>
+
+
+
+          <div class="form-row">
+        <div class="form-group">
+          <label for="descripcion9">9:</label>
+          <input type="text" id="descripcion9" required>
+        </div>
+        <div class="form-group">
+          <label for="descripcion10">10:</label>
+          <input type="text" id="descripcion10" required>
+        </div>
+                </div>
+ </div>
+  </div>
+
+
+    <div class="container">             
+
+ <button class="toggle-button"data-target="fieldsGroup5" onclick="toggleFields(this)">Control de cambios por control de calidad</button>
+
+       <div class="fields-container" id="fieldsGroup5">                
+
+<table class="table2" id="tablaControlCalidad">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Versión</th>
+            <th>Fecha del cambio</th>
+            <th>Motivo</th>
+            <th>Descripción</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <label id="version1"></label>
+            </td>
+                      <td>
+                <input type="number" aria-labelledby="version1" id="versionversion1" required>
+       
+            </td>
+               <td>
+                <input type="text" aria-labelledby="version1" id="fechaVersion1" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="version1" id="motivoVersion1" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="version1" id="descripcionControl1" required>
+            </td>
+
+        </tr>
+            <td>
+                <label for="version2"></label>
+            </td>
+            <td>
+                <input type="number" aria-labelledby="version2" id="versionversion2" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="version2" id="fechaVersion2" required>
+                 </td>
+                 <td>
+                <input type="text" aria-labelledby="version2" id="motivoVersion2" required>         
+                 </td>   
+                 <td>
+                <input type="text" aria-labelledby="version2" id="descripcionControl2" required>
+                 </td>
+                 
+        </tr>
+        <tr>
+            <td>
+                <label for="version3"></label>
+            </td>
+             <td>
+                <input type="number" aria-labelledby="version3" id="versionversion3" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="version3" id="fechaVersion3" required>
+             </td>
+              <td>
+                <input type="text" aria-labelledby="version3" id="motivoVersion3" required>    
+            </td>
+             <td>
+                <input type="text" aria-labelledby="version3" id="descripcionControl3" required>
+            </td>
+           
+        </tr>
+        <tr>
+            <td>
+                <label for="version4"></label>
+            </td>
+             <td>
+                <input type="number" aria-labelledby="version4" id="versionversion4" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="version4" id="fechaVersion4" required>
+                </td>
+ <td>
+                <input type="text" aria-labelledby="version4" id="motivoVersion4" required> 
+                </td>
+ <td>
+                <input type="text" aria-labelledby="version4" id="descripcionControl4" required>
+                </td>
+
+        </tr>
+        <tr>
+            <td>
+                <label for="version5"></label>
+            </td>
+
+             <td>
+                <input type="number" aria-labelledby="version5" id="versionversion5" required>
+            </td>
+            <td>
+                <input type="text"  aria-labelledby="version5" id="fechaVersion5" required>
+                </td>
+ <td>
+                <input type="text" aria-labelledby="version5" id="motivoVersion5" required>
+                </td>
+ <td>
+                <input type="text" aria-labelledby="version5" id="descripcionControl5" required>
+                </td>
+
+        </tr>
+        <tr>
+            <td>
+                <label for="version6"></label>
+            </td>
+
+             <td>
+                <input type="number"  aria-labelledby="version6" id="versionversion6" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="version6" id="fechaVersion6" required>
+                </td>
+ <td>
+                <input type="text"  aria-labelledby="version6" id="motivoVersion6" required>
+                </td>
+ <td>
+                <input type="text"  aria-labelledby="version6" id="descripcionControl6" required>
+                </td>
+
+        </tr>
+      
+    </tbody>
+</table>
+
+    </div>
+                </div>
+
+
+
+    <div class="container">             
+
+ <button class="toggle-button"data-target="fieldsGroup6" onclick="toggleFields(this)">Observaciones propias y/o sanitarias del proceso</button>
+
+       <div class="fields-container" id="fieldsGroup6"> 
+
+ <div class="form-row">
+    <div class="form-group">
+        <label for="observaciones1">1:</label>
+        <input type="text" id="observaciones1" required>
+    </div>
+    </div>
+     <div class="form-row">
+    <div class="form-group">
+        <label for="observaciones2">2:</label>
+        <input type="text" id="observaciones2" required>
+    </div>
+        </div>
+         <div class="form-row">
+    <div class="form-group">
+        <label for="observaciones3">3:</label>
+        <input type="text" id="observaciones3" required>
+    </div>
+        </div>
+         <div class="form-row">
+    <div class="form-group">
+        <label for="observaciones4">4:</label>
+        <input type="text" id="observaciones4" required>
+    </div>
+        </div>
+         <div class="form-row">
+    <div class="form-group">
+        <label for="observaciones5">5:</label>
+        <input type="text" id="observaciones5" required>
+    </div>
+        </div>
+ </div>
+        </div>
+
+    <div class="container">             
+
+ <button class="toggle-button"data-target="fieldsGroup7" onclick="toggleFields(this)">Responsabilidades</button>
+
+       <div class="fields-container" id="fieldsGroup7"> 
+
+<table class="table2" id="tablaPreprensaImpresion">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Responsable Pre-prensa</th>
+            <th>Responsable Impresión por sustrato</th>
+        </tr>
+    </thead>
+    <tbody>
+<tr>
+    <td>
+        <label id="diseñoPreprensaResponsable">Diseño:</label>
+    </td>
+    <td>
+        <select id="diseñoPreprensaResponsable1" name="diseñoPreprensaResponsable" required>
+            <option value="" disabled selected>Seleccione Responsable</option>
+            <option value="diseñoPreprensaResponsableImprelit">Imprelit</option>
+            <option value="diseñoPreprensaResponsableCliente">Cliente</option>
+            <option value="diseñoPreprensaResponsableNA">NA</option>
+        </select>
+    </td>
+    <td>
+        <select id="diseñoImpresionResponsable1" name="diseñoImpresionResponsable" required>
+            <option value="" disabled selected>Seleccione Responsable</option>
+            <option value="diseñoImpresionResponsableImprelit">Imprelit</option>
+            <option value="diseñoImpresionResponsableCliente">Cliente</option>
+            <option value="diseñoImpresionResponsableNa">NA</option>
+        </select>
+    </td>
+</tr>
+
+ <tr>
+            <td>
+                <label id="dummieResponsable">Dummie:</label>
+            </td>
+          
+    <td>
+        <select id="dummiePreprensaResponsable1" name="dummiePreprensaResponsable" required>
+            <option value="" disabled selected>Seleccione Responsable</option>
+            <option value="dummiePreprensaResponsableImprelit">Imprelit</option>
+            <option value="dummiePreprensaResponsableCliente">Cliente</option>
+            <option value="dummiePreprensaResponsableNA">NA</option>
+        </select>
+    </td>
+    <td>
+        <select id="dummieImpresionResponsable1" name="dummieImpresionResponsable" required>
+            <option value="" disabled selected>Seleccione Responsable</option>
+            <option value="dummieImpresionResponsableImprelit">Imprelit</option>
+            <option value="dummieImpresionResponsableCliente">Cliente</option>
+            <option value="dummieImpresionResponsableNa">NA</option>
+        </select>
+    </td>
+  </tr>
+
+ <tr>
+            <td>
+                <label id="archivoDigitalResponsable">Archivo digital:</label>
+            </td>
+          
+    <td>
+        <select id="archivoDigitalPreprensaResponsable1" name="archivoDigitalPreprensaResponsable" required>
+            <option value="" disabled selected>Seleccione Responsable</option>
+            <option value="archivoDigitalPreprensaResponsableImprelit">Imprelit</option>
+            <option value="archivoDigitalPreprensaResponsableCliente">Cliente</option>
+            <option value="archivoDigitalPreprensaResponsableNA">NA</option>
+        </select>
+    </td>
+    <td>
+        <select id="archivoDigitalImpresionResponsable1" name="archivoDigitalImpresionResponsable" required>
+            <option value="" disabled selected>Seleccione Responsable</option>
+            <option value="archivoDigitalImpresionResponsableImprelit">Imprelit</option>
+            <option value="archivoDigitalImpresionResponsableCliente">Cliente</option>
+            <option value="archivoDigitalImpresionResponsableNa">NA</option>
+        </select>
+    </td>
+  </tr>
+
+ <tr>
+            <td>
+                <label id="planchasResponsable">Planchas:</label>
+            </td>
+          
+    <td>
+        <select id="planchasPreprensaResponsable1" name="planchasPreprensaResponsable" required>
+            <option value="" disabled selected>Seleccione Responsable</option>
+            <option value="planchasPreprensaResponsableImprelit">Imprelit</option>
+            <option value="planchasPreprensaResponsableCliente">Cliente</option>
+            <option value="planchasPreprensaResponsableNA">NA</option>
+        </select>
+    </td>
+    <td>
+        <select id="planchasImpresionResponsable1" name="planchasImpresionResponsable" required>
+            <option value="" disabled selected>Seleccione Responsable</option>
+            <option value="planchasImpresionResponsableImprelit">Imprelit</option>
+            <option value="planchasImpresionResponsableCliente">Cliente</option>
+            <option value="planchasImpresionResponsableNa">NA</option>
+        </select>
+    </td>
+  </tr>
+
+ <tr>
+            <td>
+                <label id="troquelResponsable">Troquel:</label>
+            </td>
+          
+    <td>
+        <select id="troquelPreprensaResponsable1" name="troquelPreprensaResponsable" required>
+            <option value="" disabled selected>Seleccione Responsable</option>
+            <option value="troquelPreprensaResponsableImprelit">Imprelit</option>
+            <option value="troquelPreprensaResponsableCliente">Cliente</option>
+            <option value="troquelPreprensaResponsableNA">NA</option>
+        </select>
+    </td>
+    <td>
+        <select id="troquelImpresionResponsable1" name="troquelImpresionResponsable" required>
+            <option value="" disabled selected>Seleccione Responsable</option>
+            <option value="troquelImpresionResponsableImprelit">Imprelit</option>
+            <option value="troquelImpresionResponsableCliente">Cliente</option>
+            <option value="troquelImpresionResponsableNa">NA</option>
+        </select>
+    </td>
+  </tr>
+
+
+
+    </tbody>
+</table>
+
+
+
+<table class="table2" id="tablaResponsabilidadesOtro">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Otros</th>
+        </tr>
+    </thead>
+    <tbody>
+ <tr>
+            <td>
+                <label id="papelesResponsableOtro">Papeles:</label>
+            </td>
+          
+               <td>
+        <select id="papelesResponsableOtro1" name="papelesResponsableOtro" required>
+            <option value="" disabled selected>Seleccione Responsable</option>
+            <option value="imprelitPapelResponsableOtro">Imprelit</option>
+            <option value="clientePapelResponsableOtro">Cliente</option>
+            <option value="naPapelResponsableOtro">NA</option>
+        </select>
+            </td>
+
+  </tr>
+
+   <tr>
+            <td>
+                <label id="impresionResponsableOtro">Impresión:</label>
+            </td>
+          
+               <td>
+        <select id="impresionResponsableOtro1" name="impresionResponsableOtro" required>
+            <option value="" disabled selected>Seleccione Responsable</option>
+            <option value="imprelitImpresionResponsableOtro">Imprelit</option>
+            <option value="clienteImpresionResponsableOtro">Cliente</option>
+            <option value="naImpresionResponsableOtro">NA</option>
+        </select>
+            </td>
+
+  </tr>
+
+
+ <tr>
+            <td>
+                <label id="plastificadoResponsableOtro">Plastificado:</label>
+            </td>
+          
+               <td>
+        <select id="plastificadoResponsableOtro1" name="plastificadoResponsableOtro" required>
+            <option value="" disabled selected>Seleccione Responsable</option>
+            <option value="imprelitPlastificadoResponsableOtro">Imprelit</option>
+            <option value="clientePlastificadoResponsableOtro">Cliente</option>
+            <option value="naPlastificadoResponsableOtro">NA</option>
+        </select>
+            </td>
+
+  </tr>
+
+
+ <tr>
+            <td>
+                <label id="corteResponsableOtro">Corte:</label>
+            </td>
+          
+               <td>
+        <select id="corteResponsableOtro1" name="corteResponsableOtro" required>
+            <option value="" disabled selected>Seleccione Responsable</option>
+            <option value="imprelitCorteResponsableOtro">Imprelit</option>
+            <option value="clienteCorteResponsableOtro">Cliente</option>
+            <option value="naCorteResponsableOtro">NA</option>
+        </select>
+            </td>
+
+  </tr>
+
+
+ <tr>
+            <td>
+                <label id="troqueladoResponsableOtro">Troquelado:</label>
+            </td>
+          
+               <td>
+        <select id="troqueladoResponsableOtro1" name="troqueladoResponsableOtro" required>
+            <option value="" disabled selected>Seleccione Responsable</option>
+            <option value="imprelitTroqueladoResponsableOtro">Imprelit</option>
+            <option value="clienteTroqueladoResponsableOtro">Cliente</option>
+            <option value="naTroqueladoResponsableOtro">NA</option>
+        </select>
+            </td>
+
+  </tr>
+
+ <tr>
+            <td>
+                <label id="pegueResponsableOtro">Pegue:</label>
+            </td>
+          
+               <td>
+        <select id="pegueResponsableOtro1" name="pegueResponsableOtro" required>
+            <option value="" disabled selected>Seleccione Responsable</option>
+            <option value="imprelitPegueResponsableOtro">Imprelit</option>
+            <option value="clientePegueResponsableOtro">Cliente</option>
+            <option value="naPegueResponsableOtro">NA</option>
+        </select>
+            </td>
+
+  </tr>
+
+
+
+
+    </tbody>
+</table>
+
+
+ </div>
+        </div>
+
+</div>
+
+
+
+
+
+
+
+       
+
+      <div id="Conversión"style="display: none;">
+
+        <div id="filters">
+ <div class="form-row">
+
+      <div class="Header">Conversion Lineer</div>
+       </div>
+        <div class="form-row">
+    <div class="form-group">
+        <label for="sustrato">Sustrato:</label>
+        <input type="text" id="sustrato" required>
+    </div>
+    <div class="form-group">
+        <label for="anchoInicial">Ancho Inicial:</label>
+        <input type="text" id="anchoInicial" required>
+    </div>
+    <div class="form-group">
+        <label for="largoInicial">Largo Inicial:</label>
+        <input type="text" id="largoInicial" required>
+    </div>
+    <div class="form-group">
+        <label for="gramaje">Gramaje:</label>
+        <input type="text" id="gramaje" required>
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-groupB">
+        <label for="corteRealizadoEn">Corte realizado en:</label>
+        <select id="corteRealizadoEn"name="medioPago">
+      <option value="" disabled selected>Seleccione Responsable</option>
+      <option value="cuchillaConversion">Cuchilla</option>
+      <option value="guillotinaConversion">Guillotina</option>
+    </select><br><br>
+ </div>
+ </div>
+
+
+<table class="table2" id="tablaConversionLiner">
+    <thead>
+        <tr>
+            <th>Corte</th>
+            <th>Ancho</th>
+            <th>Largo</th>
+        </tr>
+    </thead>
+    <tbody>
+ <tr>
+            <td>
+                <label id="corte1ConversionLiner">Corte 1:</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="corte1ConversionLiner" id="corte1ConversionLiner1" required>
+            </td>
+             <td>
+                <input type="text" aria-labelledby="corte1ConversionLiner" id="corte1ConversionLiner2" required>
+            </td>
+
+  </tr>
+
+ <tr>
+            <td>
+                <label id="corte2ConversionLiner">Corte 2:</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="corte2ConversionLiner" id="corte2ConversionLiner1" required>
+            </td>
+             <td>
+                <input type="text" aria-labelledby="corte2ConversionLiner" id="corte2ConversionLiner2" required>
+            </td>
+
+  </tr>
+
+ <tr>
+            <td>
+                <label id="corte3ConversionLiner">Corte 3:</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="corte3ConversionLiner" id="corte3ConversionLiner1" required>
+            </td>
+             <td>
+                <input type="text" aria-labelledby="corte3ConversionLiner" id="corte3ConversionLiner2" required>
+            </td>
+
+  </tr>
+
+
+    </tbody>
+</table>
+
+
+
+    <div class="form-row">
+      <div class="Header">Conversion Single Face</div>
+</div>
+
+
+
+    <div class="form-row">
+    <div class="form-group">
+        <label for="sustrato2">Sustrato:</label>
+        <input type="text" id="sustrato2" required>
+    </div>
+    <div class="form-group">
+        <label for="anchoInicial2">Ancho inicial:</label>
+        <input type="text" id="anchoInicial2" required>
+    </div>
+
+    <div class="form-group">
+        <label for="largoInicial2">Largo inicial:</label>
+        <input type="text" id="largoInicial2" required>
+    </div>
+    <div class="form-group">
+        <label for="gramaje2">Gramaje:</label>
+        <input type="text" id="gramaje2" required>
+    </div>
+</div>
+
+    
+<div class="form-row">
+
+    <div class="form-groupB">
+        <label for="corteRealizadoEnSingleFace">Corte realizado en:</label>
+        <select id="corteRealizadoEnSingleFace"name="corteRealizadoEnSingleFace">
+      <option value="" disabled selected>Seleccione Responsable</option>
+      <option value="cuchillaConversion">Cuchilla</option>
+      <option value="guillotinaConversion">Guillotina</option>
+    </select><br><br>
+ </div>
+ </div>
+
+
+
+
+
+<table class="table2" id="tablaConversionSingleFace">
+    <thead>
+        <tr>
+            <th>Corte</th>
+            <th>Ancho</th>
+            <th>Largo</th>
+        </tr>
+    </thead>
+    <tbody>
+ <tr>
+            <td>
+                <label id="corte1ConversionSingleFace">Corte 1:</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="corte1ConversionSingleFace" id="corte1ConversionSingleFace1" required>
+            </td>
+             <td>
+                <input type="text" aria-labelledby="corte1ConversionSingleFace" id="corte1ConversionSingleFace2" required>
+            </td>
+
+  </tr>
+
+ <tr>
+            <td>
+                <label id="corte2ConversionSingleFace">Corte 2:</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="corte2ConversionSingleFace" id="corte2ConversionSingleFace1" required>
+            </td>
+             <td>
+                <input type="text" aria-labelledby="corte2ConversionSingleFace" id="corte2ConversionSingleFace2" required>
+            </td>
+
+  </tr>
+
+ <tr>
+            <td>
+                <label id="corte3ConversionSingleFace">Corte 3:</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="corte3ConversionSingleFace" id="corte3ConversionSingleFace1" required>
+            </td>
+             <td>
+                <input type="text" aria-labelledby="corte3ConversionSingleFace" id="corte3ConversionSingleFace2" required>
+            </td>
+
+  </tr>
+
+    </tbody>
+</table>
+    
+ 
+<div class="form-row">
+    <div class="form-group">
+        <label for="observaciones">Observaciones:</label>
+        <input type="text" id="observacionesConversion" required>
+    </div>
+</div>
+
+                  </div>
+
+ </div>
+
+
+       <div id="Corrugación"style="display: none;">
+
+        <div id="filters">
+
+
+<table class="table2" id="tablaCorrugacion">
+    <thead>
+        <tr>
+            <th>Campo</th>
+            <th>Liner Interior</th>
+            <th>Corrugado Medio</th>
+            <th>Liner Exterior</th>
+            <th>Otra Capa</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <label id="tipoC">Tipo:</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="tipoC" id="tipoLI" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="tipoC" id="tipoCM" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="tipoC" id="tipoLE" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="tipoC" id="tipoOC" required>
+       
+            </td>
+        </tr>
+            <td>
+                <label for="gramajeC">Gramaje:</label>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="gramajeC" id="gramajeLI" required>
+                 </td>
+                 <td>
+                <input type="text" aria-labelledby="gramajeC" id="gramajeCM" required>         
+                 </td>   
+                 <td>
+                <input type="text" aria-labelledby="gramajeC" id="gramajeLE" required>
+                 </td>
+                 <td>
+                <input type="text" aria-labelledby="gramajeC" id="gramajeOC" required>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="anchoCuchillas">Ancho final cuchillas:</label>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="anchoCuchillas" id="anchoCuchillasLI" required>
+             </td>
+              <td>
+                <input type="text" aria-labelledby="anchoCuchillas" id="anchoCuchillasCM" required>    
+            </td>
+             <td>
+                <input type="text" aria-labelledby="anchoCuchillas" id="anchoCuchillasLE" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="anchoCuchillas" id="anchoCuchillasOC" required>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="largoCuchillas">Largo final cuchillas:</label>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="largoCuchillas" id="largoCuchillasLI" required>
+                </td>
+ <td>
+                <input type="text" aria-labelledby="largoCuchillas" id="largoCuchillasCM" required> 
+                </td>
+ <td>
+                <input type="text" aria-labelledby="largoCuchillas" id="largoCuchillasLE" required>
+                </td>
+ <td>
+                <input type="text" aria-labelledby="largoCuchillas" id="largoCuchillasOC" required>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="reverso">Reverso:</label>
+            </td>
+            <td>
+                <input type="text"  aria-labelledby="reverso" id="reversoLI" required>
+                </td>
+ <td>
+                <input type="text" aria-labelledby="reverso" id="reversoCM" required>
+                </td>
+ <td>
+                <input type="text" aria-labelledby="reverso" id="reversoLE" required>
+                </td>
+ <td>
+                <input type="text" aria-labelledby="reverso" id="reversoOC" required>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="anchoRollo">Ancho de Rollo:</label>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="anchoRollo" id="anchoRolloLI" required>
+                </td>
+ <td>
+                <input type="text"  aria-labelledby="anchoRollo" id="anchoRolloCM" required>
+                </td>
+ <td>
+                <input type="text"  aria-labelledby="anchoRollo" id="anchoRolloLE" required>
+                </td>
+ <td>
+                <input type="text"  aria-labelledby="anchoRollo" id="anchoRolloOC" required>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="largoTamaño"> Largo de tamaño:</label>
+            </td>
+            <td>
+                <input type="text"  aria-labelledby="largoTamaño" id="largoTamañoLI" required>
+                </td>
+ <td>
+                <input type="text"  aria-labelledby="largoTamaño" id="largoTamañoCM" required>
+                </td>
+ <td>
+                <input type="text"  aria-labelledby="largoTamaño" id="largoTamañoLE" required>
+                </td>
+ <td>
+                <input type="text"  aria-labelledby="largoTamaño" id="largoTamañoOC" required>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="impresionFlexo">Impresión Flexo:</label>
+            </td>
+            <td>
+                <input type="text"  aria-labelledby="impresionFlexo" id="impresionFlexoLI" required>
+                </td>
+ <td>
+                <input type="text"  aria-labelledby="impresionFlexo" id="impresionFlexoCM" required>
+                </td>
+ <td>
+                <input type="text"  aria-labelledby="impresionFlexo" id="impresionFlexoLE" required>
+                </td>
+ <td>
+                <input type="text" aria-labelledby="impresionFlexo"  id="impresionFlexoOC" required>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+<table class="table2" id="tablaCorrugacion2">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Corte 1</th>
+            <th>Corte 2</th>
+            <th>Corte 3</th>
+            <th>Corte 4</th>
+        </tr>
+    </thead>
+    <tbody>
+ <tr>
+            <td>
+                <label id="anchosCortesLongitudinales">Anchos de cortes Longitudinales:</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="anchosCortesLongitudinales" id="corteL1" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="anchosCortesLongitudinales" id="corteL2" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="anchosCortesLongitudinales" id="corteL3" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="anchosCortesLongitudinales" id="corteL4" required>
+       
+            </td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+<div class="form-row">
+    <div class="form-group">
+        <label for="registroImpresion">Registro de Impresión:</label>
+        <input type="text" id="registroImpresion" required>
+    </div>
+</div>
+
+<table class="table2" id="tablaInventario3">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Ancho</th>
+            <th>Largo</th>
+        </tr>
+    </thead>
+    <tbody>
+ <tr>
+            <td>
+                <label id="cliseFlexo">Clise para Flexo:</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="anchosCortesLongitudinales" id="anchoCF" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="anchosCortesLongitudinales" id="largoCF" required>
+            </td>
+       
+            </td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+<div class="form-row">
+    <div class="form-group">
+        <label for="observaciones">Observaciones:</label>
+        <input type="text" id="observacionesCorrugado" required>
+    </div>
+</div>
+
+                  </div>
+
+        </div>
+
+       <div id="Corte"style="display: none;">
+
+        <div id="filtersCorte">
+      <div class="form-row">
+
+          <div class="form-groupB">
+          <label for="sustratCortar">Tipo de Sustrato a Cortar:</label>
+          <input type="text" id="Ancho1" required>
+        </div>
+        </div>
+      <div class="form-row">
+          <div class="form-group">
+          <label for="anchoCorte">Ancho:</label>
+          <input type="text" id="anchoCorte" required>
+        </div>
+          <div class="form-group">
+          <label for="largoCorte">Largo:</label>
+          <input type="text" id="largoCorte" required>
+        </div>
+          <div class="form-group">
+          <label for="cantidadCortes">Cantidad de Cortes:</label>
+          <input type="number" id="cantidadCortes" required>
+        </div>
+
+    <div class="form-groupB">
+        <label for="corteRealizadoEnCorte">Corte realizado en:</label>
+        <select id="corteRealizadoEnCorte"name="corteRealizadoEn">
+      <option value="" disabled selected>Seleccione Responsable</option>
+      <option value="cuchillaConversion">Cuchilla</option>
+      <option value="guillotinaConversion">Guillotina</option>
+    </select><br><br>
+ </div>
+
+         </div>
+
+<table class="table2" id="tablaCorte">
+    <thead>
+        <tr>
+            <th>Corte</th>
+            <th>Ancho</th>
+            <th>Largo</th>
+        </tr>
+    </thead>
+    <tbody>
+ <tr>
+            <td>
+                <label id="EjeXcorte1">Corte 1:</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="EjeXcorte1" id="corteCorte1" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="EjeXcorte1" id="corteCorte1" required>
+            </td>
+
+  </tr>
+
+   <tr>
+
+       <td>
+                        <label id="EjeXcorte2">Corte 2:</label>
+            </td>
+                           <td>
+                <input type="text" aria-labelledby="EjeXcorte2" id="corteCorte2" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="EjeXcorte2" id="corteCorte2" required>
+            </td>
+  </tr>
+
+   <tr>
+
+       <td>
+                        <label id="EjeXcorte3">Corte 3:</label>
+            </td>
+                           <td>
+                <input type="text" aria-labelledby="EjeXcorte3" id="corteCorte3" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="EjeXcorte3" id="corteCorte3" required>
+            </td>
+  </tr>
+
+
+
+   <tr>
+
+       <td>
+                        <label id="EjeXcorte4">Corte 4:</label>
+            </td>
+                           <td>
+                <input type="text" aria-labelledby="EjeXcorte4" id="corteCorte4" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="EjeXcorte4" id="corteCorte4" required>
+            </td>
+
+  </tr>
+
+   <tr>
+       <td>
+                        <label id="EjeXcorte5">Corte 5:</label>
+            </td>
+                           <td>
+                <input type="text" aria-labelledby="EjeXcorte5" id="corteCorte5" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="EjeXcorte5" id="corteCorte5" required>
+            </td>
+  </tr>
+
+
+   <tr>
+       <td>
+                        <label id="EjeXcorte6">Corte 6:</label>
+            </td>
+                           <td>
+                <input type="text" aria-labelledby="EjeXcorte6" id="corteCorte6" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="EjeXcorte6" id="corteCorte6" required>
+            </td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+<div class="form-row">
+    <div class="form-group">
+        <label for="observacionesCorte">Observaciones:</label>
+        <input type="text" id="observacionesCorte" required>
+    </div>
+</div>
+
+                </div>
+                  </div>
+
+        
+
+
+       <div id="Impresión"style="display: none;">
+
+        <div id="filters">
+      <div class="form-row">
+
+<table class="table2" id="tablaImpresion">
+    <thead>
+        <tr>
+            <th>Especificaciones</th>
+            <th>Afiche 1</th>
+            <th>Afiche 2</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <label id="tipoPapelImpresion">Tipo de papel:</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="tipoPapelImpresion" id="tipoPapelImpresion1" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="tipoPapelImpresion" id="tipoPapelImpresion2" required>
+            </td>
+
+
+
+        </tr>
+          <tr>
+            <td>
+                <label id="gramajeImpresion">Gramaje:</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="gramajeImpresion" id="gramajeImpresion1" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="gramajeImpresion" id="gramajeImpresion2" required>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label id="calibreImpresion">Calibre:</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="calibreImpresion" id="calibreImpresion1" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="calibreImpresion" id="calibreImpresion2" required>
+            </td>
+        </tr>
+                <tr>
+            <td>
+                <label id="anchoImpresion">Ancho:</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="anchoImpresion" id="anchoImpresion1" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="anchoImpresion" id="anchoImpresion2" required>
+            </td>
+        </tr>
+                <tr>
+            <td>
+                <label id="largoImpresion">Largo:</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="largoImpresion" id="largoImpresion1" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="largoImpresion" id="largoImpresion2" required>
+            </td>
+        </tr>
+
+
+<tr>
+            <td>
+                <label id="cabidaImpresion">Cabida para Impresión:</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="cabidaImpresion" id="cabidaImpresion1" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="cabidaImpresion" id="cabidaImpresion2" required>
+            </td>
+        </tr>
+
+               <tr>
+            <td>
+                <label id="checkbox1">Tinta tiro 1:</label>
+            </td>
+          
+               <td>
+               <div class="form-row">
+<div class="checkbox-container">
+  <label class="checkbox-label" for="checkbox1">C</label>
+  <div class="checkbox" id="tiro1C" onclick="toggleCheckbox(this)"></div>
+</div>
+
+<div class="checkbox-container">
+  <label class="checkbox-label" for="checkbox1">M</label>
+  <div class="checkbox" id="tiro1M" onclick="toggleCheckbox(this)"></div>
+</div>
+<div class="checkbox-container">
+  <label class="checkbox-label" for="checkbox1">Y</label>
+  <div class="checkbox" id="tiro1Y" onclick="toggleCheckbox(this)"></div>
+</div>
+<div class="checkbox-container">
+  <label class="checkbox-label" for="checkbox1">K</label>
+  <div class="checkbox" id="tiro1K" onclick="toggleCheckbox(this)"></div>
+</div>
+</div>
+                <div class="form-rowB">
+
+          <div class="form-groupD">
+          <label for="pantone1Tiro1">Pantones:</label>
+          <input type="text" id="pantone1Tiro1" required>
+        </div>
+            
+
+</div>
+<div class="form-rowB">
+
+          <div class="form-groupD">
+          <label for="pantone2Tiro1"></label>
+          <input type="text" id="pantone2Tiro1" required>
+        </div>
+            
+
+</div>
+<div class="form-rowB">
+
+          <div class="form-groupD">
+          <label for="pantone3Tiro1"></label>
+          <input type="text" id="pantone3Tiro1" required>
+        </div>
+            
+
+</div>
+<div class="form-rowB">
+
+          <div class="form-groupD">
+          <label for="pantone4Tiro1"></label>
+          <input type="text" id="pantone4Tiro1" required>
+        </div>
+            
+
+</div>
+<div class="form-rowB">
+
+          <div class="form-groupD">
+          <label for="pantone5Tiro1"></label>
+          <input type="text" id="pantone5Tiro1" required>
+        </div>
+            
+
+</div>
+
+            </td>
+            <td>
+              <div class="form-row">
+<div class="checkbox-container">
+  <label class="checkbox-label" for="checkbox1">C</label>
+  <div class="checkbox" id="tiro1Afiche2C" onclick="toggleCheckbox(this)"></div>
+</div>
+
+<div class="checkbox-container">
+  <label class="checkbox-label" for="checkbox1">M</label>
+  <div class="checkbox" id="tiro1Afiche2M" onclick="toggleCheckbox(this)"></div>
+</div>
+<div class="checkbox-container">
+  <label class="checkbox-label" for="checkbox1">Y</label>
+  <div class="checkbox" id="tiro1Afiche2Y" onclick="toggleCheckbox(this)"></div>
+</div>
+<div class="checkbox-container">
+  <label class="checkbox-label" for="checkbox1">K</label>
+  <div class="checkbox" id="tiro1Afiche2K" onclick="toggleCheckbox(this)"></div>
+</div>
+</div>
+
+                <div class="form-rowB">
+
+          <div class="form-groupD">
+          <label for="pantone1Tiro1Afiche2">Pantones:</label>
+          <input type="text" id="pantone1Tiro1Afiche2" required>
+        </div>
+            
+
+</div>
+<div class="form-rowB">
+
+          <div class="form-groupD">
+          <label for="pantone2Tiro1Afiche2"></label>
+          <input type="text" id="pantone2Tiro1Afiche2" required>
+        </div>
+            
+
+</div>
+<div class="form-rowB">
+
+          <div class="form-groupD">
+          <label for="pantone3Tiro1Afiche2"></label>
+          <input type="text" id="pantone3Tiro1Afiche2" required>
+        </div>
+            
+
+</div>
+<div class="form-rowB">
+
+          <div class="form-groupD">
+          <label for="pantone4Tiro1Afiche2"></label>
+          <input type="text" id="pantone4Tiro1Afiche2" required>
+        </div>
+            
+
+</div>
+<div class="form-rowB">
+
+          <div class="form-groupD">
+          <label for="pantone5Tiro1Afiche2"></label>
+          <input type="text" id="pantone5Tiro1Afiche2" required>
+        </div>
+            
+
+</div>
+            </td>
+        </tr>
+
+ <tr>
+            <td>
+                <label id="checkbox2">Tinta retiro 1:</label>
+            </td>
+          
+               <td>
+              <div class="form-row">
+<div class="checkbox-container">
+  <label class="checkbox-label" for="checkbox1">C</label>
+  <div class="checkbox" id="retiro1C" onclick="toggleCheckbox(this)"></div>
+</div>
+
+<div class="checkbox-container">
+  <label class="checkbox-label" for="checkbox1">M</label>
+  <div class="checkbox" id="retiro1M" onclick="toggleCheckbox(this)"></div>
+</div>
+<div class="checkbox-container">
+  <label class="checkbox-label" for="checkbox1">Y</label>
+  <div class="checkbox" id="retiro1Y" onclick="toggleCheckbox(this)"></div>
+</div>
+<div class="checkbox-container">
+  <label class="checkbox-label" for="checkbox1">K</label>
+  <div class="checkbox" id="retiro1K" onclick="toggleCheckbox(this)"></div>
+</div>
+</div>
+                <div class="form-rowB">
+
+          <div class="form-groupD">
+          <label for="pantone1Retiro1Afiche2">Pantones:</label>
+          <input type="text" id="pantone1Retiro1Afiche2" required>
+        </div>
+            
+
+</div>
+<div class="form-rowB">
+
+          <div class="form-groupD">
+          <label for="pantone2Retiro1Afiche2"></label>
+          <input type="text" id="pantone2Retiro1Afiche2" required>
+        </div>
+            
+
+</div>
+<div class="form-rowB">
+
+          <div class="form-groupD">
+          <label for="pantone3Retiro1Afiche2"></label>
+          <input type="text" id="pantone3Retiro1Afiche2" required>
+        </div>
+            
+
+</div>
+<div class="form-rowB">
+
+          <div class="form-groupD">
+          <label for="pantone4Retiro1Afiche2"></label>
+          <input type="text" id="pantone4Retiro1Afiche2" required>
+        </div>
+            
+
+</div>
+<div class="form-rowB">
+
+          <div class="form-groupD">
+          <label for="pantone5Retiro1Afiche2"></label>
+          <input type="text" id="pantone5Retiro1Afiche2" required>
+        </div>
+            
+
+</div>
+
+            </td>
+            <td>
+              <div class="form-row">
+<div class="checkbox-container">
+  <label class="checkbox-label" for="checkbox1">C</label>
+  <div class="checkbox" id="retiro1CAfiche2" onclick="toggleCheckbox(this)"></div>
+</div>
+
+<div class="checkbox-container">
+  <label class="checkbox-label" for="checkbox1">M</label>
+  <div class="checkbox" id="retiro1MAfiche2" onclick="toggleCheckbox(this)"></div>
+</div>
+<div class="checkbox-container">
+  <label class="checkbox-label" for="checkbox1">Y</label>
+  <div class="checkbox" id="retiro1YAfiche2" onclick="toggleCheckbox(this)"></div>
+</div>
+<div class="checkbox-container">
+  <label class="checkbox-label" for="checkbox1">K</label>
+  <div class="checkbox" id="retiro1KAfiche2" onclick="toggleCheckbox(this)"></div>
+</div>
+</div>
+
+                <div class="form-rowB">
+
+          <div class="form-groupD">
+          <label for="pantone1Tiro1">Pantones:</label>
+          <input type="text" id="pantone1Tiro1" required>
+        </div>
+            
+
+</div>
+<div class="form-rowB">
+
+          <div class="form-groupD">
+          <label for="pantone2Tiro1"></label>
+          <input type="text" id="pantone2Tiro1" required>
+        </div>
+            
+
+</div>
+<div class="form-rowB">
+
+          <div class="form-groupD">
+          <label for="pantone3Tiro1"></label>
+          <input type="text" id="pantone3Tiro1" required>
+        </div>
+            
+
+</div>
+<div class="form-rowB">
+
+          <div class="form-groupD">
+          <label for="pantone4Tiro1"></label>
+          <input type="text" id="pantone4Tiro1" required>
+        </div>
+            
+
+</div>
+<div class="form-rowB">
+
+          <div class="form-groupD">
+          <label for="pantone5Tiro1"></label>
+          <input type="text" id="pantone5Tiro1" required>
+        </div>
+            
+
+</div>
+            </td>
+
+       <tr>
+            <td>
+                <label id="tamañoPlanchaImpresion">Tamaño de Plancha:</label>
+            </td>
+          
+               <td>
+
+
+
+<div class="form-rowB">
+
+      <div class="Header3">Pinza&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+
+            <div class="checkbox-container">
+  <label class="checkbox-label" for="checkbox1"></label>
+  <div class="checkbox" id="tamañoPlanchaPinza" onclick="toggleCheckbox(this)"></div>
+</div>
+
+</div>
+
+<div class="form-rowB">
+
+      <div class="Header3">Escuadra</div>
+
+            <div class="checkbox-container">
+  <label class="checkbox-label" for="checkbox1">I</label>
+  <div class="checkbox" id="tamañoPlanchaEscuadraIzquierdo" onclick="toggleCheckbox(this)"></div>
+</div>
+
+            <div class="checkbox-container">
+  <label class="checkbox-label" for="checkbox1">D</label>
+  <div class="checkbox" id="tamañoPlanchaEscuadraDerecho" onclick="toggleCheckbox(this)"></div>
+</div>
+
+  </div>
+
+<div class="form-rowB">
+          <div class="form-groupD">
+          <label for="tamañoPlanchaImpresion">Medidas</label>
+          <input type="text" id="tamañoPlanchaImpresion1" required>
+        </div>
+            
+</div>
+            </td>
+            <td>
+
+<div class="form-rowB">
+
+      <div class="Header3">Pinza&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+
+            <div class="checkbox-container">
+  <label class="checkbox-label" for="checkbox1"></label>
+  <div class="checkbox" id="tamañoPlanchaPinzaAfiche2" onclick="toggleCheckbox(this)"></div>
+</div>
+
+</div>
+
+<div class="form-rowB">
+
+      <div class="Header3">Escuadra</div>
+
+            <div class="checkbox-container">
+  <label class="checkbox-label" for="checkbox1">I</label>
+  <div class="checkbox" id="tamañoPlanchaEscuadraIzquierdoAfiche2" onclick="toggleCheckbox(this)"></div>
+</div>
+
+            <div class="checkbox-container">
+  <label class="checkbox-label" for="checkbox1">D</label>
+  <div class="checkbox" id="tamañoPlanchaEscuadraDerechoAfiche2" onclick="toggleCheckbox(this)"></div>
+</div>
+
+  </div>
+
+<div class="form-rowB">
+          <div class="form-groupD">
+          <label for="tamañoPlanchaImpresion">Medidas</label>
+          <input type="text" id="tamañoPlanchaImpresion1Afiche2" required>
+        </div>
+            
+</div>
+            
+            </td>
+        </tr>    
+
+
+                <tr>
+            <td>
+                <label id="formatoMaquina">Formato de máquina:</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="formatoMaquina" id="formatoMaquina1" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="formatoMaquina" id="formatoMaquina2" required>
+            </td>
+        </tr>
+                
+       <tr>
+            <td>
+                <label id="brilloSinReservaImpresion">Brillo Sin Reserva:</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="brilloSinReservaImpresion" id="brilloSinReservaImpresion1" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="brilloSinReservaImpresion" id="brilloSinReservaImpresion2" required>
+            </td>
+        </tr>
+       <tr>
+            <td>
+                <label id="brilloConReservaImpresion">Brillo con Reserva:</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="brilloConReservaImpresion" id="brilloConReservaImpresion1" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="brilloConReservaImpresion" id="brilloConReservaImpresion2" required>
+            </td>
+        </tr>
+       <tr>
+            <td>
+                <label id="plastificadoSinReserva">Plastificado sin Reserva:</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="plastificadoSinReserva" id="plastificadoSinReserva1" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="plastificadoSinReserva" id="plastificadoSinReserva2" required>
+            </td>
+        </tr>
+       <tr>
+            <td>
+                <label id="plastificadoConReserva">Plastificado con Reserva:</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="plastificadoConReserva" id="plastificadoConReserva1" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="plastificadoConReserva" id="plastificadoConReserva2" required>
+            </td>
+        </tr>
+       <tr>
+            <td>
+                <label id="brilloUVSinReserva">Brillo UV sin Reserva:</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="brilloUVSinReserva" id="brilloUVSinReserva1" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="brilloUVSinReserva" id="brilloUVSinReserva2" required>
+            </td>
+        </tr>
+       <tr>
+            <td>
+                <label id="brilloUVConReserva">Brillo UV con Reserva:</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="brilloUVConReserva" id="brilloUVConReserva1" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="brilloUVConReserva" id="brilloUVConReserva2" required>
+            </td>
+        </tr>
+       <tr>
+            <td>
+                <label id="estampadoDeImpresion">Estampado de Impresión:</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="estampadoDeImpresion" id="estampadoDeImpresion1" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="estampadoDeImpresion" id="estampadoDeImpresion2" required>
+            </td>
+        </tr>
+       <tr>
+            <td>
+                <label id="proveedorOriginalImpresion">Proveedor Original de Impresión:</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="proveedorOriginalImpresion" id="proveedorOriginalImpresion1" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="proveedorOriginalImpresion" id="proveedorOriginalImpresion2" required>
+            </td>
+        </tr>
+       <tr>
+            <td>
+                <label id="otroImpresion">Otro:</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="otroImpresion" id="otroImpresion1" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="otroImpresion" id="otroImpresion2" required>
+            </td>
+        </tr>
+ 
+
+    </tbody>
+</table>
+
+                </div>
+
+                      <div class="form-row">
+          <div class="form-group">
+          <label for="observacionesImpresion">Observaciones:</label>
+          <input type="text" id="observacionesImpresion" required>
+        </div>
+         </div>
+                  </div>
+
+        </div>
+
+       
+
+       <div id="Colaminación"style="display: none;">
+
+        <div id="filtersColaminacion">
+      <div class="form-row">
+
+          <div class="form-groupB">
+          <label for="tiro">Tiro:</label>
+          <input type="text" id="tiro" required>
+        </div>
+          <div class="form-groupB">
+          <label for="retiro">Retiro:</label>
+          <input type="text" id="retiro" required>
+        </div>
+</div>
+      <div class="form-row">
+    <div class="form-groupB">
+        <label for="registroColaminacion">Registro:</label>
+        <select id="registroColaminacion"name="corteRealizadoEn" class="select-alternativo">
+      <option value="" disabled selected>Seleccione </option>
+      <option value="pinzaColaminacion">Pinza</option>
+      <option value="escuadraColaminacion">Escuadra</option>
+    </select>
+ </div>
+      
+
+
+<div class="form-groupB">
+        <label for="materialBaseColaminacion">Material Base:</label>
+        <select id="materialBaseColaminacion"name="materialBaseColaminacion1" class="select-alternativo">
+      <option value="" disabled selected>Seleccione material Base</option>
+      <option value="laminaColaminacion">Lámina</option>
+      <option value="singleFaceColaminacion">Single Face</option>
+      <option value="cartulinaColaminacion">Cartulina</option>
+      <option value="cartonPrensadoColaminacion">Cartón Prensado</option>
+    </select>
+ </div>
+</div>
+
+      <div class="form-row">
+          <div class="form-groupB">
+          <label for="claveColaminacion">Clave:</label>
+          <input type="text" id="claveColaminacion" required>
+        </div>
+          
+
+                </div>
+<table class="table2" id="tablaColaminado">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Sustrato</th>
+            <th>Afiche 1</th>
+            <th>Afiche 2</th>
+            <th>Tiro</th>
+            <th>Retiro</th>
+
+        </tr>
+    </thead>
+    <tbody>
+ <tr>
+            <td>
+                <label id="anchoFlauta">Corte 1:</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="anchoFlauta" id="anchoSustrato" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="anchoFlauta" id="anchoAfiche1" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="anchoFlauta" id="anchoAfiche2" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="anchoFlauta" id="anchoTiro" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="anchoFlauta" id="anchoRetiro" required>
+            </td>
+
+  </tr>
+
+   <tr>
+
+       <td>
+                        <label id="largoColaminacion">Corte 2:</label>
+            </td>
+                           <td>
+                <input type="text" aria-labelledby="largoColaminacion" id="largoSustrato" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="largoColaminacion" id="largoAfiche1" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="largoColaminacion" id="largoAfiche2" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="largoColaminacion" id="largoTiro" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="largoColaminacion" id="largoRetiro" required>
+            </td>
+  </tr>
+
+
+
+    </tbody>
+</table>
+
+
+      <div class="form-row">
+
+          <div class="form-group">
+          <label for="unidadesACarear">Unidades a carear:</label>
+          <input type="text" id="unidadesACarear" required>
+        </div>
+          <div class="form-group">
+          <label for="rendimientoxHora">Rendimiento por hora:</label>
+          <input type="number" id="rendimientoxHoraColaminacion" required>
+        </div>
+          <div class="form-group">
+          <label for="requerimientoAuxiliar">Auxiliares requeridos:</label>
+          <input type="number" id="requerimientoAuxiliar" required>
+        </div>
+          <div class="form-group">
+          <label for="referenciaAdhesivo">Referencia Adhesivo:</label>
+          <input type="text" id="referenciaAdhesivo" required>
+        </div>
+         </div>
+
+      
+          <div class="form-group">
+          <label for="observacionesColaminado">Observaciones:</label>
+          <input type="text" id="observacionesColaminado" required>
+        </div>
+         </div>
+
+        
+                  </div>
+
+        
+        
+
+       <div id="Troquelado"style="display: none;">
+
+
+        <div id="filters">
+      <div class="form-row">
+
+            <div class="form-groupB">
+        <label for="impresionTroquelado">¿Con impresión?:</label>
+        <select id="impresionTroquelado1"name="impresionTroquelado" class="select-alternativo">
+      <option value="" disabled selected>Seleccione </option>
+      <option value="siImpresionTroquelado">Si</option>
+      <option value="noImpresionTroquelado">No</option>
+    </select>
+ </div>
+ </div>
+       <div class="form-row">
+          <div class="form-group">
+          <label for="numeroTroquel">Numero de troquel:</label>
+          <input type="text" id="numeroTroquel" required>
+        </div>
+          <div class="form-group">
+          <label for="repujado">Repujado:</label>
+          <input type="text" id="repujado" required>
+        </div>
+          <div class="form-group">
+          <label for="cavidad">Cavidad:</label>
+          <input type="number" id="cavidad" required>
+        </div>
+          <div class="form-group">
+          <label for="proveedorTroquel">Proveedor troquel:</label>
+          <input type="text" id="proveedorTroquel" required>
+        </div>
+        <div class="form-group">
+          <label for="cantidadClises">Cantidad de Clises:</label>
+          <input type="number" id="cantidadClises" required>
+        </div>
+
+                </div>
+<table class="table2" id="tablaTroquelado">
+    <thead>
+        <tr>
+            <th></th>
+            <th>1</th>
+            <th>2</th>
+            <th>3</th>
+            <th>4</th>
+            <th>5</th>
+            <th>6</th>
+            <th>7</th>
+            <th>8</th>
+            <th>9</th>
+
+        </tr>
+    </thead>
+    <tbody>
+ <tr>
+            <td>
+                <label id="codigoClise">Codigo Clise:</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="codigoClise" id="codigoClise1" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="codigoClise" id="codigoClise2" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="codigoClise" id="codigoClise3" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="codigoClise" id="codigoClise4" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="codigoClise" id="codigoClise5" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="codigoClise" id="codigoClise6" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="codigoClise" id="codigoClise7" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="codigoClise" id="codigoClise8" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="codigoClise" id="codigoClise9" required>
+            </td>
+
+
+  </tr>
+
+
+    </tbody>
+</table>
+
+
+      <div class="form-row">
+
+          <div class="form-group">
+          <label for="estampado">Estampado:</label>
+          <input type="text" id="estampado" required>
+        </div>
+          <div class="form-group">
+          <label for="tipoEstampado">Tipo de estampado:</label>
+          <input type="text" id="tipoEstampado" required>
+        </div>
+          <div class="form-group">
+          <label for="cantidadEstampado">Cantidad de Estampado:</label>
+          <input type="number" id="cantidadEstampado" required>
+        </div>
+          <div class="form-group">
+          <label for="cliseAUsar">Clise a usar:</label>
+          <input type="text" id="cliseAUsar" required>
+        </div>
+         </div>
+
+
+
+      <div class="form-row">
+
+          <div class="form-group">
+          <label for="pinzaYEscuadra">Pinza y escuadra por::</label>
+          <input type="text" id="pinzaYEscuadra" required>
+        </div>
+          <div class="form-group">
+          <label for="numeroPlano">Numero de Plano:</label>
+          <input type="text" id="numeroPlano" required>
+        </div>
+          <div class="form-group">
+          <label for="registroImpresionTroquelado">Registro de impresión:</label>
+          <input type="text" id="registroImpresionTroquelado" required>
+        </div>
+          <div class="form-group">
+          <label for="rendimientoxHoraTroquelado">Rendimiento por hora de troquelado:</label>
+          <input type="text" id="rendimientoxHoraTroquelado" required>
+        </div>
+         </div>
+  
+          <div class="form-group">
+          <label for="observacionesTroquelado">Observaciones:</label>
+          <input type="text" id="observacionesTroquelado" required>
+        </div>
+         </div>
+        
+                  </div>
+
+
+
+       <div id="Terminados"style="display: none;">
+
+       <div id="filters">
+
+
+<table class="table2" id="tablaTerminados">
+    <thead>
+        <tr>
+            <th>Parte</th>
+            <th>Número</th>
+            <th>Tipo</th>
+            <th>Ubicación</th>
+        </tr>
+    </thead>
+    <tbody>
+ <tr>
+            <td>
+                <label id="manijasTerminados">Manijas</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="manijasTerminados" id="numeroManijas" required>
+            </td>
+             <td>
+                <input type="text" aria-labelledby="manijasTerminados" id="tipoManijas" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="manijasTerminados" id="ubicacionManijas" required>
+            </td>
+  </tr>
+
+ <tr>
+            <td>
+                <label id="brochesTerminados">Broches</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="brochesTerminados" id="numeroBroches" required>
+            </td>
+             <td>
+                <input type="text" aria-labelledby="brochesTerminados" id="tipoBroches" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="brochesTerminados" id="ubicacionBroches" required>
+            </td>
+  </tr>
+
+ <tr>
+            <td>
+                <label id="cintasTerminados">Cintas</label>
+            </td>
+          
+               <td>
+                <input type="text" aria-labelledby="cintasTerminados" id="numeroCintas" required>
+            </td>
+             <td>
+                <input type="text" aria-labelledby="cintasTerminados" id="tipoCintas" required>
+            </td>
+            <td>
+                <input type="text" aria-labelledby="cintasTerminados" id="ubicacionCintas" required>
+            </td>
+  </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+     <div class="form-row">
+
+          <div class="form-group">
+          <label for="cantidadAcetatos">Número de acetatos:</label>
+          <input type="number" id="cantidadAcetatos" required>
+        </div>
+          <div class="form-group">
+          <label for="calibreAcetato">Calibre:</label>
+          <input type="text" id="calibreAcetato" required>
+        </div>
+          <div class="form-group">
+          <label for="anchoAcetato">Ancho:</label>
+          <input type="text" id="anchoAcetato" required>
+        </div>
+        <div class="form-group">
+          <label for="largoAcetato">Largo:</label>
+          <input type="text" id="largoAcetato" required>
+        </div>
+
+</div>
+
+
+<div class="form-row">
+
+
+        <div class="form-group">
+        <label for="descartoneTerminados">¿Descartone?:</label>
+        <select id="descartoneTerminados1"name="descartoneTerminados" class="selectB" >
+      <option value="" disabled selected>Seleccione </option>
+      <option value="siDescartone">Si</option>
+      <option value="noDescartone">No</option>
+    </select>
+ </div>
+
+
+        <div class="form-group">
+        <label for="revisionTerminados">¿Revisión?:</label>
+        <select id="revisionTerminados1"name="revisionTerminados" class="selectB" >
+      <option value="" disabled selected>Seleccione </option>
+      <option value="siRevision">Si</option>
+      <option value="noRevision">No</option>
+    </select>
+ </div>
+
+
+        <div class="form-group">
+        <label for="conteoTerminados">¿Conteo?:</label>
+        <select id="conteoTerminados1"name="revisionTerminados" class="selectB" >
+      <option value="" disabled selected>Seleccione </option>
+      <option value="siConteo">Si</option>
+      <option value="noConteo">No</option>
+    </select>
+ </div>
+
+        <div class="form-group">
+        <label for="retocarTerminados">¿Retocar?:</label>
+        <select id="retocarTerminados1"name="retocarTerminados" class="selectB" >
+      <option value="" disabled selected>Seleccione </option>
+      <option value="siRetocar">Si</option>
+      <option value="noRetocar">No</option>
+    </select>
+ </div>
+
+
+        <div class="form-group">
+        <label for="fajilladoTermiandos">¿Fajillado?:</label>
+        <select id="fajilladoTermiandos1"name="fajilladoTermiandos" class="selectB" >
+      <option value="" disabled selected>Seleccione </option>
+      <option value="siFajillado">Si</option>
+      <option value="noFajillado">No</option>
+    </select>
+ </div>
+
+        <div class="form-group">
+        <label for="empaqueTerminados">¿Empaque?:</label>
+        <select id="empaqueTerminados1"name="empaqueTerminados" class="selectB" >
+      <option value="" disabled selected>Seleccione </option>
+      <option value="siEmpaque">Si</option>
+      <option value="noEmpaque">No</option>
+    </select>
+ </div>
+
+</div>
+
+
+
+
+<div class="form-row">
+
+<div class="form-group">
+          <label for="rendimientoxHoraTermiando">Rendimiento por hora:</label>
+          <input type="text" id="rendimientoxHoraTermiando" required>
+        </div>
+
+<div class="form-group">
+          <label for="cantidadInterventores">Número de interventores:</label>
+          <input type="number" id="cantidadInterventores" required>
+        </div>
+<div class="form-group">
+          <label for="otros">otros:</label>
+          <input type="text" id="otros" required>
+        </div>
+
+  </div>
+
+            <div class="form-group">
+          <label for="observacionesTerminados">Observaciones:</label>
+          <input type="text" id="observacionesTerminados" required>
+        </div>
+
+
+                  </div>
+
+        </div>
+
+       <div id="Pegue"style="display: none;">
+
+       <div id="filters">
+      <div class="form-row">
+
+          <div class="form-groupB">
+          <label for="cantidadPegues">Cantidad de pegues:</label>
+          <input type="number" id="cantidadPegues" required>
+        </div>
+         </div>
+
+      <div class="form-row">
+         <div class="form-group">
+        <label for="pegueLateral">¿Requiere Pegue Lateral?:</label>
+        <select id="pegueLateral1"name="pegueLateral" class="selectB" >
+      <option value="" disabled selected>Seleccione </option>
+      <option value="sipegueLateral">Si</option>
+      <option value="nopegueLateral">No</option>
+    </select>
+ </div>
+         <div class="form-group">
+        <label for="pegueSuperior">¿Requiere Pegue Superior?:</label>
+        <select id="pegueSuperior1"name="pegueSuperior" class="selectB" >
+      <option value="" disabled selected>Seleccione </option>
+      <option value="siPegueSuperior">Si</option>
+      <option value="noPegueSuperior">No</option>
+    </select>
+ </div>
+         <div class="form-group">
+        <label for="pegueBase">¿Requiere Pegue Base?:</label>
+        <select id="pegueBase1"name="pegueBase" class="selectB" >
+      <option value="" disabled selected>Seleccione </option>
+      <option value="siPegueBase">Si</option>
+      <option value="noPegueBase">No</option>
+    </select>
+ </div>
+          
+
+                </div>
+      <div class="form-row">
+
+          <div class="form-group">
+          <label for="tipoPegue">Tipo de pegue:</label>
+          <input type="text" id="tipoPegue" required>
+        </div>
+          <div class="form-group">
+          <label for="rendimientoxHoraPegue">Rendimiento por hora:</label>
+          <input type="text" id="rendimientoxHoraPegue" required>
+        </div>
+        
+                </div>
+
+      <div class="form-row">
+
+          <div class="form-group">
+          <label for="tipoAdhesivo">Tipo de Adhesivo:</label>
+          <input type="text" id="tipoAdhesivo" required>
+        </div>
+        
+                </div>
+
+                  </div>
+        
+        </div>
+
+
+
+       <div id="Empaque"style="display: none;">
+
+       <div id="filters">
+      <div class="form-row">
+
+          <div class="form-group">
+          <label for="unidadEmpaque">Unidade de empaque:</label>
+          <input type="text" id="unidadEmpaque" required>
+        </div>
+          <div class="form-group">
+          <label for="pesoBruto">Peso bruto:</label>
+          <input type="text" id="pesoBruto" required>
+        </div>
+          <div class="form-group">
+          <label for="pesoNeto">Peso neto:</label>
+          <input type="text" id="pesoNeto" required>
+        </div>
+          <div class="form-group">
+          <label for="tipoEmbalaje">Tipo de embalaje:</label>
+          <input type="text" id="tipoEmbalaje" required>
+        </div>
+          <div class="form-group">
+          <label for="tipoMaterialEmbalaje">Material de embalaje:</label>
+          <input type="text" id="tipoMaterialEmbalaje" required>
+        </div>
+
+                </div>
+<div class="form-row">
+
+ <div class="form-group">
+        <label for="esquinerosEmpaque">¿Requiere Esquineros?:</label>
+        <select id="esquinerosEmpaque1"name="esquinerosEmpaque" class="selectB" >
+      <option value="" disabled selected>Seleccione </option>
+      <option value="siEsquineros">Si</option>
+      <option value="noEsquineros">No</option>
+    </select>
+ </div>
+ <div class="form-group">
+        <label for="amarreEmpaque">¿Requiere Amarre?:</label>
+        <select id="amarreEmpaque1"name="amarreEmpaque" class="selectB" >
+      <option value="" disabled selected>Seleccione </option>
+      <option value="siAmarre">Si</option>
+      <option value="noAmarre">No</option>
+    </select>
+ </div>
+          <div class="form-group">
+          <label for="otrosEmpaque">Otro:</label>
+          <input type="text" id="otrosEmpaque" required>
+        </div>
+          <div class="form-group">
+          <label for="rendimientoxHoraEmpaque">Rendimiento por hora empaque:</label>
+          <input type="text" id="rendimientoxHoraEmpaque" required>
+        </div>
+          
+
+                </div>
+<div class="form-group">
+          <label for="observacionesEmpaque">Observaciones:</label>
+          <input type="text" id="observacionesEmpaque" required>
+        </div>
+
+
+
+                  </div>
+        
+        </div>
+
+
+
+       <div id="Logística"style="display: none;">
+
+       <div id="filters">
+      <div class="form-row">
+
+         <div class="form-group">
+        <label for="responsableTransporte">Responsable del Transporte:</label>
+        <select id="responsableTransporte1"name="responsableTransporte" class="select" >
+      <option value="" disabled selected>Seleccione </option>
+      <option value="imprelitResponsableTransporte">Imprelit</option>
+      <option value="clienteResponsableTransporte">Cliente</option>
+    </select>
+ </div>
+</div>
+
+
+      <div class="form-row">
+      <div class="Header2">Caracteísticas Vehículo</div>
+      </div>
+      <div class="form-row">
+
+
+
+
+ <div class="form-group">
+        <label for="caracteristicaVehiculoFurgon">Furgón:</label>
+        <select id="caracteristicaVehiculoFurgon1"name="caracteristicaVehiculoFurgon" class="selectB" >
+      <option value="" disabled selected>Seleccione </option>
+      <option value="siFurgon">Si</option>
+      <option value="noFurgon">No</option>
+    </select>
+ </div>
+  <div class="form-group">
+        <label for="caracteristicaVehiculoCarpa">Carpa:</label>
+        <select id="caracteristicaVehiculoCarpa1"name="caracteristicaVehiculoCarpa" class="selectB" >
+      <option value="" disabled selected>Seleccione </option>
+      <option value="siCarpa">Si</option>
+      <option value="noCarpa">No</option>
+    </select>
+ </div>
+  <div class="form-group">
+        <label for="caracteristicaVehiculoContainer">Container:</label>
+        <select id="caracteristicaVehiculoContainer1"name="caracteristicaVehiculoContainer" class="selectB" >
+      <option value="" disabled selected>Seleccione </option>
+      <option value="siContainer">Si</option>
+      <option value="noContainer">No</option>
+    </select>
+ </div>
+  <div class="form-group">
+        <label for="caracteristicaVehiculoPlancha">Plancha :</label>
+        <select id="caracteristicaVehiculoPlancha1"name="caracteristicaVehiculoPlancha" class="selectB" >
+      <option value="" disabled selected>Seleccione </option>
+      <option value="siPlancha">Si</option>
+      <option value="noPlancha">No</option>
+    </select>
+ </div>
+  <div class="form-group">
+        <label for="caracteristicaVehiculoVans">Vans :</label>
+        <select id="caracteristicaVehiculoVans1"name="caracteristicaVehiculoVans" class="selectB" >
+      <option value="" disabled selected>Seleccione </option>
+      <option value="siVans">Si</option>
+      <option value="noVans">No</option>
+    </select>
+ </div>
+
+  <div class="form-group">
+        <label for="caracteristicaVehiculoMoto">Moto:</label>
+        <select id="caracteristicaVehiculoMoto1"name="caracteristicaVehiculoMoto" class="selectB" >
+      <option value="" disabled selected>Seleccione </option>
+      <option value="siMoto">Si</option>
+      <option value="noMoto">No</option>
+    </select>
+ </div>
+         </div>
+
+
+          <div class="form-row">
+
+
+ <div class="form-group">
+        <label for="precintoTransporte">Precinto:</label>
+        <select id="precintoTransporte1"name="precintoTransporte" class="select" >
+      <option value="" disabled selected>Seleccione </option>
+      <option value="siPrecinto">Si</option>
+      <option value="noPrecinto">No</option>
+    </select>
+ </div>
+  </div>
+
+           <div class="form-row">
+          <div class="form-group">
+          <label for="tipoPrecinto">Tipo de precinto:</label>
+          <input type="text" id="tipoPrecinto" required>
+        </div>
+          <div class="form-group">
+          <label for="otroLogística">Otro:</label>
+          <input type="text" id="otroLogística" required>
+        </div>
+                </div>
+
+<div class="form-group">
+          <label for="observacionesLogistica">Observaciones:</label>
+          <input type="text" id="observacionesLogistica" required>
+        </div>
+                  </div>
+        
+
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+
+
+    <script>
+function mostrarSeccion(seccion) {
+    // Lista de todas las secciones que queremos gestionar
+    const secciones = ['Preliminares', 'Conversión', 'Corrugación', 'Corte', 'Impresión', 'Colaminación', 'Troquelado', 'Terminados', 'Pegue', 'Empaque', 'Logística' ];
+
+    // Recorremos todas las secciones y las ocultamos
+    secciones.forEach(id => {
+        const elemento = document.getElementById(id);
+        if (elemento) {
+            elemento.style.display = 'none'; // Ocultar
+        }
+    });
+
+    // Mostramos solo la sección seleccionada
+    const seleccionada = document.getElementById(seccion);
+    if (seleccionada) {
+        seleccionada.style.display = 'block'; // Mostrar
+    } else {
+        console.error(`La sección '${seccion}' no existe.`);
+    }
+}
+
+function toggleFields(button) {
+    // Obtiene el valor de data-target para identificar el contenedor a mostrar/ocultar
+    const targetId = button.getAttribute("data-target");
+    const targetContainer = document.getElementById(targetId);
+
+    // Cambia entre mostrar y ocultar el contenedor
+    if (targetContainer.style.display === "none" || !targetContainer.style.display) {
+        targetContainer.style.display = "block"; // Muestra el contenedor
+    } else {
+        targetContainer.style.display = "none"; // Oculta el contenedor
+    }
+}
+
+function toggleCheckbox(element) {
+  // Alterna la clase "marked"
+  element.classList.toggle('marked');
+
+  // Agrega o elimina el contenido de la "X"
+  if (element.classList.contains('marked')) {
+    element.textContent = 'X'; // Marca con una "X"
+  } else {
+    element.textContent = ''; // Limpia la casilla
+  }
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+async function enviarDatos() {
+    const inputs = document.querySelectorAll("input");
+    const payload = {};
+
+    // Recopila los datos dinámicos
+    inputs.forEach(input => {
+        const value = input.value?.trim();
+        if (value) {
+            payload[input.id] = value;
+        }
+    });
+
+    console.log("Payload enviado:", payload);
+
+    if (!payload.Ficha || !payload.version) {
+        alert("Los campos 'Ficha' y 'Versión' son obligatorios.");
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            "https://us-central1-ficha-producto.cloudfunctions.net/fichasTecnicasHandler",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            }
+        );
+
+
+}}
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function consultarDatos() {
+    console.log("Iniciando la función consultarDatos.");
+
+    const numeroFicha = document.getElementById("Ficha").value;
+    const version = document.getElementById("version").value;
+
+    if (!numeroFicha || !version) {
+        alert("Por favor, completa ambos campos: Ficha y Versión.");
+        return;
+    }
+
+    const baseUrl = "https://us-central1-ficha-producto.cloudfunctions.net/fichasTecnicasHandler";
+    const params = `?numero_ficha=${numeroFicha}&version=${version}`;
+    const fullUrl = baseUrl + params;
+
+    console.log(`URL generada: ${fullUrl}`);
+
+    fetch(fullUrl, { method: "GET" })
+        .then(response => {
+            console.log("Respuesta del servidor:", response);
+
+            if (response.status === 404) {
+                alert("Datos no encontrados en la base de datos.");
+                return;
+            }
+            if (!response.ok) {
+                throw new Error(`Error del servidor: ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data) {
+                console.log("Datos recibidos:", data);
+
+                // Actualizar campos dinámicamente
+                for (const key in data) {
+                    const field = document.getElementById(key);
+                    if (field) {
+                        field.value = data[key] || "";
+                        console.log(`Campo actualizado: ${key} -> ${data[key]}`);
+                    }
+                }
+
+                // Mostrar mensaje de éxito
+                alert(data.message || "Consulta exitosa.");
+            }
+        })
+        .catch(error => {
+            console.error("Error al consultar los datos:", error);
+            alert("Hubo un error al conectar con el backend.");
+        });
+}
+
+
+ </script>
+
+  </body>
+</html>

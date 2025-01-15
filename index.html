@@ -3246,21 +3246,25 @@ function toggleCheckbox(element) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 async function enviarDatos() {
-    const inputs = document.querySelectorAll("input"); // Selecciona todos los inputs
+    const inputs = document.querySelectorAll("input");
     const payload = {};
 
-    // Recorre los inputs y agrega solo aquellos con valores no vacíos
+    console.log("Recolección de inputs...");
+
     inputs.forEach(input => {
-        const id = input.id.trim().toLowerCase(); // Asegúrate de que el ID esté en minúsculas y limpio
-        const value = input.value.trim(); // Limpia espacios en blanco
+        const id = input.id.trim().toLowerCase(); // Asegúrate de que sea consistente
+        const value = input.value?.trim(); // Limpia espacios en blanco
         if (value) {
-            payload[id] = value; // Solo agrega campos con valores al payload
+            payload[id] = value;
+        } else {
+            console.warn(`El campo ${id} está vacío.`);
         }
     });
 
-    console.log("Payload dinámico enviado:", payload);
+    console.log("Payload generado:", payload);
 
-    if (!payload.numero_ficha || !payload.version) {
+    // Validación de los campos obligatorios
+    if (!payload.ficha || !payload.version) {
         alert("Los campos 'Ficha' y 'Versión' son obligatorios.");
         return;
     }
@@ -3280,13 +3284,13 @@ async function enviarDatos() {
         }
 
         const result = await response.text();
-        console.log("Respuesta del servidor:", result);
         alert(result);
     } catch (error) {
         console.error("Error al enviar los datos:", error);
         alert("Hubo un error al enviar los datos.");
     }
 }
+
 
 
 

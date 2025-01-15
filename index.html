@@ -3245,40 +3245,6 @@ function toggleCheckbox(element) {
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-async function enviarDatos() {
-    const inputs = document.querySelectorAll("input");
-    const payload = {};
-
-    // Recopila los datos dinámicos
-    inputs.forEach(input => {
-        const value = input.value?.trim();
-        if (value) {
-            payload[input.id] = value;
-        }
-    });
-
-    console.log("Payload enviado:", payload);
-
-    if (!payload.Ficha || !payload.version) {
-        alert("Los campos 'Ficha' y 'Versión' son obligatorios.");
-        return;
-    }
-
-    try {
-        const response = await fetch(
-            "https://us-central1-ficha-producto.cloudfunctions.net/fichasTecnicasHandler",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(payload)
-            }
-        );
-
-
-}}
-
 
 
 

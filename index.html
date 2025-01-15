@@ -3246,19 +3246,19 @@ function toggleCheckbox(element) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 async function enviarDatos() {
-    const inputs = document.querySelectorAll("input");
+    const inputs = document.querySelectorAll("input"); // Selecciona todos los inputs
     const payload = {};
 
-    // Recolecta dinámicamente solo los campos con valores
+    // Recorre los inputs y agrega solo aquellos con valores no vacíos
     inputs.forEach(input => {
-        const id = input.id.trim(); // Usa el ID del campo como clave
-        const value = input.value?.trim(); // Elimina espacios vacíos
+        const id = input.id.trim().toLowerCase(); // Asegúrate de que el ID esté en minúsculas y limpio
+        const value = input.value.trim(); // Limpia espacios en blanco
         if (value) {
-            payload[id] = value;
+            payload[id] = value; // Solo agrega campos con valores al payload
         }
     });
 
-    console.log("Payload enviado:", payload);
+    console.log("Payload dinámico enviado:", payload);
 
     if (!payload.numero_ficha || !payload.version) {
         alert("Los campos 'Ficha' y 'Versión' son obligatorios.");
@@ -3270,10 +3270,8 @@ async function enviarDatos() {
             "https://us-central1-ficha-producto.cloudfunctions.net/fichasTecnicasHandler",
             {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(payload)
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
             }
         );
 
@@ -3282,12 +3280,14 @@ async function enviarDatos() {
         }
 
         const result = await response.text();
+        console.log("Respuesta del servidor:", result);
         alert(result);
     } catch (error) {
         console.error("Error al enviar los datos:", error);
         alert("Hubo un error al enviar los datos.");
     }
 }
+
 
 
 

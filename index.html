@@ -3249,22 +3249,22 @@ async function enviarDatos() {
     const inputs = document.querySelectorAll("input");
     const payload = {};
 
-    console.log("Recolección de inputs...");
-
     inputs.forEach(input => {
-        const id = input.id.trim().toLowerCase(); // Asegúrate de que sea consistente
-        const value = input.value?.trim(); // Limpia espacios en blanco
+        const id = input.id.toLowerCase(); // Convierte el ID a minúsculas
+        const value = input.value?.trim(); // Elimina espacios en blanco
         if (value) {
-            payload[id] = value;
-        } else {
-            console.warn(`El campo ${id} está vacío.`);
+            // Transforma el campo "Ficha" en "numero_ficha"
+            if (id === "ficha") {
+                payload["numero_ficha"] = value;
+            } else {
+                payload[id] = value; // Agrega el resto de los campos tal cual
+            }
         }
     });
 
-    console.log("Payload generado:", payload);
+    console.log("Payload enviado:", payload);
 
-    // Validación de los campos obligatorios
-    if (!payload.ficha || !payload.version) {
+    if (!payload.numero_ficha || !payload.version) {
         alert("Los campos 'Ficha' y 'Versión' son obligatorios.");
         return;
     }
@@ -3275,9 +3275,15 @@ async function enviarDatos() {
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
+                body: JSON.stringify(payload)
             }
         );
+
+        if (response.status === 422) {
+            const errorMessage = await response.text();
+            alert(`Error: ${errorMessage}`);
+            return;
+        }
 
         if (!response.ok) {
             throw new Error(`Error en el servidor: ${response.statusText}`);
@@ -3290,6 +3296,7 @@ async function enviarDatos() {
         alert("Hubo un error al enviar los datos.");
     }
 }
+
 
 
 

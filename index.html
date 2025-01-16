@@ -395,7 +395,14 @@
         body:hover .button-container {
             right: 10px; /* Posición visible */
         }
+        /* Ocultar botón al alejar el mouse */
+        .hover-area:not(:hover) + .button-container {
+            right: -60px; /* Oculto nuevamente */
+        }
 
+
+
+   
         /* Área sensible al mouse */
         .hover-area {
             position: fixed;

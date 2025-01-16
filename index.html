@@ -361,13 +361,10 @@
     border-radius: 5px;
 }
 
-/* Contenedor principal */
-.container {
-    text-align: center;
-    margin-top: 20px;
-}
 
- .button-container {
+
+        /* Contenedor principal */
+        .button-container {
             position: fixed;
             top: 50%;
             right: -60px; /* Oculto inicialmente */
@@ -376,7 +373,7 @@
             z-index: 1000;
         }
 
-        /* Botón especial */
+        /* Botón */
         .button-container button {
             background-color: #4CAF50;
             color: white;
@@ -391,18 +388,17 @@
             background-color: #45a049;
         }
 
-        /* Efecto al acercar el mouse al borde derecho */
-        body:hover .button-container {
+        /* Efecto al acercar el mouse al borde derecho o al botón */
+        .hover-area:hover + .button-container,
+        .button-container:hover {
             right: 10px; /* Posición visible */
         }
+
         /* Ocultar botón al alejar el mouse */
-        .hover-area:not(:hover) + .button-container {
+        .hover-area:not(:hover) + .button-container:not(:hover) {
             right: -60px; /* Oculto nuevamente */
         }
 
-
-
-   
         /* Área sensible al mouse */
         .hover-area {
             position: fixed;

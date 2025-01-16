@@ -539,7 +539,7 @@
     <div class="button-container">
         <button class="button-save" onclick="enviarDatos()"></button>
         <button class="button-search" onclick="consultarDatos()"></button>
-        <button class="button-delete" onclick="alert('¡Eliminar clicado!')"></button>
+        <button class="button-delete" onclick="limpiarCeldas()"></button>
     </div>
 
   <!-- Barra Superior -->
@@ -3429,6 +3429,26 @@ function consultarDatos() {
         });
 }
 
+/////////////////////////////////////////////////////////////////////////////////
+
+function limpiarCeldas() {
+    // Selecciona todos los inputs dentro de la aplicación
+    const inputs = document.querySelectorAll("input");
+
+    // Itera sobre cada input y limpia su valor
+    inputs.forEach(input => {
+        input.value = ""; // Asigna un valor vacío a cada input
+    });
+
+    // Opcional: Muestra un mensaje para confirmar la acción
+    alert("Todos los campos han sido limpiados.");
+}
+
+
+
+
+
+     
 
  </script>
 

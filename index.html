@@ -537,8 +537,8 @@
 
     <!-- Botones emergentes -->
     <div class="button-container">
-        <button class="button-save" onclick="alert('¡Guardar clicado!')"></button>
-        <button class="button-search" onclick="alert('¡Consultar clicado!')"></button>
+        <button class="button-save" onclick="enviarDatos()"></button>
+        <button class="button-search" onclick="consultarDatos()"></button>
         <button class="button-delete" onclick="alert('¡Eliminar clicado!')"></button>
     </div>
 
@@ -639,11 +639,7 @@
           <input type="text" id="cliente" required>
         </div>
 
-  <!-- Botón para enviar datos -->
-  <button type="button" class="submit-button" onclick="enviarDatos()">Enviar</button>
 
-  <!-- Botón para consultar datos -->
-<button id="consultar-datos" onclick="consultarDatos()">Consultar Datos</button>
 
 
 </div>

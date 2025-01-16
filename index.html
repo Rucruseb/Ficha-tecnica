@@ -371,10 +371,13 @@
         .button-container {
             position: fixed;
             top: 50%;
-            right: -60px; /* Oculto inicialmente */
+            right: -100px; /* Oculto inicialmente */
             transform: translateY(-50%);
             transition: right 0.4s ease-in-out;
             z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
         /* Botón redondo */
@@ -390,16 +393,27 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 45px;
         }
 
         .button-container button:hover {
-            background-color: #45a049;
+            background-color: #FFFFFF;
         }
 
-        /* Icono de guardar */
-        .button-container button::before {
+        /* Iconos para los botones */
+        .button-save::before {
             content: '\1F4BE'; /* Emoji de disquete */
-            font-size: 45px;
+            font-size: 40px;
+        }
+
+        .button-search::before {
+            content: '\1F50D'; /* Emoji de lupa */
+            font-size: 40px;
+        }
+
+        .button-delete::before {
+            content: '\1F5D1'; /* Emoji de papelera */
+            font-size: 40px;
         }
 
         /* Efecto al acercar el mouse al borde derecho o al botón */
@@ -408,7 +422,7 @@
             right: 25px; /* Posición visible */
         }
 
-        /* Ocultar botón al alejar el mouse */
+        /* Ocultar botones al alejar el mouse */
         .hover-area:not(:hover) + .button-container:not(:hover) {
             right: -100px; /* Oculto nuevamente */
         }
@@ -521,9 +535,11 @@
      <!-- Área sensible al mouse -->
     <div class="hover-area"></div>
 
-    <!-- Botón emergente -->
+    <!-- Botones emergentes -->
     <div class="button-container">
-        <button onclick="alert('¡Botón clicado!')"></button>
+        <button class="button-save" onclick="alert('¡Guardar clicado!')"></button>
+        <button class="button-search" onclick="alert('¡Consultar clicado!')"></button>
+        <button class="button-delete" onclick="alert('¡Eliminar clicado!')"></button>
     </div>
 
   <!-- Barra Superior -->

@@ -367,6 +367,45 @@
     margin-top: 20px;
 }
 
+ .button-container {
+            position: fixed;
+            top: 50%;
+            right: -60px; /* Oculto inicialmente */
+            transform: translateY(-50%);
+            transition: right 0.4s ease-in-out;
+            z-index: 1000;
+        }
+
+        /* Botón especial */
+        .button-container button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .button-container button:hover {
+            background-color: #45a049;
+        }
+
+        /* Efecto al acercar el mouse al borde derecho */
+        body:hover .button-container {
+            right: 10px; /* Posición visible */
+        }
+
+        /* Área sensible al mouse */
+        .hover-area {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 20px;
+            height: 100%;
+        }
+
+
 /* Botón de toggle */
 .toggle-button {
     background-color: #86868a;
@@ -461,6 +500,15 @@
   </style>
 </head>
 <body>
+
+
+     <!-- Área sensible al mouse -->
+    <div class="hover-area"></div>
+
+    <!-- Botón emergente -->
+    <div class="button-container">
+        <button onclick="alert('¡Botón clicado!')">Click Me</button>
+    </div>
 
   <!-- Barra Superior -->
   <div class="topbar">

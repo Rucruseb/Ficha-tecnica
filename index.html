@@ -371,7 +371,7 @@
         .button-container {
             position: fixed;
             top: 50%;
-            right: -80px; /* Oculto inicialmente */
+            right: -100px; /* Oculto inicialmente */
             transform: translateY(-50%);
             transition: right 0.4s ease-in-out;
             z-index: 1000;
@@ -400,7 +400,7 @@
 
         /* Ocultar botón al alejar el mouse */
         .hover-area:not(:hover) + .button-container:not(:hover) {
-            right: -80px; /* Oculto nuevamente */
+            right: -100px; /* Oculto nuevamente */
         }
 
         /* Área sensible al mouse */
@@ -408,7 +408,7 @@
             position: fixed;
             top: 0;
             right: 0;
-            width: 45px;
+            width: 70px;
             height: 100%;
         }
 

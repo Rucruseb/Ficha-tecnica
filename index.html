@@ -3276,7 +3276,7 @@
     <script>
 function mostrarSeccion(seccion) {
     // Lista de todas las secciones que queremos gestionar
-    const secciones = ['Preliminares', 'Conversión', 'Corrugación', 'Corte', 'Impresión', 'Colaminación', 'Troquelado', 'Terminados', 'Pegue', 'Empaque', 'Logística' ];
+    const secciones = ['Preliminares', 'Conversion', 'Corrugación', 'Corte', 'Impresión', 'Colaminación', 'Troquelado', 'Terminados', 'Pegue', 'Empaque', 'Logística' ];
 
     // Recorremos todas las secciones y las ocultamos
     secciones.forEach(id => {
@@ -3347,8 +3347,8 @@ function datosPreeliminares() {
      
 
 function enviarDatos() {
-    const conversionDiv = document.querySelector("#Conversión"); // Corrige el nombre de la sección si es diferente
-    const inputs = conversiónDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
+    const conversionDiv = document.querySelector("#Conversion"); // Corrige el nombre de la sección si es diferente
+    const inputs = conversionDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
     const payload = {
         ficha: document.getElementById("Ficha")?.value?.trim().toLowerCase() || null,
         version: document.getElementById("version")?.value?.trim().toLowerCase() || null,

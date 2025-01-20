@@ -3322,25 +3322,32 @@ function toggleCheckbox(element) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 async function enviarDatos() {
-    const inputs = document.querySelectorAll("input,select");
-    const payload = {};
+    const inputs = document.querySelectorAll("input, select"); // Incluye inputs y selects
+    const payload = {
+        fichas: {}, // Datos relacionados con la tabla 'fichas'
+        conversion_lineer: {}, // Datos relacionados con la tabla 'conversion_lineer'
+        conversion_single_face: {}, // Datos relacionados con la tabla 'conversion_single_face'
+    };
 
+    // Clasifica los datos en el payload según los IDs
     inputs.forEach(input => {
-        const id = input.id.toLowerCase(); // Convierte a minúsculas
-        const value = input.value?.trim(); // Elimina espacios en blanco
+        const id = input.id?.trim(); // Asegúrate de usar IDs consistentes
+        const value = input.value?.trim();
+
         if (value) {
-            if (id === "ficha") {
-                payload.ficha = value; // Asigna el valor de "ficha"
-                payload.numero_ficha = value; // Duplica el valor en "numero_ficha"
+            if (id.startsWith("lineer")) {
+                payload.conversion_lineer[id] = value; // Datos para conversion_lineer
+            } else if (id.startsWith("singleFace")) {
+                payload.conversion_single_face[id] = value; // Datos para conversion_single_face
             } else {
-                payload[id] = value; // Otros campos normales
+                payload.fichas[id] = value; // Datos para fichas
             }
         }
     });
 
     console.log("Payload enviado:", payload);
 
-    if (!payload.numero_ficha || !payload.version) {
+    if (!payload.fichas.numero_ficha || !payload.fichas.version) {
         alert("Los campos 'Ficha' y 'Versión' son obligatorios.");
         return;
     }
@@ -3351,9 +3358,9 @@ async function enviarDatos() {
             {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
                 },
-                body: JSON.stringify(payload)
+                body: JSON.stringify(payload),
             }
         );
 

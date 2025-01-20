@@ -3335,18 +3335,26 @@ async function enviarDatos() {
         const value = input.value?.trim();
 
         if (value) {
-            if (id.startsWith("lineer")) {
-                payload.conversion_lineer[id] = value; // Datos para conversion_lineer
+            if (id === "ficha") {
+                // Duplica el valor de 'ficha' en 'numero_ficha'
+                payload.fichas.ficha = value;
+                payload.fichas.numero_ficha = value;
+            } else if (id.startsWith("lineer")) {
+                // Datos para conversion_lineer
+                payload.conversion_lineer[id] = value;
             } else if (id.startsWith("singleFace")) {
-                payload.conversion_single_face[id] = value; // Datos para conversion_single_face
+                // Datos para conversion_single_face
+                payload.conversion_single_face[id] = value;
             } else {
-                payload.fichas[id] = value; // Datos para fichas
+                // Datos generales para fichas
+                payload.fichas[id] = value;
             }
         }
     });
 
     console.log("Payload enviado:", payload);
 
+    // Validar que los campos obligatorios estén presentes
     if (!payload.fichas.numero_ficha || !payload.fichas.version) {
         alert("Los campos 'Ficha' y 'Versión' son obligatorios.");
         return;
@@ -3375,7 +3383,6 @@ async function enviarDatos() {
         alert("Hubo un error al enviar los datos.");
     }
 }
-
 
 
 

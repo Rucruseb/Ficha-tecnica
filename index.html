@@ -3337,8 +3337,8 @@ async function enviarDatos() {
         if (value) {
             if (id === "ficha") {
                 // Duplica el valor de 'ficha' en 'numero_ficha'
-                payload.fichas.ficha = value;
-                payload.fichas.numero_ficha = value;
+                payload.ficha = value;
+                payload.numero_ficha = value;
             } else if (id.startsWith("lineer")) {
                 // Datos para conversion_lineer
                 payload.conversion_lineer[id] = value;
@@ -3355,7 +3355,7 @@ async function enviarDatos() {
     console.log("Payload enviado:", payload);
 
     // Validar que los campos obligatorios estén presentes
-    if (!payload.fichas.numero_ficha || !payload.fichas.version) {
+    if (!payload.numero_ficha || !payload.version) {
         alert("Los campos 'Ficha' y 'Versión' son obligatorios.");
         return;
     }

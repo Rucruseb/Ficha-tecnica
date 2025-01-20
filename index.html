@@ -3347,12 +3347,12 @@ function datosPreeliminares() {
      
 
 function enviarDatos() {
-    const conversionDiv = document.querySelector("#Conversion");
+    const conversionDiv = document.querySelector("#Conversion"); // Corrige el nombre de la sección si es diferente
     const inputs = conversionDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
     const payload = {
         ficha: document.getElementById("Ficha")?.value?.trim().toLowerCase() || null,
         version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
-        preliminares: {}, // Para almacenar los datos de "Conversion"
+        conversion: {}, // Cambié "preliminares" a "conversion" para reflejar la sección correcta
     };
 
     inputs.forEach(input => {

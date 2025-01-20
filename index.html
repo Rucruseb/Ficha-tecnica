@@ -3354,11 +3354,21 @@ async function enviarDatos() {
 
     console.log("Payload enviado:", payload);
 
-    // Validar que los campos obligatorios estén presentes
-    if (!payload.numero_ficha || !payload.version) {
-        alert("Los campos 'Ficha' y 'Versión' son obligatorios.");
-        return;
-    }
+// Validar que los campos obligatorios estén presentes
+if (!payload.fichas.ficha) {
+    alert("El campo 'Ficha' es obligatorio.");
+    return;
+}
+
+if (!payload.fichas.numero_ficha) {
+    alert("El campo 'Número de Ficha' es obligatorio.");
+    return;
+}
+
+if (!payload.fichas.version) {
+    alert("El campo 'Versión' es obligatorio.");
+    return;
+}
 
     try {
         const response = await fetch(

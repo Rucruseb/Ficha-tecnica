@@ -564,7 +564,7 @@
       </ul>
 
       <ul class="menu">
-        <li class="menu-item" onclick="mostrarSeccion('Conversión')">Conversión</li>
+        <li class="menu-item" onclick="mostrarSeccion('conversion')">Conversión</li>
       </ul>
       <ul class="menu">
         <li class="menu-item" onclick="mostrarSeccion('Corrugación')" >Corrugación</li>
@@ -1362,7 +1362,7 @@
 
        
 
-      <div id="Conversión"style="display: none;">
+      <div id="conversion"style="display: none;">
 
         <div id="filters">
  <div class="form-row">
@@ -3347,7 +3347,7 @@ function datosPreeliminares() {
      
 
 function enviarDatos() {
-    const conversionDiv = document.querySelector("#Conversion"); // Corrige el nombre de la sección si es diferente
+    const conversionDiv = document.querySelector("#conversion"); // Corrige el nombre de la sección si es diferente
     const inputs = conversionDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
     const payload = {
         ficha: document.getElementById("Ficha")?.value?.trim().toLowerCase() || null,

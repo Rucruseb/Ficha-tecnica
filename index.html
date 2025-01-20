@@ -567,7 +567,7 @@
         <li class="menu-item" onclick="mostrarSeccion('Conversion')">Conversión</li>
       </ul>
       <ul class="menu">
-        <li class="menu-item" onclick="mostrarSeccion('Corrugación')" >Corrugación</li>
+        <li class="menu-item" onclick="mostrarSeccion('Corrugacion')" >Corrugación</li>
       </ul>
       <ul class="menu">
         <li class="menu-item" onclick="mostrarSeccion('Corte')" >Corte</li>
@@ -1567,7 +1567,7 @@
  </div>
 
 
-       <div id="Corrugación"style="display: none;">
+       <div id="Corrugacion"style="display: none;">
 
         <div id="filters">
 
@@ -3276,7 +3276,7 @@
     <script>
 function mostrarSeccion(seccion) {
     // Lista de todas las secciones que queremos gestionar
-    const secciones = ['Preliminares', 'Conversion', 'Corrugación', 'Corte', 'Impresión', 'Colaminación', 'Troquelado', 'Terminados', 'Pegue', 'Empaque', 'Logística' ];
+    const secciones = ['Preliminares', 'Conversion', 'Corrugacion', 'Corte', 'Impresión', 'Colaminación', 'Troquelado', 'Terminados', 'Pegue', 'Empaque', 'Logística' ];
 
     // Recorremos todas las secciones y las ocultamos
     secciones.forEach(id => {
@@ -3346,7 +3346,7 @@ function datosPreeliminares() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      
 
-function enviarDatos() {
+function datosConversion() {
     const conversionDiv = document.querySelector("#Conversion"); // Corrige el nombre de la sección si es diferente
     const inputs = conversionDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
     const payload = {
@@ -3366,8 +3366,26 @@ function enviarDatos() {
     console.log("Payload recopilado:", payload);
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+     function enviarDatos() {
+    const corrugacionDiv = document.querySelector("#Corrugacion"); // Corrige el nombre de la sección si es diferente
+    const inputs = corrugacionDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
+    const payload = {
+        ficha: document.getElementById("Ficha")?.value?.trim().toLowerCase() || null,
+        version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
+        corrugacion: {}, // Cambié "preliminares" a "corrugacion" para reflejar la sección correcta
+    };
 
-     
+    inputs.forEach(input => {
+        const id = input.id?.trim().toLowerCase(); // Convierte el ID a minúsculas y elimina espacios
+        const value = input.value?.trim().toLowerCase(); // Convierte el valor a minúsculas y elimina espacios
+        if (id && value) {
+            payload.conversion[id] = value; // Asigna los valores procesados al payload
+        }
+    });
+
+    console.log("Payload recopilado:", payload);
+}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 async function enviarDatos1() {
     const inputs = document.querySelectorAll("input, select"); // Incluye inputs y selects

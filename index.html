@@ -3321,7 +3321,32 @@ function toggleCheckbox(element) {
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-async function enviarDatos() {
+
+function enviarDatos() {
+    const preliminaresDiv = document.querySelector("#Preliminares");
+    const inputs = preliminaresDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
+    const payload = {
+        ficha: document.getElementById("Ficha")?.value?.trim() || null,
+        version: document.getElementById("version")?.value?.trim() || null,
+        preliminares: {}, // Para almacenar los datos de "Preliminares"
+    };
+
+    inputs.forEach(input => {
+        const id = input.id?.trim();
+        const value = input.value?.trim();
+        if (id && value) {
+            payload.preliminares[id] = value; // Asigna los valores al payload
+        }
+    });
+
+    console.log("Payload recopilado:", payload);
+}
+
+
+
+     
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+async function enviarDatos1() {
     const inputs = document.querySelectorAll("input, select"); // Incluye inputs y selects
     const payload = {
         fichas: {}, // Datos relacionados con la tabla 'fichas'

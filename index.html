@@ -3389,7 +3389,7 @@ function datosConversion() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
      function enviarDatos() {
     const corteDiv = document.querySelector("#Corte"); // Corrige el nombre de la sección si es diferente
-    const inputs = corrugacionDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
+    const inputs = corteDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
     const payload = {
         ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
         version: document.getElementById("version")?.value?.trim().toLowerCase() || null,

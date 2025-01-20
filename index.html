@@ -3348,7 +3348,7 @@ function datosPreeliminares() {
 
 function enviarDatos() {
     const conversionDiv = document.querySelector("#Conversion");
-    const inputs = preliminaresDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
+    const inputs = conversionDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
     const payload = {
         ficha: document.getElementById("Ficha")?.value?.trim().toLowerCase() || null,
         version: document.getElementById("version")?.value?.trim().toLowerCase() || null,

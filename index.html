@@ -1948,7 +1948,7 @@
         
 
 
-       <div id="Impresión"style="display: none;">
+       <div id="Impresion"style="display: none;">
 
         <div id="filters">
       <div class="form-row">
@@ -2546,7 +2546,7 @@
 
        
 
-       <div id="Colaminación"style="display: none;">
+       <div id="Colaminacion"style="display: none;">
 
         <div id="filtersColaminacion">
       <div class="form-row">
@@ -3158,7 +3158,7 @@
 
 
 
-       <div id="Logística"style="display: none;">
+       <div id="Logistica"style="display: none;">
 
        <div id="filters">
       <div class="form-row">
@@ -3276,7 +3276,7 @@
     <script>
 function mostrarSeccion(seccion) {
     // Lista de todas las secciones que queremos gestionar
-    const secciones = ['Preliminares', 'Conversion', 'Corrugacion', 'Corte', 'Impresión', 'Colaminación', 'Troquelado', 'Terminados', 'Pegue', 'Empaque', 'Logística' ];
+    const secciones = ['Preliminares', 'Conversion', 'Corrugacion', 'Corte', 'Impresion', 'Colaminacion', 'Troquelado', 'Terminados', 'Pegue', 'Empaque', 'Logistica' ];
 
     // Recorremos todas las secciones y las ocultamos
     secciones.forEach(id => {
@@ -3326,7 +3326,7 @@ function datosPreeliminares() {
     const preliminaresDiv = document.querySelector("#Preliminares");
     const inputs = preliminaresDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
     const payload = {
-        ficha: document.getElementById("Ficha")?.value?.trim().toLowerCase() || null,
+        ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
         version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
         preliminares: {}, // Para almacenar los datos de "Preliminares"
     };
@@ -3350,7 +3350,7 @@ function datosConversion() {
     const conversionDiv = document.querySelector("#Conversion"); // Corrige el nombre de la sección si es diferente
     const inputs = conversionDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
     const payload = {
-        ficha: document.getElementById("Ficha")?.value?.trim().toLowerCase() || null,
+        ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
         version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
         conversion: {}, // Cambié "preliminares" a "conversion" para reflejar la sección correcta
     };
@@ -3371,7 +3371,7 @@ function datosConversion() {
     const corrugacionDiv = document.querySelector("#Corrugacion"); // Corrige el nombre de la sección si es diferente
     const inputs = corrugacionDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
     const payload = {
-        ficha: document.getElementById("Ficha")?.value?.trim().toLowerCase() || null,
+        ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
         version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
         corrugacion: {}, // Cambié "preliminares" a "corrugacion" para reflejar la sección correcta
     };

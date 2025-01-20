@@ -3326,21 +3326,22 @@ function enviarDatos() {
     const preliminaresDiv = document.querySelector("#Preliminares");
     const inputs = preliminaresDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
     const payload = {
-        ficha: document.getElementById("Ficha")?.value?.trim() || null,
-        version: document.getElementById("version")?.value?.trim() || null,
+        ficha: document.getElementById("Ficha")?.value?.trim().toLowerCase() || null,
+        version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
         preliminares: {}, // Para almacenar los datos de "Preliminares"
     };
 
     inputs.forEach(input => {
-        const id = input.id?.trim();
-        const value = input.value?.trim();
+        const id = input.id?.trim().toLowerCase(); // Convierte el ID a minúsculas y elimina espacios
+        const value = input.value?.trim().toLowerCase(); // Convierte el valor a minúsculas y elimina espacios
         if (id && value) {
-            payload.preliminares[id] = value; // Asigna los valores al payload
+            payload.preliminares[id] = value; // Asigna los valores procesados al payload
         }
     });
 
     console.log("Payload recopilado:", payload);
 }
+
 
 
 

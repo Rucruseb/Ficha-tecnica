@@ -3327,6 +3327,11 @@ function toggleCheckbox(element) {
 
 function datosPreeliminares() {
     const preliminaresDiv = document.querySelector("#Preliminares");
+    if (!preliminaresDiv) {
+        console.warn("La sección 'Preliminares' no se encontró en el DOM.");
+        return {}; // Devuelve un objeto vacío si no existe la sección
+    }
+
     const inputs = preliminaresDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
     const payload = {
         ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
@@ -3342,7 +3347,8 @@ function datosPreeliminares() {
         }
     });
 
-    console.log("Payload recopilado:", payload);
+    console.log("Payload recopilado de 'Preliminares':", payload);
+    return payload; // ¡No olvides devolver el payload!
 }
 
 
@@ -3350,127 +3356,187 @@ function datosPreeliminares() {
      
 
 function datosConversion() {
-    const conversionDiv = document.querySelector("#Conversion"); // Corrige el nombre de la sección si es diferente
-    const inputs = conversionDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
+    const conversionDiv = document.querySelector("#Conversion");
+    if (!conversionDiv) {
+        console.error(`Sección "Conversión" no encontrada.`);
+        return null;
+    }
+
+    const inputs = conversionDiv.querySelectorAll("input, select, .checkbox");
     const payload = {
         ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
         version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
-        conversion: {}, // Cambié "preliminares" a "conversion" para reflejar la sección correcta
+        conversion: {},
     };
 
-    inputs.forEach(input => {
-        const id = input.id?.trim().toLowerCase(); // Convierte el ID a minúsculas y elimina espacios
-        const value = input.value?.trim().toLowerCase(); // Convierte el valor a minúsculas y elimina espacios
-        if (id && value) {
-            payload.conversion[id] = value; // Asigna los valores procesados al payload
-        }
-    });
-
-    console.log("Payload recopilado:", payload);
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-     function datosCorrugacion() {
-    const corrugacionDiv = document.querySelector("#Corrugacion"); // Corrige el nombre de la sección si es diferente
-    const inputs = corrugacionDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
-    const payload = {
-        ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
-        version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
-        corrugacion: {}, // Cambié "preliminares" a "corrugacion" para reflejar la sección correcta
-    };
-
-    inputs.forEach(input => {
-        const id = input.id?.trim().toLowerCase(); // Convierte el ID a minúsculas y elimina espacios
-        const value = input.value?.trim().toLowerCase(); // Convierte el valor a minúsculas y elimina espacios
-        if (id && value) {
-            payload.corrugacion[id] = value; // Asigna los valores procesados al payload
-        }
-    });
-
-    console.log("Payload recopilado:", payload);
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-     function datosCorte() {
-    const corteDiv = document.querySelector("#Corte"); // Corrige el nombre de la sección si es diferente
-    const inputs = corteDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
-    const payload = {
-        ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
-        version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
-        corte: {}, // Cambié "preliminares" a "corrugacion" para reflejar la sección correcta
-    };
-
-    inputs.forEach(input => {
-        const id = input.id?.trim().toLowerCase(); // Convierte el ID a minúsculas y elimina espacios
-        const value = input.value?.trim().toLowerCase(); // Convierte el valor a minúsculas y elimina espacios
-        if (id && value) {
-            payload.corte[id] = value; // Asigna los valores procesados al payload
-        }
-    });
-
-    console.log("Payload recopilado:", payload);
-}
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-function datosImpesion() {
-    const impresionDiv = document.querySelector("#Impresion");
-
-    // Selecciona todos los inputs, selects, y checkboxes personalizados por separado
-    const inputs = impresionDiv.querySelectorAll("input, select");
-    const checkboxes = impresionDiv.querySelectorAll(".checkbox");
-
-    const payload = {
-        ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
-        version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
-        impresion: {},
-    };
-
-    // Recolectar datos de inputs y selects
     inputs.forEach(input => {
         const id = input.id?.trim().toLowerCase();
-        const value = input.type === "checkbox" ? (input.checked ? "true" : "false") : input.value?.trim().toLowerCase();
+        let value;
 
-        if (id && value && value !== "false") { // Solo registra si el valor no es "false"
-            payload.impresion[id] = value;
+        if (input.classList.contains("checkbox")) {
+            value = input.getAttribute("data-checked") === "true" ? "true" : null;
+        } else if (input.type === "checkbox") {
+            value = input.checked ? "true" : null;
+        } else {
+            value = input.value?.trim().toLowerCase() || null;
+        }
+
+        if (id && value) {
+            payload.conversion[id] = value;
         }
     });
 
-    // Recolectar datos de checkboxes personalizados
-    checkboxes.forEach(checkbox => {
-        const id = checkbox.id?.trim().toLowerCase();
-        const value = checkbox.getAttribute("data-checked") === "true" ? "true" : "false";
-
-        if (id && value === "true") { // Solo registra si el valor es "true"
-            payload.impresion[id] = value;
-        }
-    });
-
-    console.log("Payload recopilado:", payload);
+    console.log("Payload recopilado para Conversión:", payload);
+    return payload;
 }
 
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  function datosCorrugacion() {
+    const corrugacionDiv = document.querySelector("#Corrugacion");
+    if (!corrugacionDiv) {
+        console.error(`Sección "Corrugación" no encontrada.`);
+        return null;
+    }
+
+    const inputs = corrugacionDiv.querySelectorAll("input, select, .checkbox");
+    const payload = {
+        ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
+        version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
+        corrugacion: {},
+    };
+
+    inputs.forEach(input => {
+        const id = input.id?.trim().toLowerCase();
+        let value;
+
+        if (input.classList.contains("checkbox")) {
+            value = input.getAttribute("data-checked") === "true" ? "true" : null;
+        } else if (input.type === "checkbox") {
+            value = input.checked ? "true" : null;
+        } else {
+            value = input.value?.trim().toLowerCase() || null;
+        }
+
+        if (id && value) {
+            payload.corrugacion[id] = value;
+        }
+    });
+
+    console.log("Payload recopilado para Corrugación:", payload);
+    return payload;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+ function datosCorte() {
+    const corteDiv = document.querySelector("#Corte");
+    if (!corteDiv) {
+        console.error(`Sección "Corte" no encontrada.`);
+        return null;
+    }
+
+    const inputs = corteDiv.querySelectorAll("input, select, .checkbox");
+    const payload = {
+        ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
+        version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
+        corte: {},
+    };
+
+    inputs.forEach(input => {
+        const id = input.id?.trim().toLowerCase();
+        let value;
+
+        if (input.classList.contains("checkbox")) {
+            value = input.getAttribute("data-checked") === "true" ? "true" : null;
+        } else if (input.type === "checkbox") {
+            value = input.checked ? "true" : null;
+        } else {
+            value = input.value?.trim().toLowerCase() || null;
+        }
+
+        if (id && value) {
+            payload.corte[id] = value;
+        }
+    });
+
+    console.log("Payload recopilado para Corte:", payload);
+    return payload;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function datosImpresion() {
+    const impresionDiv = document.querySelector("#Impresion");
+    if (!impresionDiv) {
+        console.error(`Sección "Impresión" no encontrada.`);
+        return null;
+    }
+
+  const inputs = impresionDiv.querySelectorAll("input, select"); // Captura inputs y selects
+const checkboxes = impresionDiv.querySelectorAll(".checkbox"); // Captura checkboxes personalizados
+
+inputs.forEach(input => {
+    const id = input.id?.trim().toLowerCase();
+    let value;
+
+    if (input.type === "checkbox") {
+        // Para checkboxes tradicionales
+        value = input.checked ? "true" : null;
+    } else {
+        // Para otros tipos de inputs y selects
+        value = input.value?.trim().toLowerCase() || null;
+    }
+
+    if (id && value) {
+        payload.impresion[id] = value;
+    }
+});
+
+checkboxes.forEach(checkbox => {
+    const id = checkbox.id?.trim().toLowerCase();
+    const value = checkbox.getAttribute("data-checked") === "true" ? "true" : null;
+
+    if (id && value) {
+        payload.impresion[id] = value;
+    }
+});
+
+   console.log("Payload recopilado para Impresión:", payload);
+    return payload;
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
      
 function datosColaminacion() {
-    const colaminacionDiv = document.querySelector("#Colaminacion"); // Corrige el nombre de la sección si es diferente
-    const inputs = colaminacionDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
+    const colaminacionDiv = document.querySelector("#Colaminacion");
+    const inputs = colaminacionDiv.querySelectorAll("input, select, .checkbox");
     const payload = {
         ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
         version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
-        colaminacion: {}, // Cambié "preliminares" a "corrugacion" para reflejar la sección correcta
+        colaminacion: {},
     };
 
     inputs.forEach(input => {
-        const id = input.id?.trim().toLowerCase(); // Convierte el ID a minúsculas y elimina espacios
-        const value = input.value?.trim().toLowerCase(); // Convierte el valor a minúsculas y elimina espacios
+        const id = input.id?.trim().toLowerCase();
+        let value;
+
+        if (input.classList.contains("checkbox")) {
+            value = input.getAttribute("data-checked") === "true" ? "true" : null;
+        } else if (input.type === "checkbox") {
+            value = input.checked ? "true" : null;
+        } else {
+            value = input.value?.trim().toLowerCase() || null;
+        }
+
         if (id && value) {
-            payload.colaminacion[id] = value; // Asigna los valores procesados al payload
+            payload.colaminacion[id] = value;
         }
     });
 
     console.log("Payload recopilado:", payload);
 }
+
 
 
      
@@ -3478,19 +3544,28 @@ function datosColaminacion() {
 
 
 function datosTroquelado() {
-    const troqueladoDiv = document.querySelector("#Troquelado"); // Corrige el nombre de la sección si es diferente
-    const inputs = troqueladoDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
+    const troqueladoDiv = document.querySelector("#Troquelado");
+    const inputs = troqueladoDiv.querySelectorAll("input, select, .checkbox");
     const payload = {
         ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
         version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
-        troquelado: {}, // Cambié "preliminares" a "corrugacion" para reflejar la sección correcta
+        troquelado: {},
     };
 
     inputs.forEach(input => {
-        const id = input.id?.trim().toLowerCase(); // Convierte el ID a minúsculas y elimina espacios
-        const value = input.value?.trim().toLowerCase(); // Convierte el valor a minúsculas y elimina espacios
+        const id = input.id?.trim().toLowerCase();
+        let value;
+
+        if (input.classList.contains("checkbox")) {
+            value = input.getAttribute("data-checked") === "true" ? "true" : null;
+        } else if (input.type === "checkbox") {
+            value = input.checked ? "true" : null;
+        } else {
+            value = input.value?.trim().toLowerCase() || null;
+        }
+
         if (id && value) {
-            payload.troquelado[id] = value; // Asigna los valores procesados al payload
+            payload.troquelado[id] = value;
         }
     });
 
@@ -3503,85 +3578,124 @@ function datosTroquelado() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function datosTerminados() {
-    const terminadosDiv = document.querySelector("#Terminados"); // Corrige el nombre de la sección si es diferente
-    const inputs = terminadosDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
+    const terminadosDiv = document.querySelector("#Terminados");
+    const inputs = terminadosDiv.querySelectorAll("input, select, .checkbox");
     const payload = {
         ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
         version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
-        terminados: {}, // Cambié "preliminares" a "corrugacion" para reflejar la sección correcta
+        terminados: {},
     };
 
     inputs.forEach(input => {
-        const id = input.id?.trim().toLowerCase(); // Convierte el ID a minúsculas y elimina espacios
-        const value = input.value?.trim().toLowerCase(); // Convierte el valor a minúsculas y elimina espacios
+        const id = input.id?.trim().toLowerCase();
+        let value;
+
+        if (input.classList.contains("checkbox")) {
+            value = input.getAttribute("data-checked") === "true" ? "true" : null;
+        } else if (input.type === "checkbox") {
+            value = input.checked ? "true" : null;
+        } else {
+            value = input.value?.trim().toLowerCase() || null;
+        }
+
         if (id && value) {
-            payload.terminados[id] = value; // Asigna los valores procesados al payload
+            payload.terminados[id] = value;
         }
     });
 
     console.log("Payload recopilado:", payload);
 }
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
      
-     function datosPegue() {
-    const pegueDiv = document.querySelector("#Pegue"); // Corrige el nombre de la sección si es diferente
-    const inputs = pegueDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
+ function datosPegue() {
+    const pegueDiv = document.querySelector("#Pegue");
+    const inputs = pegueDiv.querySelectorAll("input, select, .checkbox");
     const payload = {
         ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
         version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
-        pegue: {}, // Cambié "preliminares" a "corrugacion" para reflejar la sección correcta
+        pegue: {},
     };
 
     inputs.forEach(input => {
-        const id = input.id?.trim().toLowerCase(); // Convierte el ID a minúsculas y elimina espacios
-        const value = input.value?.trim().toLowerCase(); // Convierte el valor a minúsculas y elimina espacios
+        const id = input.id?.trim().toLowerCase();
+        let value;
+
+        if (input.classList.contains("checkbox")) {
+            value = input.getAttribute("data-checked") === "true" ? "true" : null;
+        } else if (input.type === "checkbox") {
+            value = input.checked ? "true" : null;
+        } else {
+            value = input.value?.trim().toLowerCase() || null;
+        }
+
         if (id && value) {
-            payload.pegue[id] = value; // Asigna los valores procesados al payload
+            payload.pegue[id] = value;
         }
     });
 
     console.log("Payload recopilado:", payload);
 }
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-     function datosEmpaque() {
-    const empaqueDiv = document.querySelector("#Empaque"); // Corrige el nombre de la sección si es diferente
-    const inputs = empaqueDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
+function datosEmpaque() {
+    const empaqueDiv = document.querySelector("#Empaque");
+    const inputs = empaqueDiv.querySelectorAll("input, select, .checkbox");
     const payload = {
         ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
         version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
-        empaque: {}, // Cambié "preliminares" a "corrugacion" para reflejar la sección correcta
+        empaque: {},
     };
 
     inputs.forEach(input => {
-        const id = input.id?.trim().toLowerCase(); // Convierte el ID a minúsculas y elimina espacios
-        const value = input.value?.trim().toLowerCase(); // Convierte el valor a minúsculas y elimina espacios
+        const id = input.id?.trim().toLowerCase();
+        let value;
+
+        if (input.classList.contains("checkbox")) {
+            value = input.getAttribute("data-checked") === "true" ? "true" : null;
+        } else if (input.type === "checkbox") {
+            value = input.checked ? "true" : null;
+        } else {
+            value = input.value?.trim().toLowerCase() || null;
+        }
+
         if (id && value) {
-            payload.empaque[id] = value; // Asigna los valores procesados al payload
+            payload.empaque[id] = value;
         }
     });
 
     console.log("Payload recopilado:", payload);
 }
 
+
  /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-     function datosLogistica() {
-    const logisticaDiv = document.querySelector("#Logistica"); // Corrige el nombre de la sección si es diferente
-    const inputs = logisticaDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
+function datosLogistica() {
+    const logisticaDiv = document.querySelector("#Logistica");
+    const inputs = logisticaDiv.querySelectorAll("input, select, .checkbox");
     const payload = {
         ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
         version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
-        logistica: {}, // Cambié "preliminares" a "corrugacion" para reflejar la sección correcta
+        logistica: {},
     };
 
     inputs.forEach(input => {
-        const id = input.id?.trim().toLowerCase(); // Convierte el ID a minúsculas y elimina espacios
-        const value = input.value?.trim().toLowerCase(); // Convierte el valor a minúsculas y elimina espacios
+        const id = input.id?.trim().toLowerCase();
+        let value;
+
+        if (input.classList.contains("checkbox")) {
+            value = input.getAttribute("data-checked") === "true" ? "true" : null;
+        } else if (input.type === "checkbox") {
+            value = input.checked ? "true" : null;
+        } else {
+            value = input.value?.trim().toLowerCase() || null;
+        }
+
         if (id && value) {
-            payload.logistica[id] = value; // Asigna los valores procesados al payload
+            payload.logistica[id] = value;
         }
     });
 

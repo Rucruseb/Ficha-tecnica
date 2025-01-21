@@ -3414,28 +3414,24 @@ function datosConversion() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function enviarDatos() {
-    // Selecciona el div de la sección "Impresión"
-    const impresionDiv = document.querySelector("#Impresion"); // Asegúrate de que el ID coincide con el HTML
-    if (!impresionDiv) {
-        console.error("No se encontró la sección de impresión");
-        return;
-    }
-
-    // Selecciona inputs y selects dentro del div
-    const inputs = impresionDiv.querySelectorAll("input, select");
+    const impresionDiv = document.querySelector("#Impresion");
+    const inputs = impresionDiv.querySelectorAll("input, select, .checkbox");
     const payload = {
         ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
         version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
-        impresion: {}, // Objeto para los datos de la sección "Impresión"
+        impresion: {},
     };
 
-    // Procesa los campos
+    // Recolectar datos de inputs, selects y checkboxes
     inputs.forEach(input => {
-        const id = input.id?.trim().toLowerCase(); // Asegúrate de que el ID está bien definido
+        const id = input.id?.trim().toLowerCase();
         let value;
 
-        if (input.type === "checkbox") {
-            // Para checkboxes: verdadero si está marcado, falso si no
+        if (input.classList.contains("checkbox")) {
+            // Para los checkboxes personalizados
+            value = input.getAttribute("data-checked") === "true" ? "true" : "false";
+        } else if (input.type === "checkbox") {
+            // Para checkboxes tradicionales
             value = input.checked ? "true" : "false";
         } else {
             // Para otros tipos de inputs y selects
@@ -3443,7 +3439,7 @@ function enviarDatos() {
         }
 
         if (id && value) {
-            payload.impresion[id] = value; // Agrega el campo al payload
+            payload.impresion[id] = value;
         }
     });
 

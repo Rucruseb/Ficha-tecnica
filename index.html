@@ -3775,7 +3775,7 @@ function recopilarDatosGenerales() {
 
 function enviarDatos() {
     const inputs = document.querySelectorAll("input, select"); // Incluye inputs, selects y textareas
-    const textarea = impresionDiv.querySelectorAll(".textarea");
+    const textarea = document.querySelectorAll(".textarea");
     const idsConContenido = [];
 
     // Recorre todos los campos y verifica si tienen contenido

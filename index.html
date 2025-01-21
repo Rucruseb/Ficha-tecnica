@@ -3413,7 +3413,7 @@ function datosConversion() {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function enviarDatos() {
+function datosImpesion() {
     const impresionDiv = document.querySelector("#Impresion");
 
     // Selecciona todos los inputs, selects, y checkboxes personalizados por separado
@@ -3735,8 +3735,41 @@ function limpiarCeldas() {
     alert("Todos los campos han sido limpiados.");
 }
 
+/////////////////////////////////////////////////////////////////////////////////////
 
+function enviarDatos() {
+    // Llama a cada función y recopila su resultado
+    const datosPreeliminaresPayload = datosPreeliminares();
+    const datosConversionPayload = datosConversion();
+    const datosCorrugacionPayload = datosCorrugacion();
+    const datosCortePayload = datosCorte();
+    const datosImpresionPayload = datosImpesion();
+    const datosColaminacionPayload = datosColaminacion();
+    const datosTroqueladoPayload = datosTroquelado();
+    const datosTerminadosPayload = datosTerminados();
+    const datosPeguePayload = datosPegue();
+    const datosEmpaquePayload = datosEmpaque();
+    const datosLogisticaPayload = datosLogistica();
 
+    // Combina todos los payloads en uno solo
+    const payloadGeneral = {
+        preeliminares: datosPreeliminaresPayload,
+        conversion: datosConversionPayload,
+        corrugacion: datosCorrugacionPayload,
+        corte: datosCortePayload,
+        impresion: datosImpresionPayload,
+        colaminacion: datosColaminacionPayload,
+        troquelado: datosTroqueladoPayload,
+        terminados: datosTerminadosPayload,
+        pegue: datosPeguePayload,
+        empaque: datosEmpaquePayload,
+        logistica: datosLogisticaPayload,
+    };
+
+    console.log("Payload general recopilado:", payloadGeneral);
+
+    return payloadGeneral; // Devuelve el payload combinado
+}
 
 
      

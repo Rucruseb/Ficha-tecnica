@@ -3737,7 +3737,7 @@ function limpiarCeldas() {
 
 /////////////////////////////////////////////////////////////////////////////////////
 
-function enviarDatos() {
+function recopilarDatosGenerales() {
     // Llama a cada función y recopila su resultado
     const datosPreeliminaresPayload = datosPreeliminares();
     const datosConversionPayload = datosConversion();
@@ -3771,7 +3771,29 @@ function enviarDatos() {
     return payloadGeneral; // Devuelve el payload combinado
 }
 
+/////////////////////////////////////////////////////////////////////////////////////
 
+function enviarDatos() {
+    const inputs = document.querySelectorAll("input, select"); // Incluye inputs, selects y textareas
+    const textarea = impresionDiv.querySelectorAll(".textarea");
+    const idsConContenido = [];
+
+    // Recorre todos los campos y verifica si tienen contenido
+    inputs.forEach(input => {
+        const id = input.id?.trim(); // Obtén el ID
+        const value = input.value?.trim(); // Obtén el valor del campo
+
+        if (id && value) {
+            idsConContenido.push(id); // Agrega el ID si el campo tiene contenido
+        }
+    });
+
+    console.log("IDs con contenido:", idsConContenido);
+    return idsConContenido; // Devuelve el array con los IDs encontrados
+}
+
+
+     
      
 
  </script>

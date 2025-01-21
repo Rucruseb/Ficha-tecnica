@@ -3411,33 +3411,42 @@ function datosConversion() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function enviarDatos() {
-    const impresionDiv = document.querySelector("#Impresion"); // Corrige el nombre de la sección si es diferente
-    const inputs = impresionDiv.querySelectorAll("input, select,checkbox"); // Incluye inputs y selects dentro del div
+    // Selecciona el div de la sección "Impresión"
+    const impresionDiv = document.querySelector("#Impresion"); // Asegúrate de que el ID coincide con el HTML
+    if (!impresionDiv) {
+        console.error("No se encontró la sección de impresión");
+        return;
+    }
+
+    // Selecciona inputs y selects dentro del div
+    const inputs = impresionDiv.querySelectorAll("input, select");
     const payload = {
         ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
         version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
-        impresion: {}, // Cambié "preliminares" a "corrugacion" para reflejar la sección correcta
+        impresion: {}, // Objeto para los datos de la sección "Impresión"
     };
 
-   inputs.forEach(input => {
-        const id = input.id?.trim().toLowerCase(); // Convierte el ID a minúsculas y elimina espacios
+    // Procesa los campos
+    inputs.forEach(input => {
+        const id = input.id?.trim().toLowerCase(); // Asegúrate de que el ID está bien definido
         let value;
 
         if (input.type === "checkbox") {
-            // Los checkboxes se manejan por si están marcados o no
-            value = input.checked ? "true" : "false"; // Convierte el valor a texto
+            // Para checkboxes: verdadero si está marcado, falso si no
+            value = input.checked ? "true" : "false";
         } else {
             // Para otros tipos de inputs y selects
-            value = input.value?.trim().toLowerCase(); // Convierte el valor a texto
+            value = input.value?.trim().toLowerCase();
         }
 
         if (id && value) {
-            payload.impresion[id] = value; // Asigna los valores procesados al payload
+            payload.impresion[id] = value; // Agrega el campo al payload
         }
     });
 
     console.log("Payload recopilado:", payload);
 }
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
      
 function datosColaminacion() {

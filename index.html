@@ -3415,28 +3415,31 @@ function datosConversion() {
 
 function enviarDatos() {
     const impresionDiv = document.querySelector("#Impresion");
-    const inputs = impresionDiv.querySelectorAll("input, select, .checkbox");
+
+    // Selecciona todos los inputs, selects, y checkboxes personalizados por separado
+    const inputs = impresionDiv.querySelectorAll("input, select");
+    const checkboxes = impresionDiv.querySelectorAll(".checkbox");
+
     const payload = {
         ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
         version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
         impresion: {},
     };
 
-    // Recolectar datos de inputs, selects y checkboxes
+    // Recolectar datos de inputs y selects
     inputs.forEach(input => {
         const id = input.id?.trim().toLowerCase();
-        let value;
+        const value = input.type === "checkbox" ? (input.checked ? "true" : "false") : input.value?.trim().toLowerCase();
 
-        if (input.classList.contains("checkbox")) {
-            // Para los checkboxes personalizados
-            value = input.getAttribute("data-checked") === "true" ? "true" : "false";
-        } else if (input.type === "checkbox") {
-            // Para checkboxes tradicionales
-            value = input.checked ? "true" : "false";
-        } else {
-            // Para otros tipos de inputs y selects
-            value = input.value?.trim().toLowerCase();
+        if (id && value) {
+            payload.impresion[id] = value;
         }
+    });
+
+    // Recolectar datos de checkboxes personalizados
+    checkboxes.forEach(checkbox => {
+        const id = checkbox.id?.trim().toLowerCase();
+        const value = checkbox.getAttribute("data-checked") === "true" ? "true" : "false";
 
         if (id && value) {
             payload.impresion[id] = value;

@@ -3412,16 +3412,25 @@ function datosConversion() {
 
 function datosImpresion() {
     const impresionDiv = document.querySelector("#Impresion"); // Corrige el nombre de la sección si es diferente
-    const inputs = impresionDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
+    const inputs = impresionDiv.querySelectorAll("input, select,checkbox"); // Incluye inputs y selects dentro del div
     const payload = {
         ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
         version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
         impresion: {}, // Cambié "preliminares" a "corrugacion" para reflejar la sección correcta
     };
 
-    inputs.forEach(input => {
+  inputs.forEach(input => {
         const id = input.id?.trim().toLowerCase(); // Convierte el ID a minúsculas y elimina espacios
-        const value = input.value?.trim().toLowerCase(); // Convierte el valor a minúsculas y elimina espacios
+        let value;
+
+        if (input.type === "checkbox") {
+            // Los checkboxes se manejan por si están marcados o no
+            value = input.checked ? "true" : "false"; // Convierte el valor a texto
+        } else {
+            // Para otros tipos de inputs y selects
+            value = input.value?.trim().toLowerCase(); // Convierte el valor a texto
+        }
+
         if (id && value) {
             payload.impresion[id] = value; // Asigna los valores procesados al payload
         }

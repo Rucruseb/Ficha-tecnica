@@ -3431,7 +3431,7 @@ function enviarDatos() {
         const id = input.id?.trim().toLowerCase();
         const value = input.type === "checkbox" ? (input.checked ? "true" : "false") : input.value?.trim().toLowerCase();
 
-        if (id && value) {
+        if (id && value && value !== "false") { // Solo registra si el valor no es "false"
             payload.impresion[id] = value;
         }
     });
@@ -3441,13 +3441,14 @@ function enviarDatos() {
         const id = checkbox.id?.trim().toLowerCase();
         const value = checkbox.getAttribute("data-checked") === "true" ? "true" : "false";
 
-        if (id && value) {
+        if (id && value === "true") { // Solo registra si el valor es "true"
             payload.impresion[id] = value;
         }
     });
 
     console.log("Payload recopilado:", payload);
 }
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
      

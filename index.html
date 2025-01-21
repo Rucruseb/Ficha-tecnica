@@ -3456,7 +3456,7 @@ function datosColaminacion() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////     
 
 
-function enviarDatos() {
+function datosTroquelado() {
     const troqueladoDiv = document.querySelector("#Troquelado"); // Corrige el nombre de la sección si es diferente
     const inputs = troqueladoDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
     const payload = {
@@ -3479,7 +3479,27 @@ function enviarDatos() {
 
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+function enviarDatos() {
+    const terminadosDiv = document.querySelector("#Terminados"); // Corrige el nombre de la sección si es diferente
+    const inputs = terminadosDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
+    const payload = {
+        ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
+        version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
+        terminados: {}, // Cambié "preliminares" a "corrugacion" para reflejar la sección correcta
+    };
+
+    inputs.forEach(input => {
+        const id = input.id?.trim().toLowerCase(); // Convierte el ID a minúsculas y elimina espacios
+        const value = input.value?.trim().toLowerCase(); // Convierte el valor a minúsculas y elimina espacios
+        if (id && value) {
+            payload.terminados[id] = value; // Asigna los valores procesados al payload
+        }
+    });
+
+    console.log("Payload recopilado:", payload);
+}
 
      
 /////////////////////////////////////////////////////////////////////////////////////////////////////////

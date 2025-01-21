@@ -3419,17 +3419,25 @@ function datosImpresion() {
         impresion: {}, // Cambié "preliminares" a "corrugacion" para reflejar la sección correcta
     };
 
-    inputs.forEach(input => {
+   inputs.forEach(input => {
         const id = input.id?.trim().toLowerCase(); // Convierte el ID a minúsculas y elimina espacios
-        const value = input.value?.trim().toLowerCase(); // Convierte el valor a minúsculas y elimina espacios
+        let value;
+
+        if (input.type === "checkbox") {
+            // Los checkboxes se manejan por si están marcados o no
+            value = input.checked ? "true" : "false"; // Convierte el valor a texto
+        } else {
+            // Para otros tipos de inputs y selects
+            value = input.value?.trim().toLowerCase(); // Convierte el valor a texto
+        }
+
         if (id && value) {
-            payload.impresion[id] = value; // Asigna los valores procesados al payload
+            payload.conversion[id] = value; // Asigna los valores procesados al payload
         }
     });
 
     console.log("Payload recopilado:", payload);
 }
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
      
 function datosColaminacion() {

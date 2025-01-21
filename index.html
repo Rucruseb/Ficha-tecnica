@@ -3332,7 +3332,7 @@ function datosPreeliminares() {
         return {}; // Devuelve un objeto vacío si no existe la sección
     }
 
-    const inputs = preliminaresDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
+    const inputs = preliminaresDiv.querySelectorAll("input, select");
     const payload = {
         ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
         version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
@@ -3340,17 +3340,16 @@ function datosPreeliminares() {
     };
 
     inputs.forEach(input => {
-        const id = input.id?.trim().toLowerCase(); // Convierte el ID a minúsculas y elimina espacios
-        const value = input.value?.trim().toLowerCase(); // Convierte el valor a minúsculas y elimina espacios
-        if (id && value) {
-            payload.preliminares[id] = value; // Asigna los valores procesados al payload
+        const id = input.id?.trim().toLowerCase();
+        const value = input.value?.trim().toLowerCase();
+        if (id && value && id !== "ficha" && id !== "version") { // Excluye "ficha" y "version"
+            payload.preliminares[id] = value;
         }
     });
 
     console.log("Payload recopilado de 'Preliminares':", payload);
-    return payload; // ¡No olvides devolver el payload!
+    return payload;
 }
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      

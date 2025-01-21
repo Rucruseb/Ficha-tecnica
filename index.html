@@ -3503,7 +3503,7 @@ function datosTerminados() {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
      
-     function enviarDatos() {
+     function datosPegue() {
     const pegueDiv = document.querySelector("#Pegue"); // Corrige el nombre de la sección si es diferente
     const inputs = pegueDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
     const payload = {
@@ -3522,7 +3522,29 @@ function datosTerminados() {
 
     console.log("Payload recopilado:", payload);
 }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+     function enviarDatos() {
+    const empaqueDiv = document.querySelector("#Empaque"); // Corrige el nombre de la sección si es diferente
+    const inputs = empaqueDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
+    const payload = {
+        ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
+        version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
+        empaque: {}, // Cambié "preliminares" a "corrugacion" para reflejar la sección correcta
+    };
+
+    inputs.forEach(input => {
+        const id = input.id?.trim().toLowerCase(); // Convierte el ID a minúsculas y elimina espacios
+        const value = input.value?.trim().toLowerCase(); // Convierte el valor a minúsculas y elimina espacios
+        if (id && value) {
+            payload.empaque[id] = value; // Asigna los valores procesados al payload
+        }
+    });
+
+    console.log("Payload recopilado:", payload);
+}
+     
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 async function enviarDatos1() {
     const inputs = document.querySelectorAll("input, select"); // Incluye inputs y selects

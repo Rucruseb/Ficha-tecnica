@@ -3773,25 +3773,38 @@ function recopilarDatosGenerales() {
 
 /////////////////////////////////////////////////////////////////////////////////////
 
-function enviarDatos() {
-    const inputs = document.querySelectorAll("input, select"); // Incluye inputs, selects y textareas
-    const textarea = document.querySelectorAll(".textarea");
-    const checkboxes = document.querySelectorAll(".checkbox");
-    const idsConContenido = [];
+async function enviarDatos() {
+    const payloadGeneral = recopilarDatosGenerales(); // Recopila todos los datos
 
-    // Recorre todos los campos y verifica si tienen contenido
-    inputs.forEach(input => {
-        const id = input.id?.trim(); // Obtén el ID
-        const value = input.value?.trim(); // Obtén el valor del campo
+    for (const [seccion, datos] of Object.entries(payloadGeneral)) {
+        if (Object.keys(datos).length > 0) { // Enviar solo si hay datos
+            try {
+                const response = await fetch(
+                    "https://us-central1-ficha-producto.cloudfunctions.net/fichasTecnicasHandler",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            seccion, // Incluye el nombre de la sección
+                            datos,   // Incluye los datos de la sección
+                        }),
+                    }
+                );
 
-        if (id && value) {
-            idsConContenido.push(id); // Agrega el ID si el campo tiene contenido
+                if (!response.ok) {
+                    throw new Error(`Error en el servidor: ${response.statusText}`);
+                }
+
+                console.log(`Datos de la sección ${seccion} enviados con éxito.`);
+            } catch (error) {
+                console.error(`Error al enviar datos de la sección ${seccion}:`, error);
+            }
         }
-    });
-
-    console.log("IDs con contenido:", idsConContenido);
-    return idsConContenido; // Devuelve el array con los IDs encontrados
+    }
 }
+
 
 
      

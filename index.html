@@ -3638,10 +3638,10 @@ function datosTerminados() {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
 function datosEmpaque() {
     const empaqueDiv = document.querySelector("#Empaque");
-    const inputs = empaqueDiv.querySelectorAll("input, select, .checkbox");
+    const inputs = empaqueDiv.querySelectorAll("input, select");
+
     const payload = {
         ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
         version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
@@ -3650,22 +3650,14 @@ function datosEmpaque() {
 
     inputs.forEach(input => {
         const id = input.id?.trim().toLowerCase();
-        let value;
-
-        if (input.classList.contains("checkbox")) {
-            value = input.getAttribute("data-checked") === "true" ? "true" : null;
-        } else if (input.type === "checkbox") {
-            value = input.checked ? "true" : null;
-        } else {
-            value = input.value?.trim().toLowerCase() || null;
-        }
-
+        const value = input.value?.trim().toLowerCase();
         if (id && value) {
             payload.empaque[id] = value;
         }
     });
 
-    console.log("Payload recopilado:", payload);
+    console.log("Payload recopilado para empaque:", payload);
+    return payload; // Asegúrate de retornar el payload
 }
 
 

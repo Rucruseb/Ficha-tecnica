@@ -2049,20 +2049,20 @@
                <div class="form-row">
 <div class="checkbox-container">
   <label class="checkbox-label" for="checkbox1">C</label>
-  <div class="checkbox" id="tiro1C" onclick="toggleCheckbox(this)"></div>
+  <div class="checkbox" id="tiro1C" onclick="toggleCheckbox(this)"data-checked="false"></div>
 </div>
 
 <div class="checkbox-container">
   <label class="checkbox-label" for="checkbox1">M</label>
-  <div class="checkbox" id="tiro1M" onclick="toggleCheckbox(this)"></div>
+  <div class="checkbox" id="tiro1M" onclick="toggleCheckbox(this)"data-checked="false"></div>
 </div>
 <div class="checkbox-container">
   <label class="checkbox-label" for="checkbox1">Y</label>
-  <div class="checkbox" id="tiro1Y" onclick="toggleCheckbox(this)"></div>
+  <div class="checkbox" id="tiro1Y" onclick="toggleCheckbox(this)"data-checked="false"></div>
 </div>
 <div class="checkbox-container">
   <label class="checkbox-label" for="checkbox1">K</label>
-  <div class="checkbox" id="tiro1K" onclick="toggleCheckbox(this)"></div>
+  <div class="checkbox" id="tiro1K" onclick="toggleCheckbox(this)"data-checked="false"></div>
 </div>
 </div>
                 <div class="form-rowB">
@@ -3309,16 +3309,19 @@ function toggleFields(button) {
 }
 
 function toggleCheckbox(element) {
-  // Alterna la clase "marked"
-  element.classList.toggle('marked');
+    // Alterna la clase "marked"
+    element.classList.toggle("marked");
 
-  // Agrega o elimina el contenido de la "X"
-  if (element.classList.contains('marked')) {
-    element.textContent = 'X'; // Marca con una "X"
-  } else {
-    element.textContent = ''; // Limpia la casilla
-  }
+    // Agrega o elimina el contenido de la "X"
+    if (element.classList.contains("marked")) {
+        element.textContent = "X"; // Marca con una "X"
+        element.setAttribute("data-checked", "true"); // Actualiza el estado como marcado
+    } else {
+        element.textContent = ""; // Limpia la casilla
+        element.setAttribute("data-checked", "false"); // Actualiza el estado como no marcado
+    }
 }
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 

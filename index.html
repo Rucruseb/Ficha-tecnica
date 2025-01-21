@@ -3505,7 +3505,7 @@ function datosTerminados() {
      
      function enviarDatos() {
     const pegueDiv = document.querySelector("#Pegue"); // Corrige el nombre de la sección si es diferente
-    const inputs = terminadosDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
+    const inputs = pegueDiv.querySelectorAll("input, select"); // Incluye inputs y selects dentro del div
     const payload = {
         ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
         version: document.getElementById("version")?.value?.trim().toLowerCase() || null,

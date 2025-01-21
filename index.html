@@ -3878,36 +3878,39 @@ function recopilarDatosGenerales() {
 /////////////////////////////////////////////////////////////////////////////////////
 
 async function enviarDatos() {
-    const payloadGeneral = recopilarDatosGenerales(); // Recopila todos los datos
+    // Llama a la función para recopilar datos de la sección Preliminares
+    const payload = datosPreeliminares();
 
-    for (const [seccion, datos] of Object.entries(payloadGeneral)) {
-        if (Object.keys(datos).length > 0) { // Enviar solo si hay datos
-            try {
-                const response = await fetch(
-                    "https://us-central1-ficha-producto.cloudfunctions.net/fichasTecnicasHandler",
-                    {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({
-                            seccion, // Incluye el nombre de la sección
-                            datos,   // Incluye los datos de la sección
-                        }),
-                    }
-                );
+    if (!payload) {
+        console.warn("No se recopilaron datos para la sección Preliminares.");
+        return;
+    }
 
-                if (!response.ok) {
-                    throw new Error(`Error en el servidor: ${response.statusText}`);
-                }
+    try {
+        // Enviar los datos al backend
+        const response = await fetch("https://us-central1-ficha-producto.cloudfunctions.net/fichasTecnicasHandler", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        });
 
-                console.log(`Datos de la sección ${seccion} enviados con éxito.`);
-            } catch (error) {
-                console.error(`Error al enviar datos de la sección ${seccion}:`, error);
-            }
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`Error al enviar la sección Preliminares: ${errorText}`);
+            throw new Error(`Error del servidor: ${errorText}`);
         }
+
+        const result = await response.text();
+        console.log("Sección Preliminares enviada con éxito. Respuesta del servidor:", result);
+        alert("Datos de Preliminares enviados correctamente.");
+    } catch (error) {
+        console.error("Error al enviar los datos de Preliminares:", error);
+        alert("Hubo un error al enviar los datos de Preliminares. Revisa la consola para más detalles.");
     }
 }
+
 
 
 

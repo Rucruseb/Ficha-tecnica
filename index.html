@@ -3643,11 +3643,9 @@ async function datosImpresion() {
                         ? element.options[element.selectedIndex]?.text.trim() || null // Si es select, guardar texto
                         : element.value?.trim() || null; // Otros elementos
 
-            if (id && value && value !== "false") {
-                payload[id] = value;
+            if (id) {
+                payload[id] = value; // Agregar el valor al payload incluso si es "false"
             }
-        } else {
-            payload[id] = null; // Si no existe el elemento, asigna null
         }
     });
 
@@ -3657,7 +3655,7 @@ async function datosImpresion() {
         const id = checkbox.id?.trim().toLowerCase();
         const value = checkbox.getAttribute("data-checked") === "true" ? "true" : "false";
 
-        if (id && value === "true") {
+        if (id) {
             payload[id] = value;
         }
     });
@@ -3680,7 +3678,7 @@ async function datosImpresion() {
         alert("Datos enviados correctamente para la sección de impresión.");
     } catch (error) {
         console.error("Error al enviar datos de impresión:", error);
-        alert("Error al enviar los datos de impresión. Revisa la consola para más detalles.");
+        throw error; // Lanza el error para que la función principal lo maneje
     }
 }
 

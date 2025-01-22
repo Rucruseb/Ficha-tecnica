@@ -3712,16 +3712,6 @@ async function datosColaminado() {
         }
     });
 
-    // Recolectar datos de checkboxes personalizados (si los hay)
-    const customCheckboxes =sectionContainer.querySelector("[data-checked]");
-    customCheckboxes.forEach(checkbox => {
-        const id = checkbox.id?.trim().toLowerCase();
-        const value = checkbox.getAttribute("data-checked") === "true" ? "true" : "false";
-
-        if (id && value === "true") {
-            payload[id] = value;
-        }
-    });
 
     try {
         const response = await fetch("https://us-central1-ficha-producto.cloudfunctions.net/fichasTecnicasHandler", {

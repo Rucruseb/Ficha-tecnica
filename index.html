@@ -3688,7 +3688,7 @@ async function datosImpresion() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
      
-async function datosColaminado() {
+async function enviarDatos() {
     const ids = [
         "tiro", "retiro", "registroColaminacion", "materialBaseColaminacion", "claveColaminacion",
         "anchoSustrato", "anchoAfiche1", "anchoAfiche2", "anchoTiro", "anchoRetiro",
@@ -4086,84 +4086,7 @@ async function datosLogistica() {
 
      
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-async function enviarDatos1() {
-    const inputs = document.querySelectorAll("input, select"); // Incluye inputs y selects
-    const payload = {
-        fichas: {}, // Datos relacionados con la tabla 'fichas'
-        conversion_lineer: {}, // Datos relacionados con la tabla 'conversion_lineer'
-        conversion_single_face: {}, // Datos relacionados con la tabla 'conversion_single_face'
-    };
 
-    // Clasifica los datos en el payload según los IDs
-    inputs.forEach(input => {
-        const id = input.id?.trim(); // Asegúrate de usar IDs consistentes
-        const value = input.value?.trim();
-
-        if (value) {
-            if (id === "ficha") {
-                // Duplica el valor de 'ficha' en 'numero_ficha'
-                payload.ficha = value;
-                payload.numero_ficha = value;
-            } else if (id.startsWith("lineer")) {
-                // Datos para conversion_lineer
-                payload.conversion_lineer[id] = value;
-            } else if (id.startsWith("singleFace")) {
-                // Datos para conversion_single_face
-                payload.conversion_single_face[id] = value;
-            } else {
-                // Datos generales para fichas
-                payload.fichas[id] = value;
-            }
-        }
-    });
-
-    console.log("Payload enviado:", payload);
-
-// Validar que los campos obligatorios estén presentes
-if (!payload.ficha) {
-    alert("El campo 'Ficha' es obligatorio.");
-    return;
-}
-
-if (!payload.numero_ficha) {
-    alert("El campo 'Número de Ficha' es obligatorio.");
-    return;
-}
-
-if (!payload.fichas.version) {
-    alert("El campo 'Versión' es obligatorio.");
-    return;
-}
-
-    try {
-        const response = await fetch(
-            "https://us-central1-ficha-producto.cloudfunctions.net/fichasTecnicasHandler",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(payload),
-            }
-        );
-
-        if (!response.ok) {
-            throw new Error(`Error en el servidor: ${response.statusText}`);
-        }
-
-        const result = await response.text();
-        alert(result);
-    } catch (error) {
-        console.error("Error al enviar los datos:", error);
-        alert("Hubo un error al enviar los datos.");
-    }
-}
-
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function consultarDatos() {
     console.log("Iniciando la función consultarDatos.");
@@ -4233,7 +4156,7 @@ function limpiarCeldas() {
 
 /////////////////////////////////////////////////////////////////////////////////////
 
-async function enviarDatos() {
+async function enviarDatoss() {
     // Lista de funciones a ejecutar
     const funciones = [
         datosLogistica,
@@ -4267,39 +4190,6 @@ async function enviarDatos() {
 
 /////////////////////////////////////////////////////////////////////////////////////
 
-async function enviarDatos21() {
-    // Llama a la función para recopilar datos de la sección Preliminares
-    const payload = datosPreeliminares();
-
-    if (!payload) {
-        console.warn("No se recopilaron datos para la sección Preliminares.");
-        return;
-    }
-
-    try {
-        // Enviar los datos al backend
-        const response = await fetch("https://us-central1-ficha-producto.cloudfunctions.net/fichasTecnicasHandler", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(payload),
-        });
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error(`Error al enviar la sección Preliminares: ${errorText}`);
-            throw new Error(`Error del servidor: ${errorText}`);
-        }
-
-        const result = await response.text();
-        console.log("Sección Preliminares enviada con éxito. Respuesta del servidor:", result);
-        alert("Datos de Preliminares enviados correctamente.");
-    } catch (error) {
-        console.error("Error al enviar los datos de Preliminares:", error);
-        alert("Hubo un error al enviar los datos de Preliminares. Revisa la consola para más detalles.");
-    }
-}
 
 
 

@@ -3688,7 +3688,7 @@ async function datosImpresion() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
      
-async function datosColaminacion() {
+async function enviarDatos() {
     const ids = [
         "tiro", "retiro", "registroColaminacion", "materialBaseColaminacion", "claveColaminacion",
         "anchoSustrato", "anchoAfiche1", "anchoAfiche2", "anchoTiro", "anchoRetiro",
@@ -3757,155 +3757,331 @@ async function datosColaminacion() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////     
 
 
-function datosTroquelado() {
-    const troqueladoDiv = document.querySelector("#Troquelado");
-    const inputs = troqueladoDiv.querySelectorAll("input, select, .checkbox");
-    const payload = {
-        ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
-        version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
-        troquelado: {},
-    };
+async function datosTroquelado() {
+    const ids = [
+        "tiro", "retiro", "registroColaminacion", "materialBaseColaminacion", "claveColaminacion",
+        "anchoSustrato", "anchoAfiche1", "anchoAfiche2", "anchoTiro", "anchoRetiro",
+        "largoSustrato", "largoAfiche1", "largoAfiche2", "largoTiro", "largoRetiro",
+        "unidadesACarear", "rendimientoxHoraColaminacion", "requerimientoAuxiliar",
+        "referenciaAdhesivo", "observacionesColaminado", "impresionTroquelado1", "numeroTroquel",
+        "repujado", "cavidad", "proveedorTroquel", "cantidadClises",
+        "codigoClise1", "codigoClise2", "codigoClise3", "codigoClise4",
+        "codigoClise5", "codigoClise6", "codigoClise7", "codigoClise8", "codigoClise9",
+        "estampado", "tipoEstampado", "cantidadEstampado", "cliseAUsar",
+        "pinzaYEscuadra", "numeroPlano", "registroImpresionTroquelado", "rendimientoxHoraTroquelado",
+        "observacionesTroquelado", "ficha", "version"
+    ];
 
-    inputs.forEach(input => {
-        const id = input.id?.trim().toLowerCase();
-        let value;
+    const payload = { seccion: "troquelado" }; // Identificador de la sección
 
-        if (input.classList.contains("checkbox")) {
-            value = input.getAttribute("data-checked") === "true" ? "true" : null;
-        } else if (input.type === "checkbox") {
-            value = input.checked ? "true" : null;
+    ids.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            const value =
+                element.type === "checkbox"
+                    ? (element.checked ? "true" : "false") // Si es checkbox, guardar true o false
+                    : element.tagName === "SELECT"
+                        ? element.options[element.selectedIndex]?.text.trim() || null // Si es select, guardar texto
+                        : element.value?.trim() || null; // Otros elementos
+
+            if (id && value && value !== "false") {
+                payload[id] = value;
+            }
         } else {
-            value = input.value?.trim().toLowerCase() || null;
-        }
-
-        if (id && value) {
-            payload.troquelado[id] = value;
+            payload[id] = null; // Si no existe el elemento, asigna null
         }
     });
 
-    console.log("Payload recopilado:", payload);
-}
+    // Recolectar datos de checkboxes personalizados (si los hay)
+    const customCheckboxes = document.querySelectorAll("[data-checked]");
+    customCheckboxes.forEach(checkbox => {
+        const id = checkbox.id?.trim().toLowerCase();
+        const value = checkbox.getAttribute("data-checked") === "true" ? "true" : "false";
 
+        if (id && value === "true") {
+            payload[id] = value;
+        }
+    });
+
+    try {
+        const response = await fetch("https://us-central1-ficha-producto.cloudfunctions.net/fichasTecnicasHandler", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`Error al enviar datos de troquelado: ${errorText}`);
+            throw new Error(`Error del servidor: ${errorText}`);
+        }
+
+        const result = await response.text();
+        console.log("Datos enviados correctamente. Respuesta del servidor:", result);
+        alert("Datos enviados correctamente para la sección de troquelado.");
+    } catch (error) {
+        console.error("Error al enviar datos de troquelado:", error);
+        alert("Error al enviar los datos de troquelado. Revisa la consola para más detalles.");
+    }
+}
 
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function datosTerminados() {
-    const terminadosDiv = document.querySelector("#Terminados");
-    const inputs = terminadosDiv.querySelectorAll("input, select, .checkbox");
-    const payload = {
-        ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
-        version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
-        terminados: {},
-    };
+async function datosTerminados() {
+    const ids = [
+        "numeroManijas", "tipoManijas", "ubicacionManijas",
+        "numeroBroches", "tipoBroches", "ubicacionBroches",
+        "numeroCintas", "tipoCintas", "ubicacionCintas",
+        "cantidadAcetatos", "calibreAcetato", "anchoAcetato", "largoAcetato",
+        "descartoneTerminados1", "revisionTerminados1", "conteoTerminados1",
+        "retocarTerminados1", "fajilladoTermiandos1", "empaqueTerminados1",
+        "rendimientoxHoraTermiando", "cantidadInterventores", "otros",
+        "observacionesTerminados", "ficha", "version"
+    ];
 
-    inputs.forEach(input => {
-        const id = input.id?.trim().toLowerCase();
-        let value;
+    const payload = { seccion: "terminados" }; // Identificador de la sección
 
-        if (input.classList.contains("checkbox")) {
-            value = input.getAttribute("data-checked") === "true" ? "true" : null;
-        } else if (input.type === "checkbox") {
-            value = input.checked ? "true" : null;
+    ids.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            const value =
+                element.type === "checkbox"
+                    ? (element.checked ? "true" : "false") // Si es checkbox, guardar true o false
+                    : element.tagName === "SELECT"
+                        ? element.options[element.selectedIndex]?.text.trim() || null // Si es select, guardar texto
+                        : element.value?.trim() || null; // Otros elementos
+
+            if (id && value && value !== "false") {
+                payload[id] = value;
+            }
         } else {
-            value = input.value?.trim().toLowerCase() || null;
-        }
-
-        if (id && value) {
-            payload.terminados[id] = value;
+            payload[id] = null; // Si no existe el elemento, asigna null
         }
     });
 
-    console.log("Payload recopilado:", payload);
+    // Recolectar datos de checkboxes personalizados (si los hay)
+    const customCheckboxes = document.querySelectorAll("[data-checked]");
+    customCheckboxes.forEach(checkbox => {
+        const id = checkbox.id?.trim().toLowerCase();
+        const value = checkbox.getAttribute("data-checked") === "true" ? "true" : "false";
+
+        if (id && value === "true") {
+            payload[id] = value;
+        }
+    });
+
+    try {
+        const response = await fetch("https://us-central1-ficha-producto.cloudfunctions.net/fichasTecnicasHandler", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`Error al enviar datos de terminados: ${errorText}`);
+            throw new Error(`Error del servidor: ${errorText}`);
+        }
+
+        const result = await response.text();
+        console.log("Datos enviados correctamente. Respuesta del servidor:", result);
+        alert("Datos enviados correctamente para la sección de terminados.");
+    } catch (error) {
+        console.error("Error al enviar datos de terminados:", error);
+        alert("Error al enviar los datos de terminados. Revisa la consola para más detalles.");
+    }
 }
+
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
      
- function datosPegue() {
-    const pegueDiv = document.querySelector("#Pegue");
-    const inputs = pegueDiv.querySelectorAll("input, select, .checkbox");
-    const payload = {
-        ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
-        version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
-        pegue: {},
-    };
+ async function datosPegue() {
+    const ids = [
+        "cantidadPegues", "pegueLateral1", "pegueSuperior1", "pegueBase1",
+        "tipoPegue", "rendimientoxHoraPegue", "tipoAdhesivo", "ficha", "version"
+    ];
 
-    inputs.forEach(input => {
-        const id = input.id?.trim().toLowerCase();
-        let value;
+    const payload = { seccion: "pegue" }; // Identificador de la sección
 
-        if (input.classList.contains("checkbox")) {
-            value = input.getAttribute("data-checked") === "true" ? "true" : null;
-        } else if (input.type === "checkbox") {
-            value = input.checked ? "true" : null;
+    ids.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            const value =
+                element.type === "checkbox"
+                    ? (element.checked ? "true" : "false") // Si es checkbox, guardar true o false
+                    : element.tagName === "SELECT"
+                        ? element.options[element.selectedIndex]?.text.trim() || null // Si es select, guardar texto
+                        : element.value?.trim() || null; // Otros elementos
+
+            if (id && value && value !== "false") {
+                payload[id] = value;
+            }
         } else {
-            value = input.value?.trim().toLowerCase() || null;
-        }
-
-        if (id && value) {
-            payload.pegue[id] = value;
+            payload[id] = null; // Si no existe el elemento, asigna null
         }
     });
 
-    console.log("Payload recopilado:", payload);
+    // Recolectar datos de checkboxes personalizados (si los hay)
+    const customCheckboxes = document.querySelectorAll("[data-checked]");
+    customCheckboxes.forEach(checkbox => {
+        const id = checkbox.id?.trim().toLowerCase();
+        const value = checkbox.getAttribute("data-checked") === "true" ? "true" : "false";
+
+        if (id && value === "true") {
+            payload[id] = value;
+        }
+    });
+
+    try {
+        const response = await fetch("https://us-central1-ficha-producto.cloudfunctions.net/fichasTecnicasHandler", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`Error al enviar datos de pegue: ${errorText}`);
+            throw new Error(`Error del servidor: ${errorText}`);
+        }
+
+        const result = await response.text();
+        console.log("Datos enviados correctamente. Respuesta del servidor:", result);
+        alert("Datos enviados correctamente para la sección de pegue.");
+    } catch (error) {
+        console.error("Error al enviar datos de pegue:", error);
+        alert("Error al enviar los datos de pegue. Revisa la consola para más detalles.");
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function datosEmpaque() {
-    const empaqueDiv = document.querySelector("#Empaque");
-    const inputs = empaqueDiv.querySelectorAll("input, select");
+async function datosEmpaque() {
+    const ids = [
+        "unidadEmpaque", "pesoBruto", "pesoNeto", "tipoEmbalaje", "tipoMaterialEmbalaje",
+        "esquinerosEmpaque1", "amarreEmpaque1", "otrosEmpaque", "rendimientoxHoraEmpaque",
+        "observacionesEmpaque", "ficha", "version"
+    ];
 
-    const payload = {
-        ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
-        version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
-        empaque: {},
-    };
+    const payload = { seccion: "empaque" }; // Identificador de la sección
 
-    inputs.forEach(input => {
-        const id = input.id?.trim().toLowerCase();
-        const value = input.value?.trim().toLowerCase();
-        if (id && value) {
-            payload.empaque[id] = value;
+    ids.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            const value =
+                element.type === "checkbox"
+                    ? (element.checked ? "true" : "false") // Si es checkbox, guardar true o false
+                    : element.tagName === "SELECT"
+                        ? element.options[element.selectedIndex]?.text.trim() || null // Si es select, guardar texto
+                        : element.value?.trim() || null; // Otros elementos
+
+            if (id && value && value !== "false") {
+                payload[id] = value;
+            }
+        } else {
+            payload[id] = null; // Si no existe el elemento, asigna null
         }
     });
 
-    console.log("Payload recopilado para empaque:", payload);
-    return payload; // Asegúrate de retornar el payload
+    // Recolectar datos de checkboxes personalizados (si los hay)
+    const customCheckboxes = document.querySelectorAll("[data-checked]");
+    customCheckboxes.forEach(checkbox => {
+        const id = checkbox.id?.trim().toLowerCase();
+        const value = checkbox.getAttribute("data-checked") === "true" ? "true" : "false";
+
+        if (id && value === "true") {
+            payload[id] = value;
+        }
+    });
+
+    try {
+        const response = await fetch("https://us-central1-ficha-producto.cloudfunctions.net/fichasTecnicasHandler", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`Error al enviar datos de empaque: ${errorText}`);
+            throw new Error(`Error del servidor: ${errorText}`);
+        }
+
+        const result = await response.text();
+        console.log("Datos enviados correctamente. Respuesta del servidor:", result);
+        alert("Datos enviados correctamente para la sección de empaque.");
+    } catch (error) {
+        console.error("Error al enviar datos de empaque:", error);
+        alert("Error al enviar los datos de empaque. Revisa la consola para más detalles.");
+    }
 }
+
 
 
  /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function datosLogistica() {
-    const logisticaDiv = document.querySelector("#Logistica");
-    const inputs = logisticaDiv.querySelectorAll("input, select, .checkbox");
-    const payload = {
-        ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
-        version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
-        logistica: {},
-    };
+async function datosLogistica() {
+    const ids = [
+        "responsableTransporte1", "caracteristicaVehiculoFurgon1", "caracteristicaVehiculoCarpa1",
+        "caracteristicaVehiculoContainer1", "caracteristicaVehiculoPlancha1", "caracteristicaVehiculoVans1",
+        "caracteristicaVehiculoMoto1", "precintoTransporte1", "tipoPrecinto",
+        "otroLogística", "observacionesLogistica", "ficha", "version"
+    ];
 
-    inputs.forEach(input => {
-        const id = input.id?.trim().toLowerCase();
-        let value;
+    const payload = { seccion: "logistica" }; // Identificador de la sección
 
-        if (input.classList.contains("checkbox")) {
-            value = input.getAttribute("data-checked") === "true" ? "true" : null;
-        } else if (input.type === "checkbox") {
-            value = input.checked ? "true" : null;
+    ids.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            const value =
+                element.type === "checkbox"
+                    ? (element.checked ? "true" : "false") // Si es checkbox, guardar true o false
+                    : element.tagName === "SELECT"
+                        ? element.options[element.selectedIndex]?.text.trim() || null // Si es select, guardar texto
+                        : element.value?.trim() || null; // Otros elementos
+
+            if (id && value && value !== "false") {
+                payload[id] = value;
+            }
         } else {
-            value = input.value?.trim().toLowerCase() || null;
-        }
-
-        if (id && value) {
-            payload.logistica[id] = value;
+            payload[id] = null; // Si no existe el elemento, asigna null
         }
     });
 
-    console.log("Payload recopilado:", payload);
+    // Recolectar datos de checkboxes personalizados (si los hay)
+    const customCheckboxes = document.querySelectorAll("[data-checked]");
+    customCheckboxes.forEach(checkbox => {
+        const id = checkbox.id?.trim().toLowerCase();
+        const value = checkbox.getAttribute("data-checked") === "true" ? "true" : "false";
+
+        if (id && value === "true") {
+            payload[id] = value;
+        }
+    });
+
+    try {
+        const response = await fetch("https://us-central1-ficha-producto.cloudfunctions.net/fichasTecnicasHandler", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`Error al enviar datos de logística: ${errorText}`);
+            throw new Error(`Error del servidor: ${errorText}`);
+        }
+
+        const result = await response.text();
+        console.log("Datos enviados correctamente. Respuesta del servidor:", result);
+        alert("Datos enviados correctamente para la sección de logística.");
+    } catch (error) {
+        console.error("Error al enviar datos de logística:", error);
+        alert("Error al enviar los datos de logística. Revisa la consola para más detalles.");
+    }
 }
 
      

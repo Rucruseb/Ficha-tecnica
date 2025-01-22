@@ -3634,34 +3634,26 @@ async function datosImpresion() {
     const payload = { seccion: "impresion" }; // Identificador de la sección
 
     try {
-        ids.forEach(id => {
-            const element = document.getElementById(id);
+ids.forEach(id => {
+    const element = document.getElementById(id);
 
-            if (element) {
-                const value =
-                    element.type === "checkbox"
-                        ? element.checked.toString() // Guardar como "true" o "false"
-                        : element.tagName === "SELECT"
-                            ? element.options[element.selectedIndex]?.text.trim() || null // Guardar el texto del select
-                            : element.value?.trim() || null; // Otros tipos de elementos
+    if (element) {
+        const value =
+            element.type === "checkbox"
+                ? element.checked.toString()
+                : element.tagName === "SELECT"
+                    ? element.options[element.selectedIndex]?.text.trim() || null
+                    : element.value?.trim() || null;
 
-                payload[id] = value; // Añadir al payload
-            } else {
-                console.warn(`El elemento con ID '${id}' no se encontró.`);
-                payload[id] = null; // Si no existe, asignar null
-            }
-        });
+        // Verificar si ya existe en el payload
+        if (payload.hasOwnProperty(id)) {
+            console.warn(`La clave '${id}' ya existe en el payload. Se sobrescribirá.`);
+        }
 
-        // Recolectar datos de checkboxes personalizados (si los hay)
-        const customCheckboxes = document.querySelectorAll("[data-checked]");
-        customCheckboxes.forEach(checkbox => {
-            const id = checkbox.id?.trim().toLowerCase();
-            const value = checkbox.getAttribute("data-checked") === "true" ? "true" : "false";
+        payload[id] = value; // Añadir al payload
+    }
+});
 
-            if (id) {
-                payload[id] = value;
-            }
-        });
 
         console.log("Payload para impresión:", payload); // Depuración
 

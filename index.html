@@ -3325,7 +3325,7 @@ function toggleCheckbox(element) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function enviarDatos() {
+async function datosPreeliminares() {
     // IDs fijos que corresponden a las columnas de la tabla preliminares
     const ids = [
         "ficha", "version", "descripcion", "fecha_creacion", "codigo_cliente", "cliente",
@@ -3377,40 +3377,48 @@ async function enviarDatos() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      
 
-function datosConversion() {
-    const conversionDiv = document.querySelector("#Conversion");
-    if (!conversionDiv) {
-        console.error(`Sección "Conversión" no encontrada.`);
-        return null;
-    }
+async function enviarDatos() {
+    // IDs fijos que corresponden a las columnas de la tabla `conversion`
+    const ids = [
+        "LineerSustrato", "LineerAnchoInicial", "LineerLargoInicial", "LineerGramaje",
+        "LineerCorte1Ancho", "LineerCorte1Largo", "LineerCorte2Ancho", "LineerCorte2Largo",
+        "LineerCorte3Ancho", "LineerCorte3Largo",
+        "SingleFaceSustrato", "SingleFaceAnchoInicial", "SingleFaceLargoInicial", "SingleFaceGramaje",
+        "SingleFaceCorte1Ancho", "SingleFaceCorte1Largo", "SingleFaceCorte2Ancho", "SingleFaceCorte2Largo",
+        "SingleFaceCorte3Ancho", "SingleFaceCorte3Largo",
+        "corteRealizadoEn", "observacionesConversion",
+        "ficha", "version"
+    ];
 
-    const inputs = conversionDiv.querySelectorAll("input, select, .checkbox");
-    const payload = {
-        ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
-        version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
-        conversion: {},
-    };
-
-    inputs.forEach(input => {
-        const id = input.id?.trim().toLowerCase();
-        let value;
-
-        if (input.classList.contains("checkbox")) {
-            value = input.getAttribute("data-checked") === "true" ? "true" : null;
-        } else if (input.type === "checkbox") {
-            value = input.checked ? "true" : null;
-        } else {
-            value = input.value?.trim().toLowerCase() || null;
-        }
-
-        if (id && value) {
-            payload.conversion[id] = value;
-        }
+    // Crear el payload tomando los valores de los IDs
+    const payload = { seccion: "conversion" }; // Identificador de la sección
+    ids.forEach(id => {
+        const element = document.getElementById(id);
+        payload[id] = element?.value?.trim() || null; // Guardar null si el valor está vacío
     });
 
-    console.log("Payload recopilado para Conversión:", payload);
-    return payload;
+    try {
+        const response = await fetch("https://us-central1-ficha-producto.cloudfunctions.net/fichasTecnicasHandler", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`Error al enviar datos: ${errorText}`);
+            throw new Error(`Error del servidor: ${errorText}`);
+        }
+
+        const result = await response.text();
+        console.log("Datos enviados correctamente. Respuesta del servidor:", result);
+        alert("Datos enviados correctamente.");
+    } catch (error) {
+        console.error("Error al enviar datos:", error);
+        alert("Error al enviar los datos. Revisa la consola para más detalles.");
+    }
 }
+
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////

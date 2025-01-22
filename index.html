@@ -4233,39 +4233,37 @@ function limpiarCeldas() {
 
 /////////////////////////////////////////////////////////////////////////////////////
 
-function recopilarDatosGenerales() {
-    // Llama a cada función y recopila su resultado
-    const datosPreeliminaresPayload = datosPreeliminares();
-    const datosConversionPayload = datosConversion();
-    const datosCorrugacionPayload = datosCorrugacion();
-    const datosCortePayload = datosCorte();
-    const datosImpresionPayload = datosImpresion();
-    const datosColaminacionPayload = datosColaminacion();
-    const datosTroqueladoPayload = datosTroquelado();
-    const datosTerminadosPayload = datosTerminados();
-    const datosPeguePayload = datosPegue();
-    const datosEmpaquePayload = datosEmpaque();
-    const datosLogisticaPayload = datosLogistica();
+async function enviarDatos() {
+    // Lista de funciones a ejecutar
+    const funciones = [
+        datosLogistica,
+        datosEmpaque,
+        datosPegue,
+        datosTerminados,
+        datosTroquelado,
+        datosColaminado,
+        datosImpresion,
+        datosCorte,
+        datosCorrugacion,
+        datosConversion,
+        datosPreeliminares
+    ];
 
-    // Combina todos los payloads en uno solo
-    const payloadGeneral = {
-        preeliminares: datosPreeliminaresPayload,
-        conversion: datosConversionPayload,
-        corrugacion: datosCorrugacionPayload,
-        corte: datosCortePayload,
-        impresion: datosImpresionPayload,
-        colaminacion: datosColaminacionPayload,
-        troquelado: datosTroqueladoPayload,
-        terminados: datosTerminadosPayload,
-        pegue: datosPeguePayload,
-        empaque: datosEmpaquePayload,
-        logistica: datosLogisticaPayload,
-    };
+    // Ejecutar cada función y manejar errores
+    for (const funcion of funciones) {
+        try {
+            console.log(`Ejecutando función: ${funcion.name}`);
+            await funcion(); // Esperar a que la función termine
+            console.log(`Éxito: ${funcion.name} ejecutada correctamente.`);
+        } catch (error) {
+            console.error(`Error al ejecutar ${funcion.name}:`, error);
+            alert(`Error al enviar los datos con ${funcion.name}. Revisa la consola para más detalles.`);
+        }
+    }
 
-    console.log("Payload general recopilado:", payloadGeneral);
-
-    return payloadGeneral; // Devuelve el payload combinado
+    alert("Todos los datos han sido enviados a sus respectivas tablas.");
 }
+
 
 /////////////////////////////////////////////////////////////////////////////////////
 

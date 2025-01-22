@@ -3377,24 +3377,31 @@ async function datosPreeliminares() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      
 
-async function enviarDatos() {
-    // IDs fijos que corresponden a las columnas de la tabla `conversion`
+async function datosConversion() {
     const ids = [
-        "LineerSustrato", "LineerAnchoInicial", "LineerLargoInicial", "LineerGramaje",
-        "LineerCorte1Ancho", "LineerCorte1Largo", "LineerCorte2Ancho", "LineerCorte2Largo",
-        "LineerCorte3Ancho", "LineerCorte3Largo",
-        "SingleFaceSustrato", "SingleFaceAnchoInicial", "SingleFaceLargoInicial", "SingleFaceGramaje",
-        "SingleFaceCorte1Ancho", "SingleFaceCorte1Largo", "SingleFaceCorte2Ancho", "SingleFaceCorte2Largo",
-        "SingleFaceCorte3Ancho", "SingleFaceCorte3Largo",
+        "lineerSustrato", "lineerAnchoInicial", "lineerLargoInicial", "lineerGramaje",
+        "lineerCorte1Ancho", "lineerCorte1Largo", "lineerCorte2Ancho", "lineerCorte2Largo",
+        "lineerCorte3Ancho", "lineerCorte3Largo",
+        "singleFaceSustrato", "singleFaceAnchoInicial", "singleFaceLargoInicial", "singleFaceGramaje",
+        "singleFaceCorte1Ancho", "singleFaceCorte1Largo", "singleFaceCorte2Ancho", "singleFaceCorte2Largo",
+        "singleFaceCorte3Ancho", "singleFaceCorte3Largo",
         "corteRealizadoEn", "observacionesConversion",
         "ficha", "version"
     ];
 
-    // Crear el payload tomando los valores de los IDs
     const payload = { seccion: "conversion" }; // Identificador de la sección
+
     ids.forEach(id => {
         const element = document.getElementById(id);
-        payload[id] = element?.value?.trim() || null; // Guardar null si el valor está vacío
+        if (element) {
+            if (element.tagName === "SELECT") {
+                payload[id] = element.options[element.selectedIndex]?.text.trim() || null;
+            } else {
+                payload[id] = element.value?.trim() || null;
+            }
+        } else {
+            payload[id] = null;
+        }
     });
 
     try {

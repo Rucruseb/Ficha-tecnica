@@ -3561,40 +3561,53 @@ async function datosConversion() {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
- function datosCorte() {
-    const corteDiv = document.querySelector("#Corte");
-    if (!corteDiv) {
-        console.error(`Sección "Corte" no encontrada.`);
-        return null;
-    }
+async function enviarDatos() {
+    const ids = [
+        "ancho1", "anchoCorte", "largoCorte", "cantidadCortes",
+        "corteRealizadoEnCorte", "corteCorte1", "corteCorte2",
+        "corteCorte3", "corteCorte4", "corteCorte5", "corteCorte6",
+        "observacionesCorte", "ficha", "version"
+    ];
 
-    const inputs = corteDiv.querySelectorAll("input, select, .checkbox");
-    const payload = {
-        ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
-        version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
-        corte: {},
-    };
+    const payload = { seccion: "corte" }; // Identificador de la sección
 
-    inputs.forEach(input => {
-        const id = input.id?.trim().toLowerCase();
-        let value;
-
-        if (input.classList.contains("checkbox")) {
-            value = input.getAttribute("data-checked") === "true" ? "true" : null;
-        } else if (input.type === "checkbox") {
-            value = input.checked ? "true" : null;
+    ids.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            if (element.tagName === "SELECT") {
+                // Si es un <select>, tomar el texto de la opción seleccionada
+                payload[id] = element.options[element.selectedIndex]?.text.trim() || null;
+            } else {
+                // Si no, tomar el valor directamente
+                payload[id] = element.value?.trim() || null;
+            }
         } else {
-            value = input.value?.trim().toLowerCase() || null;
-        }
-
-        if (id && value) {
-            payload.corte[id] = value;
+            payload[id] = null; // Si no existe el elemento, asigna null
         }
     });
 
-    console.log("Payload recopilado para Corte:", payload);
-    return payload;
+    try {
+        const response = await fetch("https://us-central1-ficha-producto.cloudfunctions.net/fichasTecnicasHandler", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`Error al enviar datos de corte: ${errorText}`);
+            throw new Error(`Error del servidor: ${errorText}`);
+        }
+
+        const result = await response.text();
+        console.log("Datos enviados correctamente. Respuesta del servidor:", result);
+        alert("Datos enviados correctamente para la sección de corte.");
+    } catch (error) {
+        console.error("Error al enviar datos de corte:", error);
+        alert("Error al enviar los datos de corte. Revisa la consola para más detalles.");
+    }
 }
+
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////

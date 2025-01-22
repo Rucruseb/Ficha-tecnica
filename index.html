@@ -1572,6 +1572,27 @@
         <div id="filters">
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         
 <table class="table2" id="tablaCorrugacion">
     <thead>
         <tr>
@@ -1806,6 +1827,35 @@
 
         </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     
        <div id="Corte"style="display: none;">
 
         <div id="filtersCorte">
@@ -1948,6 +1998,39 @@
         
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     
        <div id="Impresion"style="display: none;">
 
         <div id="filters">
@@ -3377,7 +3460,7 @@ async function datosPreeliminares() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      
 
-async function enviarDatos() {
+async function datosConversion() {
     const ids = [
         "lineerSustrato", "lineerAnchoInicial", "lineerLargoInicial", "lineerGramaje",
         "lineerCorte1Ancho", "lineerCorte1Largo", "lineerCorte2Ancho", "lineerCorte2Largo",
@@ -3429,7 +3512,7 @@ async function enviarDatos() {
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
- async function datosCorrugacion() {
+ async function enviarDatos() {
     const ids = [
         "tipoLI", "tipoCM", "tipoLE", "tipoOC",
         "gramajeLI", "gramajeCM", "gramajeLE", "gramajeOC",
@@ -3444,7 +3527,7 @@ async function enviarDatos() {
         "observacionesCorrugado", "ficha", "version"
     ];
 
-    const payload = { seccion: "Corrugacion" }; // Identificador de la sección
+    const payload = { seccion: "corrugacion" }; // Identificador de la sección
     ids.forEach(id => {
         const element = document.getElementById(id);
         if (element) {

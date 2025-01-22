@@ -3325,30 +3325,53 @@ function toggleCheckbox(element) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function datosPreeliminares() {
-    const preliminaresDiv = document.querySelector("#Preliminares");
-    if (!preliminaresDiv) {
-        console.warn("La sección 'Preliminares' no se encontró en el DOM.");
-        return {}; // Devuelve un objeto vacío si no existe la sección
-    }
+async function datosPreliminares() {
+    // IDs fijos que corresponden a las columnas de la tabla preliminares
+    const ids = [
+        "ficha", "version", "descripcion", "fecha_creacion", "codigo_cliente", "cliente",
+        "NombrePieza1", "NombrePieza2", "NombrePieza3", "NombrePieza4", "NombrePieza5",
+        "anchoPieza1", "anchoPieza2", "anchoPieza3", "anchoPieza4", "anchoPieza5",
+        "largoPieza1", "largoPieza2", "largoPieza3", "largoPieza4", "largoPieza5",
+        "accesorio1", "accesorio2", "accesorio3", "accesorio4", "accesorio5", "accesorio6", "accesorio7", "accesorio8",
+        "descripcion1", "descripcion2", "descripcion3", "descripcion4", "descripcion5", "descripcion6", "descripcion7", "descripcion8", "descripcion9", "descripcion10",
+        "versionversion1", "versionversion2", "versionversion3", "versionversion4", "versionversion5", "versionversion6",
+        "fechaVersion1", "fechaVersion2", "fechaVersion3", "fechaVersion4", "fechaVersion5", "fechaVersion6",
+        "motivoVersion1", "motivoVersion2", "motivoVersion3", "motivoVersion4", "motivoVersion5", "motivoVersion6",
+        "descripcionControl1", "descripcionControl2", "descripcionControl3", "descripcionControl4", "descripcionControl5", "descripcionControl6",
+        "observaciones1", "observaciones2", "observaciones3", "observaciones4", "observaciones5",
+        "diseñoPreprensaResponsable1", "diseñoImpresionResponsable1", "dummiePreprensaResponsable1", "dummieImpresionResponsable1",
+        "archivoDigitalPreprensaResponsable1", "archivoDigitalImpresionResponsable1", "planchasPreprensaResponsable1", "planchasImpresionResponsable1",
+        "troquelPreprensaResponsable1", "troquelImpresionResponsable1", "papelesResponsableOtro1", "impresionResponsableOtro1",
+        "plastificadoResponsableOtro1", "corteResponsableOtro1", "troqueladoResponsableOtro1", "pegueResponsableOtro1"
+    ];
 
-    const inputs = preliminaresDiv.querySelectorAll("input, select");
-    const payload = {
-        ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
-        version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
-        preliminares: {}, // Para almacenar los datos de "Preliminares"
-    };
-
-    inputs.forEach(input => {
-        const id = input.id?.trim().toLowerCase();
-        const value = input.value?.trim().toLowerCase();
-        if (id && value && id !== "ficha" && id !== "version") { // Excluye "ficha" y "version"
-            payload.preliminares[id] = value;
-        }
+    // Crear el payload tomando los valores de los IDs
+    const payload = { seccion: "preliminares" }; // Identificador de la sección
+    ids.forEach(id => {
+        const element = document.getElementById(id);
+        payload[id] = element?.value?.trim() || null; // Guardar null si el valor está vacío
     });
 
-    console.log("Payload recopilado de 'Preliminares':", payload);
-    return payload;
+    try {
+        const response = await fetch("https://us-central1-ficha-producto.cloudfunctions.net/fichasTecnicasHandler", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`Error al enviar datos: ${errorText}`);
+            throw new Error(`Error del servidor: ${errorText}`);
+        }
+
+        const result = await response.text();
+        console.log("Datos enviados correctamente. Respuesta del servidor:", result);
+        alert("Datos enviados correctamente.");
+    } catch (error) {
+        console.error("Error al enviar datos:", error);
+        alert("Error al enviar los datos. Revisa la consola para más detalles.");
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

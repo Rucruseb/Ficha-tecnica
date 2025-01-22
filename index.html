@@ -3377,7 +3377,7 @@ async function datosPreeliminares() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      
 
-async function enviarDatos() {
+async function datosConversion() {
     const ids = [
         "lineerSustrato", "lineerAnchoInicial", "lineerLargoInicial", "lineerGramaje",
         "lineerCorte1Ancho", "lineerCorte1Largo", "lineerCorte2Ancho", "lineerCorte2Largo",
@@ -3429,40 +3429,53 @@ async function enviarDatos() {
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-  function datosCorrugacion() {
-    const corrugacionDiv = document.querySelector("#Corrugacion");
-    if (!corrugacionDiv) {
-        console.error(`Sección "Corrugación" no encontrada.`);
-        return null;
-    }
+ async function enviarDatos() {
+    const ids = [
+        "tipoLI", "tipoCM", "tipoLE", "tipoOC",
+        "gramajeLI", "gramajeCM", "gramajeLE", "gramajeOC",
+        "anchoCuchillasLI", "anchoCuchillasCM", "anchoCuchillasLE", "anchoCuchillasOC",
+        "largoCuchillasLI", "largoCuchillasCM", "largoCuchillasLE", "largoCuchillasOC",
+        "reversoLI", "reversoCM", "reversoLE", "reversoOC",
+        "anchoRolloLI", "anchoRolloCM", "anchoRolloLE", "anchoRolloOC",
+        "largoTamañoLI", "largoTamañoCM", "largoTamañoLE", "largoTamañoOC",
+        "impresionFlexoLI", "impresionFlexoCM", "impresionFlexoLE", "impresionFlexoOC",
+        "corteL1", "corteL2", "corteL3", "corteL4",
+        "registroImpresion", "anchoCF", "largoCF",
+        "observacionesCorrugado", "ficha", "version"
+    ];
 
-    const inputs = corrugacionDiv.querySelectorAll("input, select, .checkbox");
-    const payload = {
-        ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
-        version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
-        corrugacion: {},
-    };
-
-    inputs.forEach(input => {
-        const id = input.id?.trim().toLowerCase();
-        let value;
-
-        if (input.classList.contains("checkbox")) {
-            value = input.getAttribute("data-checked") === "true" ? "true" : null;
-        } else if (input.type === "checkbox") {
-            value = input.checked ? "true" : null;
+    const payload = { seccion: "Corrugacion" }; // Identificador de la sección
+    ids.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            payload[id] = element.value?.trim() || null;
         } else {
-            value = input.value?.trim().toLowerCase() || null;
-        }
-
-        if (id && value) {
-            payload.corrugacion[id] = value;
+            payload[id] = null; // Si no existe el elemento, asigna null
         }
     });
 
-    console.log("Payload recopilado para Corrugación:", payload);
-    return payload;
+    try {
+        const response = await fetch("https://us-central1-ficha-producto.cloudfunctions.net/fichasTecnicasHandler", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`Error al enviar datos: ${errorText}`);
+            throw new Error(`Error del servidor: ${errorText}`);
+        }
+
+        const result = await response.text();
+        console.log("Datos enviados correctamente. Respuesta del servidor:", result);
+        alert("Datos enviados correctamente.");
+    } catch (error) {
+        console.error("Error al enviar datos:", error);
+        alert("Error al enviar los datos. Revisa la consola para más detalles.");
+    }
 }
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
  function datosCorte() {

@@ -4156,6 +4156,37 @@ function limpiarCeldas() {
 
 /////////////////////////////////////////////////////////////////////////////////////
 
+async function enviarDatoss() {
+    // Lista de funciones a ejecutar
+    const funciones = [
+        datosPreeliminares,
+        datosConversion,
+        datosCorrugacion,
+        datosCorte,
+        datosColaminado,
+        datosLogistica,
+        datosEmpaque,
+        datosPegue,
+        datosTerminados,
+        datosTroquelado,
+        datosImpresion,
+
+    ];
+
+    // Ejecutar cada función y manejar errores
+    for (const funcion of funciones) {
+        try {
+            console.log(`Ejecutando función: ${funcion.name}`);
+            await funcion(); // Esperar a que la función termine
+            console.log(`Éxito: ${funcion.name} ejecutada correctamente.`);
+        } catch (error) {
+            console.error(`Error al ejecutar ${funcion.name}:`, error);
+            alert(`Error al enviar los datos con ${funcion.name}. Revisa la consola para más detalles.`);
+        }
+    }
+
+    alert("Todos los datos han sido enviados a sus respectivas tablas.");
+}
 
 
 /////////////////////////////////////////////////////////////////////////////////////

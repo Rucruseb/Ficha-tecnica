@@ -3633,34 +3633,38 @@ async function datosImpresion() {
 
     const payload = { seccion: "impresion" }; // Identificador de la sección
 
-    ids.forEach(id => {
-        const element = document.getElementById(id);
-        if (element) {
-            const value =
-                element.type === "checkbox"
-                    ? (element.checked ? "true" : "false") // Si es checkbox, guardar true o false
-                    : element.tagName === "SELECT"
-                        ? element.options[element.selectedIndex]?.text.trim() || null // Si es select, guardar texto
-                        : element.value?.trim() || null; // Otros elementos
+    try {
+        ids.forEach(id => {
+            const element = document.getElementById(id);
+
+            if (element) {
+                const value =
+                    element.type === "checkbox"
+                        ? element.checked.toString() // Guardar como "true" o "false"
+                        : element.tagName === "SELECT"
+                            ? element.options[element.selectedIndex]?.text.trim() || null // Guardar el texto del select
+                            : element.value?.trim() || null; // Otros tipos de elementos
+
+                payload[id] = value; // Añadir al payload
+            } else {
+                console.warn(`El elemento con ID '${id}' no se encontró.`);
+                payload[id] = null; // Si no existe, asignar null
+            }
+        });
+
+        // Recolectar datos de checkboxes personalizados (si los hay)
+        const customCheckboxes = document.querySelectorAll("[data-checked]");
+        customCheckboxes.forEach(checkbox => {
+            const id = checkbox.id?.trim().toLowerCase();
+            const value = checkbox.getAttribute("data-checked") === "true" ? "true" : "false";
 
             if (id) {
-                payload[id] = value; // Agregar el valor al payload incluso si es "false"
+                payload[id] = value;
             }
-        }
-    });
+        });
 
-    // Recolectar datos de checkboxes personalizados (si los hay)
-    const customCheckboxes = document.querySelectorAll("[data-checked]");
-    customCheckboxes.forEach(checkbox => {
-        const id = checkbox.id?.trim().toLowerCase();
-        const value = checkbox.getAttribute("data-checked") === "true" ? "true" : "false";
+        console.log("Payload para impresión:", payload); // Depuración
 
-        if (id) {
-            payload[id] = value;
-        }
-    });
-
-    try {
         const response = await fetch("https://us-central1-ficha-producto.cloudfunctions.net/fichasTecnicasHandler", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -3677,8 +3681,9 @@ async function datosImpresion() {
         console.log("Datos enviados correctamente. Respuesta del servidor:", result);
         alert("Datos enviados correctamente para la sección de impresión.");
     } catch (error) {
-        console.error("Error al enviar datos de impresión:", error);
-        throw error; // Lanza el error para que la función principal lo maneje
+        console.error("Error al procesar datos de impresión:", error);
+        alert("Error al enviar los datos de impresión. Revisa la consola para más detalles.");
+        throw error; // Permite manejar el error desde otra función (enviarDatos)
     }
 }
 

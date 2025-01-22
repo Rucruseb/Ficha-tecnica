@@ -3561,7 +3561,7 @@ async function datosConversion() {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-async function enviarDatos() {
+async function datosCorte() {
     const ids = [
         "ancho1", "anchoCorte", "largoCorte", "cantidadCortes",
         "corteRealizadoEnCorte", "corteCorte1", "corteCorte2",
@@ -3611,43 +3611,79 @@ async function enviarDatos() {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-function datosImpresion() {
-    const impresionDiv = document.querySelector("#Impresion"); // Selecciona el div correspondiente
-    
-    // Selecciona inputs y selects
-    const inputsAndSelects = impresionDiv.querySelectorAll("input, select");
-    // Selecciona checkboxes personalizados
-    const customCheckboxes = impresionDiv.querySelectorAll(".checkbox");
+async function enviarDatos() {
+    const ids = [
+        "tipoPapelImpresion1", "tipoPapelImpresion2", "gramajeImpresion1", "gramajeImpresion2",
+        "calibreImpresion1", "calibreImpresion2", "anchoImpresion1", "anchoImpresion2",
+        "largoImpresion1", "largoImpresion2", "cabidaImpresion1", "cabidaImpresion2",
+        "pantone1Tiro1", "pantone2Tiro1", "pantone3Tiro1", "pantone4Tiro1", "pantone5Tiro1",
+        "pantone1Tiro1Afiche2", "pantone2Tiro1Afiche2", "pantone3Tiro1Afiche2", "pantone4Tiro1Afiche2", "pantone5Tiro1Afiche2",
+        "pantone1Retiro1Afiche2", "pantone2Retiro1Afiche2", "pantone3Retiro1Afiche2", "pantone4Retiro1Afiche2", "pantone5Retiro1Afiche2",
+        "tamañoPlanchaImpresion1", "tamañoPlanchaImpresion1Afiche2", "formatoMaquina1", "formatoMaquina2",
+        "brilloSinReservaImpresion1", "brilloSinReservaImpresion2", "brilloConReservaImpresion1", "brilloConReservaImpresion2",
+        "plastificadoSinReserva1", "plastificadoSinReserva2", "plastificadoConReserva1", "plastificadoConReserva2",
+        "brilloUVSinReserva1", "brilloUVSinReserva2", "brilloUVConReserva1", "brilloUVConReserva2",
+        "estampadoDeImpresion1", "estampadoDeImpresion2", "proveedorOriginalImpresion1", "proveedorOriginalImpresion2",
+        "otroImpresion1", "otroImpresion2", "observacionesImpresion", "tiro1C", "tiro1M", "tiro1Y", "tiro1K",
+        "tiro1Afiche2C", "tiro1Afiche2M", "tiro1Afiche2Y", "tiro1Afiche2K",
+        "retiro1C", "retiro1M", "retiro1Y", "retiro1K", "retiro1CAfiche2", "retiro1MAfiche2", "retiro1YAfiche2", "retiro1KAfiche2",
+        "tamañoPlanchaPinza", "tamañoPlanchaPinzaAfiche2", "tamañoPlanchaEscuadraIzquierdo", "tamañoPlanchaEscuadraDerecho",
+        "tamañoPlanchaEscuadraIzquierdoAfiche2", "tamañoPlanchaEscuadraDerechoAfiche2", "ficha", "version"
+    ];
 
-    const payload = {
-        ficha: document.getElementById("ficha")?.value?.trim().toLowerCase() || null,
-        version: document.getElementById("version")?.value?.trim().toLowerCase() || null,
-        impresion: {}, // Inicia el objeto para almacenar datos de impresión
-    };
+    const payload = { seccion: "impresion" }; // Identificador de la sección
 
-    // Recolectar datos de inputs y selects
-    inputsAndSelects.forEach(input => {
-        const id = input.id?.trim().toLowerCase();
-        const value = input.type === "checkbox" ? (input.checked ? "true" : "false") : input.value?.trim().toLowerCase();
+    ids.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            const value =
+                element.type === "checkbox"
+                    ? (element.checked ? "true" : "false") // Si es checkbox, guardar true o false
+                    : element.tagName === "SELECT"
+                        ? element.options[element.selectedIndex]?.text.trim() || null // Si es select, guardar texto
+                        : element.value?.trim() || null; // Otros elementos
 
-        if (id && value && value !== "false") { // Solo registra si el valor no es "false"
-            payload.impresion[id] = value;
+            if (id && value && value !== "false") {
+                payload[id] = value;
+            }
+        } else {
+            payload[id] = null; // Si no existe el elemento, asigna null
         }
     });
 
-    // Recolectar datos de checkboxes personalizados
+    // Recolectar datos de checkboxes personalizados (si los hay)
+    const customCheckboxes = document.querySelectorAll("[data-checked]");
     customCheckboxes.forEach(checkbox => {
         const id = checkbox.id?.trim().toLowerCase();
         const value = checkbox.getAttribute("data-checked") === "true" ? "true" : "false";
 
-        if (id && value === "true") { // Solo registra si el valor es "true"
-            payload.impresion[id] = value;
+        if (id && value === "true") {
+            payload[id] = value;
         }
     });
 
-    console.log("Payload recopilado en datosImpresion:", payload);
-    return payload; // Retorna el payload para su uso en recopilaciones generales
+    try {
+        const response = await fetch("https://us-central1-ficha-producto.cloudfunctions.net/fichasTecnicasHandler", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`Error al enviar datos de impresión: ${errorText}`);
+            throw new Error(`Error del servidor: ${errorText}`);
+        }
+
+        const result = await response.text();
+        console.log("Datos enviados correctamente. Respuesta del servidor:", result);
+        alert("Datos enviados correctamente para la sección de impresión.");
+    } catch (error) {
+        console.error("Error al enviar datos de impresión:", error);
+        alert("Error al enviar los datos de impresión. Revisa la consola para más detalles.");
+    }
 }
+
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////

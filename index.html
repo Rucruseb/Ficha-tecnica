@@ -4027,7 +4027,7 @@ async function datosLogistica() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
- async function consultarDatos() {
+async function consultarDatos() {
     // Obtener los valores de las casillas 'ficha' y 'version'
     const ficha = document.getElementById("ficha")?.value?.trim();
     const version = document.getElementById("version")?.value?.trim();
@@ -4038,8 +4038,12 @@ async function datosLogistica() {
         return;
     }
 
+    // Establecer la URL como una constante
+    const url = "https://us-central1-ficha-producto.cloudfunctions.net/obtenerDatosHandler" +
+                `?ficha=${ficha}&version=${version}`;
+
     try {
-        const response = await fetch(`https://us-central1-ficha-producto.cloudfunctions.net/obtenerDatosHandler?ficha=${ficha}&version=${version}`);
+        const response = await fetch(url); // Usar la constante URL aquí
         if (!response.ok) {
             const errorText = await response.text();
             console.error(`Error al obtener datos: ${errorText}`);
@@ -4072,6 +4076,7 @@ async function datosLogistica() {
         alert("Error al cargar los datos. Revisa la consola para más detalles.");
     }
 }
+
 
 
 /////////////////////////////////////////////////////////////////////////////////

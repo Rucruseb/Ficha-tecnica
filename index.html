@@ -4063,14 +4063,20 @@ async function consultarDatos() {
         // Rellena los campos del formulario con los datos del payload
         Object.keys(payload).forEach(tabla => {
             const datosTabla = payload[tabla]; // Datos específicos de cada tabla
+            console.log(`Procesando datos para la tabla: ${tabla}`, datosTabla);
+
             Object.keys(datosTabla).forEach(campo => {
-                const input = document.getElementById(campo); // Busca el campo por su ID
+                const input = document.querySelector(`#${campo}`); // Busca el campo por su ID
                 if (input) {
                     if (input.type === "checkbox") {
                         input.checked = datosTabla[campo] === "true"; // Maneja checkboxes
+                        console.log(`Campo ${campo} (checkbox) asignado: ${datosTabla[campo]}`);
                     } else {
                         input.value = datosTabla[campo] || ""; // Asigna el valor a otros inputs
+                        console.log(`Campo ${campo} asignado: ${datosTabla[campo]}`);
                     }
+                } else {
+                    console.warn(`No se encontró un input con ID: ${campo}`);
                 }
             });
         });

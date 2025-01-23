@@ -4028,7 +4028,20 @@ async function datosLogistica() {
 
 
 function consultarDatos() {
-    const url = "https://us-central1-ficha-producto.cloudfunctions.net/fichasTecnicasHandler";
+    // Obtén los valores de los campos ficha y versión
+    const ficha = document.getElementById("ficha")?.value?.trim();
+    const version = document.getElementById("version")?.value?.trim();
+
+    // Verifica que ambos campos tengan valores
+    if (!ficha || !version) {
+        alert("Por favor, completa los campos 'Ficha' y 'Versión'.");
+        return;
+    }
+
+    // Construye el URL con los parámetros
+    const url = `https://us-central1-ficha-producto.cloudfunctions.net/fichasTecnicasHandler?ficha=${ficha}&version=${version}`;
+
+    // Abre el URL en una nueva pestaña
     window.open(url, "_blank");
 }
 

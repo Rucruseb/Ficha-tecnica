@@ -4065,20 +4065,27 @@ async function consultarDatos() {
             const datosTabla = payload[tabla]; // Datos específicos de cada tabla
             console.log(`Procesando datos para la tabla: ${tabla}`, datosTabla);
 
-            Object.keys(datosTabla).forEach(campo => {
-                const input = document.querySelector(`#${campo}`); // Busca el campo por su ID
-                if (input) {
-                    if (input.type === "checkbox") {
-                        input.checked = datosTabla[campo] === "true"; // Maneja checkboxes
-                        console.log(`Campo ${campo} (checkbox) asignado: ${datosTabla[campo]}`);
+            // Verifica si los datos son un array
+            if (Array.isArray(datosTabla) && datosTabla.length > 0) {
+                const datosObjeto = datosTabla[0]; // Procesa solo el primer objeto del array
+
+                Object.keys(datosObjeto).forEach(campo => {
+                    const input = document.querySelector(`#${campo}`); // Busca el campo por su ID
+                    if (input) {
+                        if (input.type === "checkbox") {
+                            input.checked = datosObjeto[campo] === "true"; // Maneja checkboxes
+                            console.log(`Campo ${campo} (checkbox) asignado: ${datosObjeto[campo]}`);
+                        } else {
+                            input.value = datosObjeto[campo] || ""; // Asigna el valor a otros inputs
+                            console.log(`Campo ${campo} asignado: ${datosObjeto[campo]}`);
+                        }
                     } else {
-                        input.value = datosTabla[campo] || ""; // Asigna el valor a otros inputs
-                        console.log(`Campo ${campo} asignado: ${datosTabla[campo]}`);
+                        console.warn(`No se encontró un input con ID: ${campo}`);
                     }
-                } else {
-                    console.warn(`No se encontró un input con ID: ${campo}`);
-                }
-            });
+                });
+            } else {
+                console.warn(`Los datos de la tabla ${tabla} no son un array o están vacíos.`);
+            }
         });
     } catch (error) {
         // Maneja errores en la solicitud

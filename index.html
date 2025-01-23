@@ -4027,7 +4027,7 @@ async function datosLogistica() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-function consultarDatos() {
+async function consultarDatos() {
     // Obtén los valores de los campos ficha y versión
     const ficha = document.getElementById("ficha")?.value?.trim();
     const version = document.getElementById("version")?.value?.trim();
@@ -4041,9 +4041,31 @@ function consultarDatos() {
     // Construye el URL con los parámetros
     const url = `https://us-central1-ficha-producto.cloudfunctions.net/fichasTecnicasHandler?ficha=${ficha}&version=${version}`;
 
-    // Abre el URL en una nueva pestaña
-    window.open(url, "_blank");
+    try {
+        // Realiza la solicitud GET
+        const response = await fetch(url);
+
+        // Verifica si la respuesta es válida
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error("Error al obtener los datos:", errorText);
+            alert("Hubo un error al consultar los datos. Revisa la consola para más información.");
+            return;
+        }
+
+        // Convierte la respuesta a JSON
+        const payload = await response.json();
+
+        // Muestra el payload en la consola
+        console.log("Payload recibido:", payload);
+        alert("Datos obtenidos correctamente. Revisa la consola para más información.");
+    } catch (error) {
+        // Maneja errores en la solicitud
+        console.error("Error al realizar la solicitud:", error);
+        alert("Error al realizar la solicitud. Revisa la consola para más información.");
+    }
 }
+
 
 
 

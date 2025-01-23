@@ -4028,6 +4028,12 @@ async function datosLogistica() {
 
 
    async function consultarDatos(ficha, version) {
+
+    if (!ficha || !version) {
+        console.error("Ficha y versión son obligatorias para obtener datos.");
+        return;
+    }
+
     try {
         const response = await fetch(`https://us-central1-ficha-producto.cloudfunctions.net/obtenerDatosHandler?ficha=${ficha}&version=${version}`);
         if (!response.ok) {

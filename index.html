@@ -4027,50 +4027,9 @@ async function datosLogistica() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-async function consultarDatos() {
-    const ficha = document.getElementById("ficha").value.trim();
-    const version = document.getElementById("version").value.trim();
-
-    if (!ficha || !version) {
-        alert("Por favor ingresa ficha y versión.");
-        return;
-    }
-
-    const url = `https://us-central1-ficha-producto.cloudfunctions.net/obtenerDatosHandler?ficha=${ficha}&version=${version}`;
-
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error(`Error al obtener datos: ${errorText}`);
-            throw new Error(`Error del servidor: ${errorText}`);
-        }
-
-        const data = await response.json();
-        console.log("Datos recibidos del servidor:", data);
-
-        // Repartir los datos en las secciones correspondientes
-        Object.keys(data).forEach(tabla => {
-            const seccion = document.querySelector(`#seccion${tabla.charAt(0).toUpperCase() + tabla.slice(1)}`);
-            if (seccion) {
-                const datosTabla = data[tabla];
-                Object.keys(datosTabla).forEach(campo => {
-                    const input = seccion.querySelector(`#${campo}`);
-                    if (input) {
-                        if (input.type === "checkbox") {
-                            input.checked = datosTabla[campo] === "true";
-                        } else {
-                            input.value = datosTabla[campo] || "";
-                        }
-                    }
-                });
-            }
-        });
-        alert("Datos cargados correctamente.");
-    } catch (error) {
-        console.error("Error al obtener los datos:", error);
-        alert("Error al cargar los datos. Revisa la consola para más detalles.");
-    }
+function consultarDatos() {
+    const url = "https://us-central1-ficha-producto.cloudfunctions.net/fichasTecnicasHandler";
+    window.open(url, "_blank");
 }
 
 

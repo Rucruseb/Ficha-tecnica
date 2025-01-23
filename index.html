@@ -4027,10 +4027,14 @@ async function datosLogistica() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-   async function consultarDatos(ficha, version) {
+ async function consultarDatos() {
+    // Obtener los valores de las casillas 'ficha' y 'version'
+    const ficha = document.getElementById("ficha")?.value?.trim();
+    const version = document.getElementById("version")?.value?.trim();
 
     if (!ficha || !version) {
         console.error("Ficha y versión son obligatorias para obtener datos.");
+        alert("Por favor ingrese los valores de 'Ficha' y 'Versión'.");
         return;
     }
 

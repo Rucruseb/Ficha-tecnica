@@ -4028,22 +4028,18 @@ async function datosLogistica() {
 
 
 async function consultarDatos() {
-    // Obtener los valores de las casillas 'ficha' y 'version'
-    const ficha = document.getElementById("ficha")?.value?.trim();
-    const version = document.getElementById("version")?.value?.trim();
+    const ficha = document.getElementById("ficha").value.trim();
+    const version = document.getElementById("version").value.trim();
 
     if (!ficha || !version) {
-        console.error("Ficha y versión son obligatorias para obtener datos.");
-        alert("Por favor ingrese los valores de 'Ficha' y 'Versión'.");
+        alert("Por favor ingresa ficha y versión.");
         return;
     }
 
-    // Establecer la URL como una constante
-    const url = "https://us-central1-ficha-producto.cloudfunctions.net/obtenerDatosHandler" +
-                `?ficha=${ficha}&version=${version}`;
+    const url = `https://us-central1-ficha-producto.cloudfunctions.net/obtenerDatosHandler?ficha=${ficha}&version=${version}`;
 
     try {
-        const response = await fetch(url); // Usar la constante URL aquí
+        const response = await fetch(url);
         if (!response.ok) {
             const errorText = await response.text();
             console.error(`Error al obtener datos: ${errorText}`);
@@ -4053,9 +4049,9 @@ async function consultarDatos() {
         const data = await response.json();
         console.log("Datos recibidos del servidor:", data);
 
-        // Distribuir los datos en las secciones del frontend
+        // Repartir los datos en las secciones correspondientes
         Object.keys(data).forEach(tabla => {
-            const seccion = document.querySelector(`#seccion${tabla.charAt(0).toUpperCase() + tabla.slice(1)}`); // ID de la sección
+            const seccion = document.querySelector(`#seccion${tabla.charAt(0).toUpperCase() + tabla.slice(1)}`);
             if (seccion) {
                 const datosTabla = data[tabla];
                 Object.keys(datosTabla).forEach(campo => {
@@ -4076,6 +4072,7 @@ async function consultarDatos() {
         alert("Error al cargar los datos. Revisa la consola para más detalles.");
     }
 }
+
 
 
 

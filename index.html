@@ -4059,13 +4059,27 @@ async function consultarDatos() {
         // Muestra el payload en la consola
         console.log("Payload recibido:", payload);
         alert("Datos obtenidos correctamente. Revisa la consola para más información.");
+
+        // Rellena los campos del formulario con los datos del payload
+        Object.keys(payload).forEach(tabla => {
+            const datosTabla = payload[tabla]; // Datos específicos de cada tabla
+            Object.keys(datosTabla).forEach(campo => {
+                const input = document.getElementById(campo); // Busca el campo por su ID
+                if (input) {
+                    if (input.type === "checkbox") {
+                        input.checked = datosTabla[campo] === "true"; // Maneja checkboxes
+                    } else {
+                        input.value = datosTabla[campo] || ""; // Asigna el valor a otros inputs
+                    }
+                }
+            });
+        });
     } catch (error) {
         // Maneja errores en la solicitud
         console.error("Error al realizar la solicitud:", error);
         alert("Error al realizar la solicitud. Revisa la consola para más información.");
     }
 }
-
 
 
 

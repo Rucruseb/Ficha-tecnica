@@ -3640,8 +3640,8 @@ ids.forEach(id => {
 
     if (element) {
         const value =
-            element.type === "checkbox"
-                ? element.checked.toString()
+        element.classList.contains("checkbox")
+            ? element.getAttribute("data-checked") === "true" ? "true" : "false" // Manejo de checkboxes personalizados
                 : element.tagName === "SELECT"
                     ? element.options[element.selectedIndex]?.text.trim() || null
                     : element.value?.trim() || null;

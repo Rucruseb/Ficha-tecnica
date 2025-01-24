@@ -4116,11 +4116,16 @@ function limpiarCeldas() {
     document.querySelectorAll("select").forEach(select => select.selectedIndex = 0);
     // Limpia textareas
     document.querySelectorAll("textarea").forEach(textarea => textarea.value = "");
-    // Limpia checkboxes
-    document.querySelectorAll("input[type='checkbox']").forEach(checkbox => checkbox.checked = false);
+    // Limpia checkboxes personalizados
+    document.querySelectorAll(".checkbox").forEach(checkbox => {
+        checkbox.classList.remove("marked"); // Quita la clase "marked"
+        checkbox.textContent = ""; // Limpia el contenido de la casilla
+        checkbox.setAttribute("data-checked", "false"); // Establece el estado como no marcado
+    });
 
     alert("Todos los campos han sido limpiados.");
 }
+
 
 /////////////////////////////////////////////////////////////////////////////////////
 

@@ -4066,13 +4066,68 @@ async function consultarDatos() {
                 Object.keys(datosObjeto).forEach(campo => {
                     const input = document.querySelector(`#${campo}`); // Busca el campo por su ID
                     if (input) {
-                      if (input.type === "checkbox") {
-                             // Convertir el valor a booleano explícito
-                             const isChecked = datosObjeto[campo] === "true" || datosObjeto[campo] === true;
-                         
-                             input.checked = isChecked; // Marcar o desmarcar el checkbox
-                             console.log(`Campo ${campo} (checkbox) asignado: ${isChecked}`);
-                         }
+                   async function consultarDatos() {
+    const ficha = document.getElementById("ficha")?.value?.trim();
+    const version = document.getElementById("version")?.value?.trim();
+
+    if (!ficha || !version) {
+        alert("Por favor, completa los campos 'Ficha' y 'Versión'.");
+        return;
+    }
+
+    const url = `https://us-central1-ficha-producto.cloudfunctions.net/fichasTecnicasHandler?ficha=${ficha}&version=${version}`;
+
+    try {
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error("Error al obtener los datos:", errorText);
+            alert("Hubo un error al consultar los datos. Revisa la consola para más información.");
+            return;
+        }
+
+        const payload = await response.json();
+        console.log("Payload recibido:", payload);
+
+        Object.keys(payload).forEach(tabla => {
+            const datosTabla = payload[tabla];
+
+            if (Array.isArray(datosTabla) && datosTabla.length > 0) {
+                const datosObjeto = datosTabla[0];
+
+                Object.keys(datosObjeto).forEach(campo => {
+                    const input = document.querySelector(`#${campo}`);
+                    if (input) {
+                        if (input.classList.contains("checkbox")) {
+                            if (datosObjeto[campo] === "true") {
+                                input.classList.add("marked");
+                                input.textContent = "X";
+                                input.setAttribute("data-checked", "true");
+                            } else {
+                                input.classList.remove("marked");
+                                input.textContent = "";
+                                input.setAttribute("data-checked", "false");
+                            }
+                        } else if (input.tagName === "SELECT") {
+                            const optionToSelect = Array.from(input.options).find(
+                                option => option.value.trim() === datosObjeto[campo]?.trim() ||
+                                          option.text.trim() === datosObjeto[campo]?.trim()
+                            );
+                            if (optionToSelect) optionToSelect.selected = true;
+                        } else {
+                            input.value = datosObjeto[campo] || "";
+                        }
+                    }
+                });
+            }
+        });
+    } catch (error) {
+        console.error("Error al realizar la solicitud:", error);
+        alert("Error al realizar la solicitud. Revisa la consola para más información.");
+    }
+}
+
 
                          else if (input.tagName === "SELECT") {
                              // Seleccionar la opción correcta en un campo <select>

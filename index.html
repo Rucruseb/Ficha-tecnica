@@ -4083,7 +4083,8 @@ async function consultarDatos() {
                          else if (input.tagName === "SELECT"){
                            // Seleccionar la opción correcta en un campo <select>
                             const optionToSelect = Array.from(input.options).find(
-                                option => option.text.trim() === fila[campo]?.trim()
+                               option.value.trim() === datosObjeto[campo]?.trim() ||
+                               option.text.trim() === datosObjeto[campo]?.trim()
                             );
                             if (optionToSelect) {
                                 optionToSelect.selected = true;

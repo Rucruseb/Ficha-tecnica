@@ -1863,7 +1863,7 @@
 
           <div class="form-groupB">
           <label for="sustratCortar">Tipo de Sustrato a Cortar:</label>
-          <input type="text" id="Ancho1" required>
+          <input type="text" id="tipoSustratoCortar" required>
         </div>
         </div>
       <div class="form-row">
@@ -1909,7 +1909,7 @@
                 <input type="text" aria-labelledby="EjeXcorte1" id="corteCorte1" required>
             </td>
             <td>
-                <input type="text" aria-labelledby="EjeXcorte1" id="corteCorte1" required>
+                <input type="text" aria-labelledby="EjeXcorte1" id="corteLargo1" required>
             </td>
 
   </tr>
@@ -1923,7 +1923,7 @@
                 <input type="text" aria-labelledby="EjeXcorte2" id="corteCorte2" required>
             </td>
             <td>
-                <input type="text" aria-labelledby="EjeXcorte2" id="corteCorte2" required>
+                <input type="text" aria-labelledby="EjeXcorte2" id="corteLargo2" required>
             </td>
   </tr>
 
@@ -1936,7 +1936,7 @@
                 <input type="text" aria-labelledby="EjeXcorte3" id="corteCorte3" required>
             </td>
             <td>
-                <input type="text" aria-labelledby="EjeXcorte3" id="corteCorte3" required>
+                <input type="text" aria-labelledby="EjeXcorte3" id="corteLargo3" required>
             </td>
   </tr>
 
@@ -1951,7 +1951,7 @@
                 <input type="text" aria-labelledby="EjeXcorte4" id="corteCorte4" required>
             </td>
             <td>
-                <input type="text" aria-labelledby="EjeXcorte4" id="corteCorte4" required>
+                <input type="text" aria-labelledby="EjeXcorte4" id="corteLargo4" required>
             </td>
 
   </tr>
@@ -1964,7 +1964,7 @@
                 <input type="text" aria-labelledby="EjeXcorte5" id="corteCorte5" required>
             </td>
             <td>
-                <input type="text" aria-labelledby="EjeXcorte5" id="corteCorte5" required>
+                <input type="text" aria-labelledby="EjeXcorte5" id="corteLargo5" required>
             </td>
   </tr>
 
@@ -1977,7 +1977,7 @@
                 <input type="text" aria-labelledby="EjeXcorte6" id="corteCorte6" required>
             </td>
             <td>
-                <input type="text" aria-labelledby="EjeXcorte6" id="corteCorte6" required>
+                <input type="text" aria-labelledby="EjeXcorte6" id="corteLargo6" required>
             </td>
         </tr>
 
@@ -3565,7 +3565,9 @@ async function datosConversion() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 async function datosCorte() {
     const ids = [
-        "ancho1", "anchoCorte", "largoCorte", "cantidadCortes",
+        "tipoSustratoCortar","corteLargo1","corteLargo2","corteLargo3",
+        "corteLargo4","corteLargo5","corteLargo6"", "anchoCorte", 
+        "largoCorte", "cantidadCortes",
         "corteRealizadoEnCorte", "corteCorte1", "corteCorte2",
         "corteCorte3", "corteCorte4", "corteCorte5", "corteCorte6",
         "observacionesCorte", "ficha", "version"

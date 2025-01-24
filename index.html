@@ -3452,7 +3452,7 @@ async function datosPreeliminares() {
 
         const result = await response.text();
         console.log("Datos enviados correctamente. Respuesta del servidor:", result);
-        alert("Datos enviados correctamente.");
+
     } catch (error) {
         console.error("Error al enviar datos:", error);
         alert("Error al enviar los datos. Revisa la consola para más detalles.");
@@ -3504,7 +3504,6 @@ async function datosConversion() {
 
         const result = await response.text();
         console.log("Datos enviados correctamente. Respuesta del servidor:", result);
-        alert("Datos enviados correctamente.");
     } catch (error) {
         console.error("Error al enviar datos:", error);
         alert("Error al enviar los datos. Revisa la consola para más detalles.");
@@ -3554,7 +3553,6 @@ async function datosConversion() {
 
         const result = await response.text();
         console.log("Datos enviados correctamente. Respuesta del servidor:", result);
-        alert("Datos enviados correctamente.");
     } catch (error) {
         console.error("Error al enviar datos:", error);
         alert("Error al enviar los datos. Revisa la consola para más detalles.");
@@ -3604,7 +3602,6 @@ async function datosCorte() {
 
         const result = await response.text();
         console.log("Datos enviados correctamente. Respuesta del servidor:", result);
-        alert("Datos enviados correctamente para la sección de corte.");
     } catch (error) {
         console.error("Error al enviar datos de corte:", error);
         alert("Error al enviar los datos de corte. Revisa la consola para más detalles.");
@@ -3675,7 +3672,7 @@ ids.forEach(id => {
 
         const result = await response.text();
         console.log("Datos enviados correctamente. Respuesta del servidor:", result);
-        alert("Datos enviados correctamente para la sección de impresión.");
+
     } catch (error) {
         console.error("Error al procesar datos de impresión:", error);
         alert("Error al enviar los datos de impresión. Revisa la consola para más detalles.");
@@ -3732,7 +3729,6 @@ async function datosColaminado() {
 
         const result = await response.text();
         console.log("Datos enviados correctamente. Respuesta del servidor:", result);
-        alert("Datos enviados correctamente para la sección de colaminación.");
     } catch (error) {
         console.error("Error al enviar datos de colaminación:", error);
         alert("Error al enviar los datos de colaminación. Revisa la consola para más detalles.");
@@ -3797,7 +3793,6 @@ async function datosTroquelado() {
 
         const result = await response.text();
         console.log("Datos enviados correctamente. Respuesta del servidor:", result);
-        alert("Datos enviados correctamente para la sección de troquelado.");
     } catch (error) {
         console.error("Error al enviar datos de troquelado:", error);
         alert("Error al enviar los datos de troquelado. Revisa la consola para más detalles.");
@@ -3856,8 +3851,6 @@ async function datosTerminados() {
         }
 
         const result = await response.text();
-        console.log("Datos enviados correctamente. Respuesta del servidor:", result);
-        alert("Datos enviados correctamente para la sección de terminados.");
     } catch (error) {
         console.error("Error al enviar datos de terminados:", error);
         alert("Error al enviar los datos de terminados. Revisa la consola para más detalles.");
@@ -3911,7 +3904,6 @@ async function datosTerminados() {
 
         const result = await response.text();
         console.log("Datos enviados correctamente. Respuesta del servidor:", result);
-        alert("Datos enviados correctamente para la sección de pegue.");
     } catch (error) {
         console.error("Error al enviar datos de pegue:", error);
         alert("Error al enviar los datos de pegue. Revisa la consola para más detalles.");
@@ -3964,7 +3956,6 @@ async function datosEmpaque() {
 
         const result = await response.text();
         console.log("Datos enviados correctamente. Respuesta del servidor:", result);
-        alert("Datos enviados correctamente para la sección de empaque.");
     } catch (error) {
         console.error("Error al enviar datos de empaque:", error);
         alert("Error al enviar los datos de empaque. Revisa la consola para más detalles.");
@@ -4020,7 +4011,6 @@ async function datosLogistica() {
 
         const result = await response.text();
         console.log("Datos enviados correctamente. Respuesta del servidor:", result);
-        alert("Datos enviados correctamente para la sección de logística.");
     } catch (error) {
         console.error("Error al enviar datos de logística:", error);
         alert("Error al enviar los datos de logística. Revisa la consola para más detalles.");

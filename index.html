@@ -4066,10 +4066,14 @@ async function consultarDatos() {
                 Object.keys(datosObjeto).forEach(campo => {
                     const input = document.querySelector(`#${campo}`); // Busca el campo por su ID
                     if (input) {
-                        if (input.type === "checkbox") {
-                            input.checked = datosObjeto[campo] === "true"; // Maneja checkboxes
-                            console.log(`Campo ${campo} (checkbox) asignado: ${datosObjeto[campo]}`);
-                        } 
+                      if (input.type === "checkbox") {
+                             // Convertir el valor a booleano explícito
+                             const isChecked = datosObjeto[campo] === "true" || datosObjeto[campo] === true;
+                         
+                             input.checked = isChecked; // Marcar o desmarcar el checkbox
+                             console.log(`Campo ${campo} (checkbox) asignado: ${isChecked}`);
+                         }
+
                          else if (input.tagName === "SELECT") {
                              // Seleccionar la opción correcta en un campo <select>
                              const optionToSelect = Array.from(input.options).find(option =>

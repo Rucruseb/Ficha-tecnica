@@ -4116,6 +4116,8 @@ function limpiarCeldas() {
     document.querySelectorAll("select").forEach(select => select.selectedIndex = 0);
     // Limpia textareas
     document.querySelectorAll("textarea").forEach(textarea => textarea.value = "");
+    // Limpia checkboxes
+    document.querySelectorAll("input[type='checkbox']").forEach(checkbox => checkbox.checked = false);
 
     alert("Todos los campos han sido limpiados.");
 }

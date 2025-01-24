@@ -4080,14 +4080,15 @@ async function consultarDatos() {
                             input.checked = datosObjeto[campo] === "true"; // Maneja checkboxes
                             console.log(`Campo ${campo} (checkbox) asignado: ${datosObjeto[campo]}`);
                         } 
-                         else if (input.tagName === "SELECT"){
-                           // Seleccionar la opción correcta en un campo <select>
-                            const optionToSelect = Array.from(input.options).find(
-                               option.value.trim() === datosObjeto[campo]?.trim() ||
-                               option.text.trim() === datosObjeto[campo]?.trim()
-                            );
+                         else if (input.tagName === "SELECT") {
+                             // Seleccionar la opción correcta en un campo <select>
+                             const optionToSelect = Array.from(input.options).find(option =>
+                                 option.value.trim() === datosObjeto[campo]?.trim() ||
+                                 option.text.trim() === datosObjeto[campo]?.trim()
+                             );
                             if (optionToSelect) {
                                 optionToSelect.selected = true;
+                              console.log(`Campo ${campo} (select) asignado: ${datosObjeto[campo]}`);
                                  } 
                          
                         } else {

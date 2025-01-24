@@ -4079,6 +4079,16 @@ async function consultarDatos() {
                         if (input.type === "checkbox") {
                             input.checked = datosObjeto[campo] === "true"; // Maneja checkboxes
                             console.log(`Campo ${campo} (checkbox) asignado: ${datosObjeto[campo]}`);
+                        } 
+                         else if (input.tagName === "SELECT"){
+                           // Seleccionar la opción correcta en un campo <select>
+                            const optionToSelect = Array.from(input.options).find(
+                                option => option.text.trim() === fila[campo]?.trim()
+                            );
+                            if (optionToSelect) {
+                                optionToSelect.selected = true;
+                                 } 
+                         
                         } else {
                             input.value = datosObjeto[campo] || ""; // Asigna el valor a otros inputs
                             console.log(`Campo ${campo} asignado: ${datosObjeto[campo]}`);

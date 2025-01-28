@@ -4174,7 +4174,11 @@ async function consultarDatos() {
                               console.log(`Campo ${campo} (select) asignado: ${datosObjeto[campo]}`);
                                  } 
                          
-                        } else {
+                        }else if (input.type === "date") {
+                            // Maneja inputs de tipo date
+                            input.value = datosObjeto[campo] || ""; // Asegúrate de que el valor esté en formato YYYY-MM-DD
+                            console.log(`Campo ${campo} (date) asignado: ${datosObjeto[campo]}`);
+                        }else {
                             input.value = datosObjeto[campo] || ""; // Asigna el valor a otros inputs
                             console.log(`Campo ${campo} asignado: ${datosObjeto[campo]}`);
                         }

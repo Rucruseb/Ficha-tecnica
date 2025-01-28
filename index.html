@@ -616,7 +616,7 @@
       <div class="form-row">
           <div class="form-groupB">
           <label for="Fecha">Fecha:</label>
-          <input type="date" id="Fecha" required>
+          <input type="date" id="fecha" required>
         </div>
 
 </div>
@@ -3487,10 +3487,10 @@ function toggleCheckbox(element) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function datosPreeliminares() {
+async function enviarDatos() {
     // IDs fijos que corresponden a las columnas de la tabla preliminares
     const ids = [
-        "ficha", "version", "descripcion", "fecha_creacion", "codigo_cliente", "cliente",
+        "ficha", "version", "descripcion", "fecha_creacion", "codigo_cliente", "cliente", "fecha",
         "nombre_producto","codigo_producto","plano_producto","division_de_cuerpos","cantidad_cuerpos","orden",
         "partes","cantidad_partes_descripcion","parte_descripcion","nombre_parte_descripcion","descripcion_descripcion",
         "NombrePieza1", "NombrePieza2", "NombrePieza3", "NombrePieza4", "NombrePieza5",
@@ -3513,7 +3513,14 @@ async function datosPreeliminares() {
     const payload = { seccion: "preliminares" }; // Identificador de la sección
     ids.forEach(id => {
         const element = document.getElementById(id);
-        payload[id] = element?.value?.trim() || null; // Guardar null si el valor está vacío
+        if (element) {
+            // Si es un campo de tipo "date", convertir la fecha a texto en formato YYYY-MM-DD
+            if (element.type === "date") {
+                payload[id] = element.value ? element.value.trim() : null;
+            } else {
+                payload[id] = element.value?.trim() || null; // Guardar null si el valor está vacío
+            }
+        }
     });
 
     try {
@@ -3700,9 +3707,9 @@ async function datosImpresion() {
         "pantone1Tiro1Afiche2", "pantone2Tiro1Afiche2", "pantone3Tiro1Afiche2", "pantone4Tiro1Afiche2", "pantone5Tiro1Afiche2",
         "pantone1Retiro1Afiche2", "pantone2Retiro1Afiche2", "pantone3Retiro1Afiche2", "pantone4Retiro1Afiche2", "pantone5Retiro1Afiche2",
         "tamañoPlanchaImpresion1", "tamañoPlanchaImpresion1Afiche2", "formatoMaquina1", "formatoMaquina2",
-        "brilloSinReservaImpresion1", "brilloSinReservaImpresion2", "brilloConReservaImpresion1", "brilloConReservaImpresion2",
+        "brilloSinReservaImpresion1", "brilloSinReservaImpresion2",
         "plastificadoSinReserva1", "plastificadoSinReserva2", "plastificadoConReserva1", "plastificadoConReserva2",
-        "brilloUVSinReserva1", "brilloUVSinReserva2", "brilloUVConReserva1", "brilloUVConReserva2",
+        "brilloUVSinReserva1", "brilloUVSinReserva2", "proveedorTintaAfiche1", "proveedorTintaAfiche2";
         "estampadoDeImpresion1", "estampadoDeImpresion2", "proveedorOriginalImpresion1", "proveedorOriginalImpresion2",
         "otroImpresion1", "otroImpresion2", "observacionesImpresion", "tiro1C", "tiro1M", "tiro1Y", "tiro1K",
         "tiro1Afiche2C", "tiro1Afiche2M", "tiro1Afiche2Y", "tiro1Afiche2K",
@@ -4211,7 +4218,7 @@ function limpiarCeldas() {
 
 /////////////////////////////////////////////////////////////////////////////////////
 
-async function enviarDatos() {
+async function enviarDatoss() {
     // Lista de funciones a ejecutar
     const funciones = [
         datosPreeliminares,
